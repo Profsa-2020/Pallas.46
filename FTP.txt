@@ -1,12 +1,12 @@
 [
 	{
-		"name": "Pallas.45",
+		"name": "Pallas.46",
 		"host": "ftp.profsa.com.br",
 		"port": 21,
 		"type": "ftp",
 		"username": "profsa@profsa.com.br",
 		"password": "profsa1993",
-		"path": "/pallas45/",
+		"path": "/pallas46/",
 		"autosave": false,
 		"confirm": true
 	}

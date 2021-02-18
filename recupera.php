@@ -4,7 +4,7 @@
 
 <head>
      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-     <meta name="description" content="Profsa Informática - Gerenciamento de Contratos - SearchMidia Marketing de Retorno" />
+     <meta name="description" content="Profsa Informática - Gerenciamento de Contratos - SearchMidia" />
      <meta name="author" content="Paulo Rogério Souza" />
      <meta name="viewport" content="width=device-width, initial-scale=1" />
 
@@ -18,7 +18,6 @@
      <link rel="icon" href="https://cdn.shortpixel.ai/client/q_glossy,ret_img,w_32,h_32/https://www.searchmidia.com.br/wp-content/uploads/2017/07/Favicon.png" sizes="32x32" />
      <link rel="icon" href="https://cdn.shortpixel.ai/client/q_glossy,ret_img,w_192,h_192/https://www.searchmidia.com.br/wp-content/uploads/2017/07/Favicon.png" sizes="192x192" />
      <link rel="apple-touch-icon" href="https://cdn.shortpixel.ai/client/q_glossy,ret_img,w_180,h_180/https://www.searchmidia.com.br/wp-content/uploads/2017/07/Favicon.png" />
-
      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
      <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -27,32 +26,29 @@
      <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
 
      <link href="css/pallas46.css" rel="stylesheet" type="text/css" media="screen" />
-     <title>Login - Gerenciamento de Contratos - SearchMidia - Profsa Informátda Ltda</title>
+     <title>Recupera - Gerenciamento de Contratos - SearchMidia - Profsa Informátda Ltda</title>
 </head>
 
 <script>
 $(document).ready(function() {
-     $('#frmLogin').submit(function() {
+
+     $('#frmRecupera').submit(function() {
           var ema = $('#ema').val();
-          var sen = $('#sen').val();
-          $.getJSON("ajax/verifica-ace.php", {
-                    ema: ema,
-                    sen: sen
+          $.getJSON("ajax/verifica-ema.php", {
+                    ema: ema
                })
                .done(function(data) {
                     if (data.err != "") {
                          $('#ema').val('');
-                         $('#sen').val('');
                          alert(data.err);
                     } else {
                          if (data.men != "") {
                               alert(data.men);
                          }
-                         location.href = "menu01.php";
                     }
                }).fail(function(data) {
                     console.log('Erro: ' + JSON.stringify(data));
-                    alert("Erro ocorrido no processamento de login e senha de acesso");
+                    alert("Erro ocorrido no processamento de e-mail para recuperação");
                });
           return false;
      });
@@ -61,45 +57,31 @@ $(document).ready(function() {
 </script>
 
 <body class="login">
-<h1 class="cab-0">Login inicial sistema de Análise de Investimentos - Profsa Informática</h1>
+<h1 class="cab-0">Recuperação de Senha - Sistema SearchMidia - Análise de Investimentos</h1>
      <div class="entrada">
-          <div class="qua-1 animated bounceInDown">
-               <form class="cpo-0" id="frmLogin" name="frmLogin" action="" method="POST">
-                    <br />
+          <div class="qua-1 animated bounceInUp">
+               <form class="cpo-0" id="frmRecupera" name="frmRecupera" action="" method="POST">
+                    <br /><br />
                     <div class="row">
                          <a href="http://www.searchmidia.com.br/">
-                              <img class="ima-1" src="img/logo-04.png" alt="Logotipo da empresa SearchMidiaa"
-                                   title="Acesso ao site principal da empresa SearchMidia" />
+                              <img class="ima-1" src="img/logo-04.png" alt="Logotipo da empresa SearchMidia"
+                                   title="Recuperação de senha do sistema principal da empresa SearchMidia" />
                          </a>
                     </div>
-                    <br />
+                    <br /><br />
                     <div class="row">
                          <div class="col s1"></div>
                          <div class="input-field col s10">
                               <i class="cor-1 material-icons prefix">email</i>
-                              <input type="email" class="center" id="ema" name="ema" maxlength="75" value="" required >
-                              <label for="nome">E-mail do usuário para acesso ...</label>
+                              <input type="text" class="text-center" id="ema" name="ema" maxlength="50" required>
+                              <label for="nome">E-mail do usuário para envio ...</label>
                          </div>
                          <div class="col s1"></div>
                     </div>
-
                     <div class="row">
-                         <div class="col s1"></div>
-                         <div class="input-field col s10">
-                              <i class="cor-1 material-icons prefix">lock</i>
-                              <input type="password" class="center" id="sen" name="sen" maxlength="15" value="" required >
-                              <label for="senha">Senha de acesso ao sistema ...</label>
-                         </div>
-                         <div class="col s1"></div>
-                    </div>
-
-                    <div class="row">
-                         <input class="bot-1" type="submit" id="ent" name="entrar" value="Entrar" />
-                         <br /><br />
-                         <input type="checkbox" id="lem" name="lembrete" value="S" />
-                         <label class="tit-1" for="lem">Lembrar Login</label>
-                         <br /><br />
-                         <span class="tit-2"><a href="recupera.php">Esqueci a senha</a></span>
+                         <input class="bot-1" type="submit" id="env" name="enviar" value="Enviar" />
+                         <br /><br /><br />
+                         <span class="tit-2"><a href="index.php">Voltar</a></span>
                     </div>
                     <br />
                </form>
