@@ -37,7 +37,7 @@
                               aria-hidden="true"></i><br /> Empresas </a>
                </li>
                <li class="nav-item">
-                    <a class="nav-link" href="con-pagto.php?ope=1&cod=0"><i class="fa fa-credit-card fa-2x" aria-hidden="true"></i><br />
+                    <a class="nav-link" href="man-pagto.php?ope=1&cod=0"><i class="fa fa-credit-card fa-2x" aria-hidden="true"></i><br />
                          Formas de Pagto </a>
                </li>
                <li class="nav-item">
