@@ -72,8 +72,9 @@ $(document).ready(function() {
      $('#tab-0').DataTable({
           "pageLength": 25,
           "aaSorting": [
-               [0, 'desc'],
-               [1, 'desc']
+               [0, 'asc'],
+               [1, 'desc'],
+               [2, 'desc']
           ],
           "language": {
                "lengthMenu": "Demonstrar _MENU_ linhas por páginas",
@@ -178,6 +179,7 @@ $(document).ready(function() {
                                    <table id="tab-0" class="table table-sm table-striped">
                                         <thead>
                                              <tr>
+                                                  <th>Emp</th>
                                                   <th>Data</th>
                                                   <th>Hora</th>
                                                   <th>Ope</th>
@@ -212,12 +214,17 @@ function carrega_log($dti, $dtf) {
      include_once "dados.php";
      $dti = substr($dti,6,4) . "-" . substr($dti,3,2) . "-" . substr($dti,0,2) . " 00:00:00";
      $dtf = substr($dtf,6,4) . "-" . substr($dtf,3,2) . "-" . substr($dtf,0,2) . " 23:59:59";
-     $com = "Select logdatahora,logoperacao,logusuario,logtipo,logidsenha,logip,logcidade, logestado,lognavegador,logprovedor,logprograma,logobservacao from tb_log ";
-     $com .= " where logempresa = " . $_SESSION['wrkcodemp'] . " and logdatahora between '" . $dti . "' and '" . $dtf . "' ";
-     $com .= " order by logdatahora desc, idlog ";          
+     $com = "Select logempresa, logdatahora,logoperacao,logusuario,logtipo,logidsenha,logip,logcidade, logestado,lognavegador,logprovedor,logprograma,logobservacao from tb_log ";
+     if ($_SESSION['wrktipusu'] >= 3) {
+          $com .= " where logdatahora between '" . $dti . "' and '" . $dtf . "' ";
+     } else {
+          $com .= " where logempresa = " . $_SESSION['wrkcodemp'] . " and logdatahora between '" . $dti . "' and '" . $dtf . "' ";
+     }
+     $com .= " order by logempresa, logdatahora desc, idlog ";          
      $nro = leitura_reg($com, $lin);
      foreach ($lin as $reg) {               
           $txt =  '<tr>';
+          $txt .= '<td class="text-center"><strong>' . str_pad($reg['logempresa'], 3, "0", STR_PAD_LEFT) . '</strong></td>';
           $txt .= "<td>" . date('d/m/Y',strtotime($reg['logdatahora'])) . "</td>";
           $txt .= "<td>" . date('H:m:s',strtotime($reg['logdatahora'])) . "</td>";
           $txt .= "<td>" . $reg['logoperacao'] . "</td>";

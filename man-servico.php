@@ -303,7 +303,7 @@ $(document).ready(function() {
                                         <th>Grupo de Serviço</th>
                                         <th>Descrição do Serviço</th>
                                         <th>Preço</th>
-                                        <th>Vigêncdia</th>
+                                        <th>Vigência</th>
                                         <th>Observação para o Serviço</th>
                                    </tr>
                               </thead>

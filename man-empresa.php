@@ -145,6 +145,22 @@ $(document).ready(function() {
           }
      });
 
+     $('#bt_logotipo').bind("click", function() {
+          $('#bt_window').click();
+     });
+     $('#bt_window').change(function() {
+          var path = $('#bt_window').val();
+          $('#log').val(path.replace(/^.*\\/, ""));
+
+          var ima = $(this)[0].files[0]; // Carrega preview da imagem em jquery para a tela do logotipo
+          var fileReader = new FileReader();
+          fileReader.onloadend = function() {
+               $('#log-1').attr('src', fileReader.result);
+          }
+          fileReader.readAsDataURL(ima);
+
+     });
+
      $(window).scroll(function() {
           if ($(this).scrollTop() > 100) {
                $(".subir").fadeIn(500);
@@ -167,6 +183,7 @@ $(document).ready(function() {
      $ret = 00;
      $per = "";
      $del = "";
+     $log = "";
      $bot = "Salvar";
      include_once "dados.php";
      include_once "profsa.php";
@@ -250,7 +267,15 @@ $(document).ready(function() {
                echo '<script>history.go(-' . $_SESSION['wrknumvol'] . ');</script>'; $_SESSION['wrknumvol'] = 1;
           }
      }
-
+     $cam = "emp_" . str_pad($_SESSION['wrkcodreg'], 3, "0", STR_PAD_LEFT) . "/" . "log_" . str_pad($_SESSION['wrkcodreg'], 3, "0", STR_PAD_LEFT);
+     if (file_exists($cam. ".png") == true) { $log = $cam . ".png"; }
+     if (file_exists($cam. ".jpg") == true) { $log = $cam . ".jpg"; }
+     if (file_exists($cam. ".jpeg") == true) { $log = $cam . ".jpeg"; }
+     if ($_SESSION['wrkcodemp'] == $_SESSION['wrkcodreg']) {
+          if ($log != "") {
+               $_SESSION['wrklogemp'] = $log;
+          }
+     }
 ?>
 
 <body id="box00">
@@ -276,7 +301,7 @@ $(document).ready(function() {
                          </form>
                     </div>
                </div>
-               <form class="tel-1" name="frmTelMan" action="" method="POST">
+               <form class="tel-1" name="frmTelMan" action="" method="POST" enctype="multipart/form-data">
                     <div class="row">
                          <div class="col-md-2">
                               <label>Código</label>
@@ -403,9 +428,24 @@ $(document).ready(function() {
                     </div>
                     <br />
                     <div class="row text-center">
-                         <div class="col-md-12">
+                         <div class="col-md-2 text-left">
+                              <button type="button" class="bot-2" id="bt_logotipo" name="ima"
+                                   title="Upload de arquivo com logotipo da empresa para Danfe"><i
+                                        class="fa fa-picture-o fa-3x" aria-hidden="true"></i>
+                              </button>
+                         </div>
+                         <div class="col-md-8">
                               <button type="submit" name="salvar" <?php echo $per; ?>
                                    class="bot-1 <?php echo $del; ?>"><?php echo $bot; ?></button>
+                         </div>
+                         <div class="col-md-2 text-center">
+                              <?php
+                                        if ($log == "") {
+                                             echo '<img id="log-1" class="img-fluid" src="" width="150" />';
+                                        } else {
+                                             echo '<img id="log-1" class="img-fluid" src="' . $log . '" width="150" />';
+                                        }
+                                   ?>
                          </div>
                     </div>
                     <br />
@@ -417,6 +457,7 @@ $(document).ready(function() {
                          </div>
                     </div>
                     <br />
+                    <input name="arq-log" type="file" id="bt_window" class="bot-3" accept="".jpg, .png, .jpeg"" />
                </form>
           </div>
           <br /><br />
@@ -469,6 +510,10 @@ function ler_empresa(&$cha, &$cgc, &$des, &$fan, &$ema, &$sta, &$tel, &$cep, &$e
 
 function consiste_emp() {
      $sta = 0;
+     if (isset($_FILES['arq-log']) == true) {
+          $cam = $_FILES['arq-log']['name'];
+          $ret = upload_log($cam, $des, $tam, $ext);
+     }        
      if (trim($_REQUEST['des']) == "") {
           echo '<script>alert("Razão Social da empresa não pode estar em branco");</script>';
           return 1;
@@ -597,6 +642,57 @@ function excluir_emp() {
           echo '<script>alert("Erro na exclusão do registro solicitado !");</script>';
      }
      return $ret;
+ }
+
+ function upload_log(&$cam, &$des, &$tam, &$ext) {
+     $sta = 0; 
+     $arq = isset($_FILES['arq-log']) ? $_FILES['arq-log'] : false;
+     if ($arq == false) {
+          $sta = 2; 
+     } else if ($arq['name'] == "") {
+          return 0;
+     }            
+     $erro[0] = 'Não houve erro encontrado no Upload do arquivo';
+     $erro[1] = 'O arquivo informado no upload é maior do que o limite da plataforma';
+     $erro[2] = 'O arquivo ultrapassa o limite de tamanho especifiado no HTML';
+     $erro[3] = 'O upload do arquivo foi feito parcialmente, tente novamente';
+     $erro[4] = 'Não foi feito o upload do arquivo corretamente !';
+     $erro[5] = 'Não foi feito o upload do arquivo corretamente !!';
+     $erro[6] = 'Pasta temporária ausente para Upload do arquuivo informado';
+     $erro[7] = 'Falha em escrever o arquivo para upload informado em disco';
+     if ($arq['error'] != 0) {
+          if ($_SESSION['wrkopereg'] == 1) {
+               echo '<script>alert("' . $erro[$arq['error']] . '");</script>'; $sta = 1;
+          } else {
+               return 0;
+          }
+     }
+     if ($sta == 0) {
+          $tip = array('jpg', 'JPG', 'png', 'PNG', 'jpeg', 'JPEG', );
+          $des = limpa_cpo($arq['name']);
+          $tam = $arq['size'];
+          $fim = explode('.', $des);
+          $ext = end($fim);
+          if (array_search($ext, $tip) === false) {
+          echo '<script>alert("Extensão de arquivo do certificado informado deve ser imagem");</script>'; $sta = 5;
+          }
+     }
+     if ($sta == 0) {
+          $tip = explode('.', $des);
+          $des = $tip[0] . "." . $ext;
+          $pas = "emp_" . str_pad($_SESSION['wrkcodreg'], 3, "0", STR_PAD_LEFT); 
+          if (file_exists($pas) == false) {
+               mkdir($pas);
+          }
+          $cam = strtolower($pas . "/" . "log_" . str_pad($_SESSION['wrkcodreg'], 3, "0", STR_PAD_LEFT) . "." . $ext);
+          $ret = move_uploaded_file($arq['tmp_name'], $cam);
+          if ($ret == false) {
+          echo '<script>alert("Erro na cópia (upload) do arquivo informado para o site");</script>'; $sta = 5;
+          } else {
+               $sta = gravar_log(22,"UpLoad do logotipo Nome: " . $cam . " Tamanho: " . $tam);
+          }      
+     }    
+     return $sta;
  }
 
 ?>

@@ -93,9 +93,9 @@ $(document).ready(function() {
      if (isset($_REQUEST['ope']) == true) { $_SESSION['wrkopereg'] = $_REQUEST['ope']; }
      if (isset($_REQUEST['cod']) == true) { $_SESSION['wrkcodemp'] = $_REQUEST['cod']; }
      if ($_SESSION['wrkcodemp'] > 0) {
-          $cam = 'upload/' . 'emp_' . str_pad($_SESSION['wrkcodemp'], 6, "0", STR_PAD_LEFT) . "_" . "000";
-          if (file_exists($cam . '.jpg') == true) { $_SESSION['wrklogemp'] = $cam . '.jpg'; }
+          $cam = "emp_" . str_pad($_SESSION['wrkcodemp'], 3, "0", STR_PAD_LEFT) . "/" . "log_" . str_pad($_SESSION['wrkcodemp'], 3, "0", STR_PAD_LEFT);
           if (file_exists($cam . '.png') == true) { $_SESSION['wrklogemp'] = $cam . '.png'; }
+          if (file_exists($cam . '.jpg') == true) { $_SESSION['wrklogemp'] = $cam . '.jpg'; }
           if (file_exists($cam . '.jpeg') == true) { $_SESSION['wrklogemp'] = $cam . '.jpeg'; }
      }
 
