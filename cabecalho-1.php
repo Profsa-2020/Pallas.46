@@ -41,7 +41,7 @@
                          Formas de Pagto </a>
                </li>
                <li class="nav-item">
-                    <a class="nav-link" href="con-consultor.php?ope=1&cod=0"><i class="fa fa-users fa-2x" aria-hidden="true"></i><br />
+                    <a class="nav-link" href="con-consultor.php"><i class="fa fa-users fa-2x" aria-hidden="true"></i><br />
                          Consultores </a>
                </li>
                <li class="nav-item">
@@ -49,7 +49,7 @@
                          Grupo de Cliente </a>
                </li>
                <li class="nav-item">
-                    <a class="nav-link" href="man-cliente.php?ope=1&cod=0"><i class="fa fa-handshake-o fa-2x" aria-hidden="true"></i><br />
+                    <a class="nav-link" href="con-cliente.php"><i class="fa fa-handshake-o fa-2x" aria-hidden="true"></i><br />
                          Clientes </a>
                </li>
                <li class="nav-item">
@@ -57,7 +57,7 @@
                          Grupo de Serviço </a>
                </li>
                <li class="nav-item">
-                    <a class="nav-link" href="con-servico.php?ope=1&cod=0"> <i class="fa fa-desktop fa-2x"
+                    <a class="nav-link" href="man-servico.php?ope=1&cod=0"> <i class="fa fa-desktop fa-2x"
                               aria-hidden="true"></i><br /> Serviços </a>
                </li>
                <li class="nav-item">

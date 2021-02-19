@@ -45,14 +45,12 @@
      <script type="text/javascript" src="js/jquery.mask.min.js"></script>
 
      <link href="css/pallas46.css" rel="stylesheet" type="text/css" media="screen" />
-     <title>Forma de Pagto - Gerenciamento de Contratos - SearchMidia - Profsa Informátda Ltda</title>
+     <title>Serviço - Gerenciamento de Contratos - SearchMidia - Profsa Informátda Ltda</title>
 </head>
 
 <script>
 $(function() {
-     $("#par").mask("00");
-     $("#ven").mask("00");
-     $("#tax").mask("00,00", {
+     $("#pre").mask("000.000,00", {
           reverse: true
      });
 });
@@ -74,7 +72,7 @@ $(document).ready(function() {
                "lengthMenu": "Demonstrar _MENU_ linhas por páginas",
                "zeroRecords": "Não existe registros a demonstar ...",
                "info": "Mostrada página _PAGE_ de _PAGES_",
-               "infoEmpty": "Sem registros de Formas de Pagamento ...",
+               "infoEmpty": "Sem registros de Serviços ...",
                "sSearch": "Buscar:",
                "infoFiltered": "(Consulta de _MAX_ total de linhas)",
                "oPaginate": {
@@ -118,7 +116,7 @@ $(document).ready(function() {
      if (isset($_SERVER['HTTP_REFERER']) == true) {
           if (limpa_pro($_SESSION['wrknompro']) != limpa_pro($_SERVER['HTTP_REFERER'])) {
                $_SESSION['wrkproant'] = limpa_pro($_SERVER['HTTP_REFERER']);
-               $ret = gravar_log(6,"Entrada na página de manutenção de forma de pagto do sistema Pallas.46 - SearchMidia");  
+               $ret = gravar_log(6,"Entrada na página de manutenção de serviços do sistema Pallas.46 - SearchMidia");  
           }
      }
      if (isset($_SESSION['wrkopereg']) == false) { $_SESSION['wrkopereg'] = 0; }
@@ -127,10 +125,9 @@ $(document).ready(function() {
      if (isset($_REQUEST['cod']) == true) { $_SESSION['wrkcodreg'] = $_REQUEST['cod']; }
      $cod = (isset($_REQUEST['cod']) == false ? 0 : $_REQUEST['cod']);
      $sta = (isset($_REQUEST['sta']) == false ? 0 : $_REQUEST['sta']);
-     $par = (isset($_REQUEST['par']) == false ? '' : $_REQUEST['par']);
-     $ven = (isset($_REQUEST['ven']) == false ? '' : $_REQUEST['ven']);
-     $tax = (isset($_REQUEST['tax']) == false ? '' : $_REQUEST['tax']);
-
+     $gru = (isset($_REQUEST['gru']) == false ? '' : $_REQUEST['gru']);
+     $pre = (isset($_REQUEST['pre']) == false ? '' : $_REQUEST['pre']);
+     $vig = (isset($_REQUEST['vig']) == false ? 0 : $_REQUEST['vig']);
      $des = (isset($_REQUEST['des']) == false ? '' : str_replace("'", "´", $_REQUEST['des']));
      $obs = (isset($_REQUEST['obs']) == false ? '' : str_replace("'", "´", $_REQUEST['obs']));
      if ($_SESSION['wrkopereg'] == 1) { 
@@ -139,45 +136,45 @@ $(document).ready(function() {
      if ($_SESSION['wrkopereg'] >= 2) {
           if (isset($_REQUEST['salvar']) == false) { 
                $cha = $_SESSION['wrkcodreg']; 
-               $ret = ler_pagto($cha, $des, $sta, $par, $ven, $tax, $obs); 
+               $ret = ler_pagto($cha, $des, $sta, $gru, $pre, $vig, $obs); 
           }
      }
      if ($_SESSION['wrkopereg'] == 3) { 
           $bot = 'Deletar'; 
           $del = "cor-2";
-          $per = ' onclick="return confirm(\'Confirma exclusão de Forma de Pagto informado em tela ?\')" ';
+          $per = ' onclick="return confirm(\'Confirma exclusão de Serviço informado em tela ?\')" ';
      }
 
  if (isset($_REQUEST['salvar']) == true) {
       if ($_SESSION['wrkopereg'] == 1) {
-           $sta = consiste_pag();
+           $sta = consiste_ser();
            if ($sta == 0) {
-                $ret = incluir_pag();
+                $ret = incluir_ser();
                 $cod = ultimo_cod();
-                $ret = gravar_log(11,"Inclusão de novo Forma de Pagto de campo: " . $des); 
-                $des = ''; $obs = ''; $par = ''; $ven = ''; $tax = ''; $sta = 00; $_SESSION['wrkopereg'] = 1; $_SESSION['wrkcodreg'] = 0;
+                $ret = gravar_log(11,"Inclusão de novo Serviço de campo: " . $des); 
+                $des = ''; $obs = ''; $gru = 0; $pre = ''; $vig = ''; $sta = 00; $_SESSION['wrkopereg'] = 1; $_SESSION['wrkcodreg'] = 0;
            }
       }
       if ($_SESSION['wrkopereg'] == 2) {
-           $sta = consiste_pag();
+           $sta = consiste_ser();
            if ($sta == 0) {
-                $ret = alterar_pag();
+                $ret = alterar_ser();
                 $cod = ultimo_cod(); 
-                $ret = gravar_log(12,"Alteração de Forma de Pagto cadastrado: " . $des); 
-                $des = ''; $obs = ''; $par = ''; $ven = ''; $tax = ''; $sta = 00;  $_SESSION['wrkopereg'] = 1; $_SESSION['wrkcodreg'] = 0;
+                $ret = gravar_log(12,"Alteração de Serviço cadastrado: " . $des); 
+                $des = ''; $obs = ''; $gru = 0; $pre = ''; $vig = ''; $sta = 00; $_SESSION['wrkopereg'] = 1; $_SESSION['wrkcodreg'] = 0;
            }
       }
       if ($_SESSION['wrkopereg'] == 3) {
-           $ret = excluir_pag(); $bot = 'Salvar'; $per = '';
+           $ret = excluir_ser(); $bot = 'Salvar'; $per = '';
            $cod = ultimo_cod(); 
-           $ret = gravar_log(13,"Exclusão de Forma de Pagto cadastrado: " . $des); 
-           $des = ''; $obs = ''; $par = ''; $ven = ''; $tax = ''; $sta = 00;  $_SESSION['wrkopereg'] = 1; $_SESSION['wrkcodreg'] = 0;
-      }
+           $ret = gravar_log(13,"Exclusão de Serviço cadastrado: " . $des); 
+           $des = ''; $obs = ''; $gru = 0; $pre = ''; $vig = ''; $sta = 00; $_SESSION['wrkopereg'] = 1; $_SESSION['wrkcodreg'] = 0;
+          }
 }
 ?>
 
 <body id="box00">
-     <h1 class="cab-0">Manutenção de Forma de Pagto - SearchMidia - Profsa Informática</h1>
+     <h1 class="cab-0">Manutenção de Serviço - SearchMidia - Profsa Informática</h1>
      <div class="row">
           <div class="col-md-12">
                <?php include_once "cabecalho-1.php"; ?>
@@ -187,13 +184,13 @@ $(document).ready(function() {
           <div class="qua-0">
                <div class="row qua-2">
                     <div class="col-md-11 text-left">
-                         <span>Manutenção de Forma de Pagto</span>
+                         <span>Manutenção de Serviço</span>
                     </div>
                     <div class="col-md-1 text-center">
-                         <form name="frmTelNov" action="man-pagto.php?ope=1&cod=0" method="POST">
+                         <form name="frmTelNov" action="man-servico.php?ope=1&cod=0" method="POST">
                               <div class="text-center">
                                    <button type="submit" class="bot-2" id="nov" name="novo"
-                                        title="Mostra campos para criar novo Forma de Pagto no sistema"><i
+                                        title="Mostra campos para criar novo Serviço no sistema"><i
                                              class="fa fa-plus-circle fa-1g" aria-hidden="true"></i></button>
                               </div>
                          </form>
@@ -207,8 +204,8 @@ $(document).ready(function() {
                                    value="<?php echo $cod; ?>" disabled />
                          </div>
                          <div class="col-md-8">
-                              <label>Condição de Pagamento</label>
-                              <input type="text" class="form-control" maxlength="50" id="des" name="des"
+                              <label>Descrição do Serviço</label>
+                              <input type="text" class="form-control" maxlength="75" id="des" name="des"
                                    value="<?php echo $des; ?>" required />
                          </div>
                          <div class="col-md-2">
@@ -230,27 +227,56 @@ $(document).ready(function() {
                          </div>
                     </div>
                     <div class="row">
+                         <div class="col-md-2"></div>
+                         <div class="col-md-8">
+                              <label>Grupo de Serviço</label>
+                              <select id="gru" name="gru" class="form-control">
+                                   <?php $ret = carrega_gru($gru); ?>
+                              </select>
+                         </div>
+                         <div class="col-md-2"></div>
+                    </div>
+                    <div class="row">
                          <div class="col-md-3"></div>
-                         <div class="col-md-2">
-                              <label>Nº de Parcelas</label>
-                              <input type="text" class="form-control text-center" maxlength="2" id="par" name="par"
-                                   value="<?php echo $par; ?>" />
+                         <div class="col-md-3">
+                              <label>Preço</label>
+                              <input type="text" class="form-control text-center" maxlength="10" id="pre" name="pre"
+                                   value="<?php echo $pre; ?>" />
                          </div>
-                         <div class="col-md-2">
-                              <label>Dia de Vecto</label>
-                              <input type="text" class="form-control text-center" maxlength="2" id="ven" name="ven"
-                                   value="<?php echo $ven; ?>" />
-                         </div>
-                         <div class="col-md-2">
-                              <label>Taxa</label>
-                              <input type="text" class="form-control text-center" maxlength="5" id="tax" name="tax"
-                                   value="<?php echo $tax; ?>" />
+                         <div class="col-md-3">
+                              <label>Vigência</label><br />
+                              <select name="vig" class="form-control">
+                                   <option value="0" <?php echo ($vig != 0 ? '' : 'selected="selected"'); ?>>
+                                        Esporárido
+                                   </option>
+                                   <option value="1" <?php echo ($vig != 1 ? '' : 'selected="selected"'); ?>>
+                                        Mensal
+                                   </option>
+                                   <option value="2" <?php echo ($vig != 2 ? '' : 'selected="selected"'); ?>>
+                                        Bimestral
+                                   </option>
+                                   <option value="3" <?php echo ($vig != 3 ? '' : 'selected="selected"'); ?>>
+                                        Trimestral
+                                   </option>
+                                   <option value="4" <?php echo ($vig != 4 ? '' : 'selected="selected"'); ?>>
+                                        Semestral
+                                   </option>
+                                   <option value="5" <?php echo ($vig != 5 ? '' : 'selected="selected"'); ?>>
+                                        Anual
+                                   </option>
+                                   <option value="6" <?php echo ($vig != 6 ? '' : 'selected="selected"'); ?>>
+                                        Bianual
+                                   </option>
+                                   <option value="7" <?php echo ($vig != 7 ? '' : 'selected="selected"'); ?>>
+                                        Trianual
+                                   </option>
+                              </select>
                          </div>
                          <div class="col-md-3"></div>
                     </div>
                     <div class="row">
                          <div class="col-md-12">
-                              <label>Observação para o Pagamento</label>
+                              <label>Observação para o Serviço</label>
                               <textarea class="form-control" rows="3" id="obs" name="obs"><?php echo $obs; ?></textarea>
                          </div>
                     </div>
@@ -274,17 +300,15 @@ $(document).ready(function() {
                                         <th width="5%">Excluir</th>
                                         <th width="5%">Número</th>
                                         <th>Status</th>
-                                        <th>Condição de Pagamento</th>
-                                        <th>Parcelas</th>
-                                        <th>Vecto</th>
-                                        <th>Taxa</th>
-                                        <th>Observação para o Pagto</th>
-                                        <th>Inclusão</th>
-                                        <th>Alteração</th>
+                                        <th>Grupo de Serviço</th>
+                                        <th>Descrição do Serviço</th>
+                                        <th>Preço</th>
+                                        <th>Vigêncdia</th>
+                                        <th>Observação para o Serviço</th>
                                    </tr>
                               </thead>
                               <tbody>
-                                   <?php $ret = carrega_pag();  ?>
+                                   <?php $ret = carrega_ser();  ?>
                               </tbody>
                          </table>
                     </div>
@@ -299,93 +323,104 @@ $(document).ready(function() {
 
 <?php
 if ($_SESSION['wrkopereg'] == 1 && $_SESSION['wrkcodreg'] == $cod) {
-     exit('<script>location.href = "man-pagto.php?ope=1&cod=0"</script>');
+     exit('<script>location.href = "man-servico.php?ope=1&cod=0"</script>');
 }
 
 function ultimo_cod() {
      $cod = 1;
      include_once "dados.php";
-     $nro = acessa_reg('Select idpagto from tb_pagto order by idpagto desc Limit 1', $reg);
+     $nro = acessa_reg('Select idservico from tb_servico order by idservico desc Limit 1', $reg);
      if ($nro == 1) {
-          $cod = $reg['idpagto'] + 1;
+          $cod = $reg['idservico'] + 1;
      }        
      return $cod;
 }
+function carrega_gru($gru) {
+     $sta = 0;
+     include_once "dados.php";    
+     if ($gru == 0) {
+          echo '<option value="0" selected="selected">Selecione grupo desejado ...</option>';
+     }
+     $com = "Select idgrupo, grudescricao from tb_grupo where grustatus = 0 and grutiporeg = 2 and gruempresa = " . $_SESSION['wrkcodemp'] . " order by grudescricao, idgrupo";
+     $nro = leitura_reg($com, $reg);
+     foreach ($reg as $lin) {
+          if ($lin['idgrupo'] != $gru) {
+               echo  '<option value ="' . $lin['idgrupo'] . '">' . $lin['grudescricao'] . '</option>'; 
+          } else {
+               echo  '<option value ="' . $lin['idgrupo'] . '" selected="selected">' . $lin['grudescricao'] . '</option>';
+          }
+     }
+     return $sta;
+}
 
-function consiste_pag() {
+function consiste_ser() {
      $sta = 0;
      if (trim($_REQUEST['des']) == "") {
-          echo '<script>alert("Descrição do Forma de Pagto não pode estar em branco");</script>';
+          echo '<script>alert("Descrição do Serviço não pode estar em branco");</script>';
           return 1;
      }
-     if (strlen($_REQUEST['ven']) > 31) {
-          echo '<script>alert("Dia para o vencimento não pode ser superior a 31 dias");</script>';
-          $sta = 1;
-     }       
-     if (strlen($_REQUEST['par']) > 24) {
-          echo '<script>alert("Número de parcelas não pode ser superior a 24 parcelas");</script>';
-          $sta = 1;
-     }       
+     if (trim($_REQUEST['pre']) == "" || trim($_REQUEST['pre']) == "0") {
+          echo '<script>alert("Preço do Serviço informado não pode estar em branco");</script>';
+          return 1;
+     }
      if (strlen($_REQUEST['obs']) > 500) {
-          echo '<script>alert("Observação para pagto não pode ter mais de 500 caracteres");</script>';
+          echo '<script>alert("Observação para serviço não pode ter mais de 500 caracteres");</script>';
           $sta = 1;
      }       
      return $sta;
  }
 
-function carrega_pag() {
+function carrega_ser() {
      include_once "dados.php";
-     $com = "Select * from tb_pagto where pagempresa = " . $_SESSION['wrkcodemp'] . " order by pagdescricao, idpagto";
+     $com = "Select S.*, G.grudescricao from (tb_servico S left join tb_grupo G on S.sergrupo = G.idgrupo) where serempresa = " . $_SESSION['wrkcodemp'] . " order by serdescricao, idservico";
      $nro = leitura_reg($com, $reg);
      foreach ($reg as $lin) {
           $txt =  '<tr>';
-          $txt .= '<td class="text-center"><a href="man-pagto.php?ope=2&cod=' . $lin['idpagto'] . '" title="Efetua alteração do registro informado na linha"><i class="large material-icons">healing</i></a></td>';
-          $txt .= '<td class="lit-d text-center"><a href="man-pagto.php?ope=3&cod=' . $lin['idpagto'] . '" title="Efetua exclusão do registro informado na linha"><i class="cor-1 large material-icons">delete_forever</i></a></td>';
-          $txt .= '<td class="text-center">' . $lin['idpagto'] . '</td>';
-          if ($lin['pagstatus'] == 0) {$txt .= "<td>" . "Normal" . "</td>";}
-          if ($lin['pagstatus'] == 1) {$txt .= "<td>" . "Bloqueado" . "</td>";}
-          if ($lin['pagstatus'] == 2) {$txt .= "<td>" . "Suspenso" . "</td>";}
-          if ($lin['pagstatus'] == 3) {$txt .= "<td>" . "Cancelado" . "</td>";}
-          $txt .= '<td class="text-left">' . $lin['pagdescricao'] . "</td>";
-          $txt .= '<td class="text-center">' . $lin['pagparcelas'] . "</td>";
-          $txt .= '<td class="text-center">' . $lin['pagdiavecto'] . "</td>";
-          $txt .= '<td class="text-center">' . number_format($lin['pagtaxa'], 2, ",", ".") . "</td>";
-          $txt .= '<td class="text-left">' . $lin['pagobservacao'] . "</td>";
-          if ($lin['datinc'] == null) {
-               $txt .= "<td>" . '' . "</td>";
-          }else{
-               $txt .= "<td>" . date('d/m/Y H:m:s',strtotime($lin['datinc'])) . "</td>";
-          }
-          if ($lin['datalt'] == null) {
-               $txt .= "<td>" . '' . "</td>";
-          }else{
-               $txt .= "<td>" . date('d/m/Y H:m:s',strtotime($lin['datalt'])) . "</td>";
-          }
+          $txt .= '<td class="text-center"><a href="man-servico.php?ope=2&cod=' . $lin['idservico'] . '" title="Efetua alteração do registro informado na linha"><i class="large material-icons">healing</i></a></td>';
+          $txt .= '<td class="lit-d text-center"><a href="man-servico.php?ope=3&cod=' . $lin['idservico'] . '" title="Efetua exclusão do registro informado na linha"><i class="cor-1 large material-icons">delete_forever</i></a></td>';
+          $txt .= '<td class="text-center">' . $lin['idservico'] . '</td>';
+          if ($lin['serstatus'] == 0) {$txt .= "<td>" . "Normal" . "</td>";}
+          if ($lin['serstatus'] == 1) {$txt .= "<td>" . "Bloqueado" . "</td>";}
+          if ($lin['serstatus'] == 2) {$txt .= "<td>" . "Suspenso" . "</td>";}
+          if ($lin['serstatus'] == 3) {$txt .= "<td>" . "Cancelado" . "</td>";}
+          $txt .= '<td class="text-left">' . $lin['grudescricao'] . "</td>";
+          $txt .= '<td class="text-left">' . $lin['serdescricao'] . "</td>";
+          $txt .= '<td class="text-center">' . number_format($lin['serpreco'], 2, ",", ".") . "</td>";
+          if ($lin['servigencia'] == 0) {$txt .= "<td>" . "Esporárido" . "</td>";}
+          if ($lin['servigencia'] == 1) {$txt .= "<td>" . "Mensal" . "</td>";}
+          if ($lin['servigencia'] == 2) {$txt .= "<td>" . "Bimestral" . "</td>";}
+          if ($lin['servigencia'] == 3) {$txt .= "<td>" . "Trimestral" . "</td>";}
+          if ($lin['servigencia'] == 4) {$txt .= "<td>" . "Semestral" . "</td>";}
+          if ($lin['servigencia'] == 5) {$txt .= "<td>" . "Anual" . "</td>";}
+          if ($lin['servigencia'] == 6) {$txt .= "<td>" . "Bianual" . "</td>";}
+          if ($lin['servigencia'] == 7) {$txt .= "<td>" . "Trianual" . "</td>";}
+          $txt .= '<td class="text-left">' . $lin['serobservacao'] . "</td>";
           $txt .= "</tr>";
           echo $txt;
      }
 }
 
-function incluir_pag() {
+function incluir_ser() {
      $ret = 0;
+     $pre = str_replace(".", "", $_REQUEST['pre']); $pre = str_replace(",", ".", $pre);
      include_once "dados.php";
-     $sql  = "insert into tb_pagto (";
-     $sql .= "pagstatus, ";
-     $sql .= "pagempresa, ";
-     $sql .= "pagdescricao, ";
-     $sql .= "pagparcelas, ";
-     $sql .= "pagdiavecto, ";
-     $sql .= "pagtaxa, ";
-     $sql .= "pagobservacao, ";
+     $sql  = "insert into tb_servico (";
+     $sql .= "serstatus, ";
+     $sql .= "serempresa, ";
+     $sql .= "serdescricao, ";
+     $sql .= "serpreco, ";
+     $sql .= "sergrupo, ";
+     $sql .= "servigencia, ";
+     $sql .= "serobservacao, ";
      $sql .= "keyinc, ";
      $sql .= "datinc ";
      $sql .= ") value ( ";
      $sql .= "'" . $_REQUEST['sta'] . "',";
      $sql .= "'" . $_SESSION['wrkcodemp'] . "',";
      $sql .= "'" . str_replace("'", "´", $_REQUEST['des']) . "',";
-     $sql .= "'" . ($_REQUEST['par'] == "" ? 0 : $_REQUEST['par']) . "',";
-     $sql .= "'" . ($_REQUEST['ven'] == "" ? 0 : $_REQUEST['ven']) . "',";
-     $sql .= "'" . ($_REQUEST['tax'] == "" ? 0 : str_replace(",",".", $_REQUEST['tax'])) . "',";
+     $sql .= "'" . $pre . "',";
+     $sql .= "'" . $_REQUEST['gru'] . "',";
+     $sql .= "'" . $_REQUEST['vig'] . "',";
      $sql .= "'" . str_replace("'", "´", $_REQUEST['obs']) . "',";
      $sql .= "'" . $_SESSION['wrkideusu'] . "',";
      $sql .= "'" . date("Y/m/d H:i:s") . "')";
@@ -397,36 +432,37 @@ function incluir_pag() {
      return $ret;
 }
 
-function ler_pagto(&$cha, &$des, &$sta, &$par, &$ven, &$tax, &$obs) {
+function ler_pagto(&$cha, &$des, &$sta, &$gru, &$pre, &$vig, &$obs) {
      include_once "dados.php";
-     $nro = acessa_reg("Select * from tb_pagto where idpagto = " . $cha, $reg);            
+     $nro = acessa_reg("Select * from tb_servico where idservico = " . $cha, $reg);            
      if ($nro == 0) {
-          echo '<script>alert("Código do Forma de Pagto informado não cadastrado no sistema");</script>';
+          echo '<script>alert("Código do Serviço informado não cadastrado no sistema");</script>';
      } else {
-          $cha = $reg['idpagto'];
-          $des = $reg['pagdescricao'];
-          $obs = $reg['pagobservacao'];
-          $sta = $reg['pagstatus'];
-          $par = $reg['pagparcelas'];
-          $ven = $reg['pagdiavecto'];
-          $tax = $reg['pagtaxa'];
+          $cha = $reg['idservico'];
+          $des = $reg['serdescricao'];
+          $obs = $reg['serobservacao'];
+          $sta = $reg['serstatus'];
+          $vig = $reg['servigencia'];
+          $gru = $reg['sergrupo'];
+          $pre = number_format($reg['serpreco'], 2, ",", ".");
      }
      return $cha;
  }
 
- function alterar_pag() {
+ function alterar_ser() {
      $ret = 0;
+     $pre = str_replace(".", "", $_REQUEST['pre']); $pre = str_replace(",", ".", $pre);
      include_once "dados.php";
-     $sql  = "update tb_pagto set ";
-     $sql .= "pagstatus = '". $_REQUEST['sta'] . "', ";
-     $sql .= "pagdescricao = '". $_REQUEST['des'] . "', ";
-     $sql .= "pagparcelas = '". ($_REQUEST['par'] == "" ? 0 : $_REQUEST['par']) . "', ";
-     $sql .= "pagdiavecto = '". ($_REQUEST['ven'] == "" ? 0 :$_REQUEST['ven']) . "', ";
-     $sql .= "pagtaxa = '". ($_REQUEST['tax'] == "" ? 0 :str_replace(",",".",$_REQUEST['tax'])) . "', ";
-     $sql .= "pagobservacao = '". $_REQUEST['obs'] . "', ";
+     $sql  = "update tb_servico set ";
+     $sql .= "serstatus = '". $_REQUEST['sta'] . "', ";
+     $sql .= "serdescricao = '". $_REQUEST['des'] . "', ";
+     $sql .= "serpreco = '". $pre . "', ";
+     $sql .= "servigencia = '". $_REQUEST['vig'] . "', ";
+     $sql .= "sergrupo = '". $_REQUEST['gru'] . "', ";
+     $sql .= "serobservacao = '". $_REQUEST['obs'] . "', ";
      $sql .= "keyalt = '" . $_SESSION['wrkideusu'] . "', ";
      $sql .= "datalt = '" . date("Y/m/d H:i:s") . "' ";
-     $sql .= "where idpagto = " . $_SESSION['wrkcodreg'];
+     $sql .= "where idservico = " . $_SESSION['wrkcodreg'];
      $ret = comando_tab($sql, $nro, $ult, $men);
      if ($ret == false) {
           print_r($sql);
@@ -435,10 +471,10 @@ function ler_pagto(&$cha, &$des, &$sta, &$par, &$ven, &$tax, &$obs) {
      return $ret;
  } 
 
- function excluir_pag() {
+ function excluir_ser() {
      $ret = 0;
      include_once "dados.php";
-     $sql  = "delete from tb_pagto where idpagto = " . $_SESSION['wrkcodreg'] ;
+     $sql  = "delete from tb_servico where idservico = " . $_SESSION['wrkcodreg'] ;
      $ret = comando_tab($sql, $nro, $ult, $men);
      if ($ret == false) {
           print_r($sql);

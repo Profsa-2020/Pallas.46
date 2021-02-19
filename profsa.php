@@ -249,6 +249,26 @@ function limpa_pro($nom)  {
      return $sta;
  }
 
+ function valida_cpf ($cpf) {
+     $sta = 0; $som = 0;
+     if ($cpf == '0') { return 0; }
+     $cpf = preg_replace('/[^0-9]/','',$cpf);  // Troca não numeros por branco.
+     for ($ind = 0, $nro = 10; $ind <= 8 ; $ind++, $nro--) {
+         $som = $som + $cpf[$ind] * $nro;
+     }
+     $res1 = 11 - $som % 11;
+     if ($res1 == 10 || $res1 == 11) { $res1 = 0; }
+     $cpf = $cpf . $res1;
+     $som = 0;
+     for ($ind=0, $nro=11; $ind <= 9 ; $ind++, $nro--) {
+         $som = $som + $cpf[$ind] * $nro;
+     }
+     $res2 = 11 - $som % 11;
+     if ($res2 == 10 || $res2 == 11) { $res2 = 0; }
+     if ($res1 != $cpf[9] || $res2 != $cpf[10]) { $sta = 1; }
+     return $sta;
+ }
+
  function inverte_dat($tip, $dat) {
     $bar = strpos($dat,'/');
     $tra = strpos($dat,'-');

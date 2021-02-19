@@ -47,7 +47,7 @@
      <script type="text/javascript" src="js/jquery.mask.min.js"></script>
 
      <link href="css/pallas46.css" rel="stylesheet" type="text/css" media="screen" />
-     <title>Cliente - Gerenciamento de Contratos - SearchMidia - Profsa Informátda Ltda</title>
+     <title>Consultor - Gerenciamento de Contratos - SearchMidia - Profsa Informátda Ltda</title>
 </head>
 
 <script>
@@ -69,7 +69,7 @@ $(document).ready(function() {
                "lengthMenu": "Demonstrar _MENU_ linhas por páginas",
                "zeroRecords": "Não existe registros a demonstrar ...",
                "info": "Mostrada página _PAGE_ de _PAGES_",
-               "infoEmpty": "Sem registros de clientes ...",
+               "infoEmpty": "Sem registros de consultores ...",
                "sSearch": "Buscar:",
                "infoFiltered": "(Consulta de _MAX_ total de linhas)",
                "oPaginate": {
@@ -112,7 +112,7 @@ $(document).ready(function() {
      if (isset($_SERVER['HTTP_REFERER']) == true) {
           if (limpa_pro($_SESSION['wrknompro']) != limpa_pro($_SERVER['HTTP_REFERER'])) {
                $_SESSION['wrkproant'] = limpa_pro($_SERVER['HTTP_REFERER']);
-               $ret = gravar_log(4, "Entrada na página de consulta de clientes - Pallas.46");  
+               $ret = gravar_log(4, "Entrada na página de consulta de consultores - Pallas.46");  
           }
      }
      if (isset($_SESSION['wrkopereg']) == false) { $_SESSION['wrkopereg'] = 0; }
@@ -123,7 +123,7 @@ $(document).ready(function() {
 ?>
 
 <body id="box00">
-<h1 class="cab-0">Consulta de Clientes - SearchMidia - Profsa Informática</h1>
+<h1 class="cab-0">Consulta de Consultores - SearchMidia - Profsa Informática</h1>
      <div class="row">
           <div class="col-md-12">
                <?php include_once "cabecalho-1.php"; ?>
@@ -132,13 +132,13 @@ $(document).ready(function() {
      <div class="container">
           <div class="row qua-2">
                <div class="col-md-11 text-left">
-                    <span>Consulta de Clientes</span>
+                    <span>Consulta de Consultores</span>
                </div>
                <div class="col-md-1">
-                    <form name="frmTelNov" action="man-cliente.php?ope=1&cod=0" method="POST">
+                    <form name="frmTelNov" action="man-consultor.php?ope=1&cod=0" method="POST">
                          <div class="text-center">
                               <button type="submit" class="bot-2" id="nov" name="novo"
-                                   title="Mostra campos para criar novo cliente no sistema"><i
+                                   title="Mostra campos para criar novo consultor no sistema"><i
                                         class="fa fa-plus-circle fa-1g" aria-hidden="true"></i></button>
                          </div>
                     </form>
@@ -157,17 +157,18 @@ $(document).ready(function() {
                                         <th width="5%">Excluir</th>
                                         <th width="5%">Código</th>
                                         <th>Status</th>
-                                        <th>Razão Social do Cliente</th>
-                                        <th>Número C.n.p.j.</th>
+                                        <th>Nome do Consultor</th>
+                                        <th>Número C.p.f.</th>
+                                        <th>Registro</th>
                                         <th>Cidade - UF</th>
                                         <th>E-Mail</th>
                                         <th>Telefone</th>
                                         <th>Celular</th>
-                                        <th>Nome do Contato</th>
+                                        <th>Observação</th>
                                    </tr>
                               </thead>
                               <tbody>
-                                   <?php $ret = carrega_cli();  ?>
+                                   <?php $ret = carrega_con();  ?>
                               </tbody>
                          </table>
                     </div>
@@ -180,30 +181,31 @@ $(document).ready(function() {
 </body>
 
 <?php
-function carrega_cli() {
+function carrega_con() {
      include_once "dados.php";
-     $com = "Select * from tb_cliente where cliempresa = " .  $_SESSION['wrkcodemp'] . " order by clirazao, idcliente";
+     $com = "Select * from tb_consultor where conempresa = " .  $_SESSION['wrkcodemp'] . " order by connome, idconsultor";
      $nro = leitura_reg($com, $reg);
      foreach ($reg as $lin) {
           $txt =  '<tr>';
-          $txt .= '<td class="text-center"><a href="man-cliente.php?ope=2&cod=' . $lin['idcliente'] . '" title="Efetua alteração do registro informado na linha"><i class="large material-icons">healing</i></a></td>';
-          $txt .= '<td class="lit-d text-center"><a href="man-cliente.php?ope=3&cod=' . $lin['idcliente'] . '" title="Efetua exclusão do registro informado na linha"><i class="cor-1 large material-icons">delete_forever</i></a></td>';
-          $txt .= '<td class="text-center">' . $lin['idcliente'] . '</td>';
-          if ($lin['clistatus'] == 0) {$txt .= "<td>" . "Ativo" . "</td>";}
-          if ($lin['clistatus'] == 1) {$txt .= "<td>" . "Inativo" . "</td>";}
-          if ($lin['clistatus'] == 2) {$txt .= "<td>" . "Suspenso" . "</td>";}
-          if ($lin['clistatus'] == 3) {$txt .= "<td>" . "Cancelado" . "</td>";}
-          $txt .= "<td>" . $lin['clirazao'] . "</td>";
-          if ($lin['clipessoa'] == 0) {
-               $txt .= "<td>" . mascara_cpo($lin['clicnpj'], "   .   .   -  ") . "</td>";
+          $txt .= '<td class="text-center"><a href="man-consultor.php?ope=2&cod=' . $lin['idconsultor'] . '" title="Efetua alteração do registro informado na linha"><i class="large material-icons">healing</i></a></td>';
+          $txt .= '<td class="lit-d text-center"><a href="man-consultor.php?ope=3&cod=' . $lin['idconsultor'] . '" title="Efetua exclusão do registro informado na linha"><i class="cor-1 large material-icons">delete_forever</i></a></td>';
+          $txt .= '<td class="text-center">' . $lin['idconsultor'] . '</td>';
+          if ($lin['constatus'] == 0) {$txt .= "<td>" . "Ativo" . "</td>";}
+          if ($lin['constatus'] == 1) {$txt .= "<td>" . "Inativo" . "</td>";}
+          if ($lin['constatus'] == 2) {$txt .= "<td>" . "Suspenso" . "</td>";}
+          if ($lin['constatus'] == 3) {$txt .= "<td>" . "Cancelado" . "</td>";}
+          $txt .= "<td>" . $lin['connome'] . "</td>";
+          if ($lin['conpessoa'] == 0) {
+               $txt .= "<td>" . mascara_cpo($lin['concpf'], "   .   .   -  ") . "</td>";
           } else {
-               $txt .= "<td>" . mascara_cpo($lin['clicnpj'], "  .   .   /    -  ") . "</td>";
+               $txt .= "<td>" . mascara_cpo($lin['concpf'], "  .   .   /    -  ") . "</td>";
           }
-          $txt .= "<td>" . $lin['clicidade'] . '-' . $lin['cliestado'] . "</td>";
-          $txt .= "<td>" . $lin['cliemail'] . "</td>";
-          $txt .= "<td>" . $lin['clitelefone'] . "</td>";
-          $txt .= "<td>" . $lin['clicelular'] . "</td>";
-          $txt .= "<td>" . $lin['clicontato'] . "</td>";
+          $txt .= "<td>" . $lin['conregistro'] . "</td>";
+          $txt .= "<td>" . $lin['concidade'] . '-' . $lin['conestado'] . "</td>";
+          $txt .= "<td>" . $lin['conemail'] . "</td>";
+          $txt .= "<td>" . $lin['contelefone'] . "</td>";
+          $txt .= "<td>" . $lin['concelular'] . "</td>";
+          $txt .= "<td>" . $lin['conobservacao'] . "</td>";
           $txt .= "</tr>";
           echo $txt; 
      }

@@ -62,8 +62,8 @@ $(document).ready(function() {
      $('#tab-0').DataTable({
           "pageLength": 25,
           "aaSorting": [
-               [3, 'asc'],
-               [4, 'asc']
+               [4, 'asc'],
+               [3, 'asc']
           ],
           "language": {
                "lengthMenu": "Demonstrar _MENU_ linhas por páginas",
@@ -182,7 +182,11 @@ $(document).ready(function() {
 <?php
 function carrega_emp() {
      include_once "dados.php";
-     $com = "Select * from tb_empresa where idempresa = " .  $_SESSION['wrkcodemp'] . " order by emprazao, idempresa";
+     if ($_SESSION['wrktipusu'] >= 3) {
+          $com = "Select * from tb_empresa order by emprazao, idempresa";
+     } else {
+          $com = "Select * from tb_empresa where idempresa = " .  $_SESSION['wrkcodemp'] . " order by emprazao, idempresa";
+     }
      $nro = leitura_reg($com, $reg);
      foreach ($reg as $lin) {
           $txt =  '<tr>';

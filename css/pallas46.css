@@ -49,7 +49,7 @@
     box-shadow: 10px 15px 5px rgba(0,0,0,.3);
  }
 
- .qua-0 label {
+ .qua-0 label, .lit-1 span {
     font-size: 14px;
     color: #918e8e;
 }
