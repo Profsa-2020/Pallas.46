@@ -105,6 +105,19 @@
     background-color: #F8F9FA;
 }
 
+.qua-3 {
+    color: #c9c7c7;   
+    margin: 0px 5px; 
+    font-size: 20px;
+    font-weight: bold;
+    border-radius: 10px;
+    background-color: #0033ff;
+}
+.qua-3 p {
+    font-size: 28px;
+    text-align: right;
+}
+
 .tab-1 {
     font-size: 12px;
     padding: 0px 15px;

@@ -98,6 +98,8 @@ $(document).ready(function() {
           if (file_exists($cam . '.jpg') == true) { $_SESSION['wrklogemp'] = $cam . '.jpg'; }
           if (file_exists($cam . '.jpeg') == true) { $_SESSION['wrklogemp'] = $cam . '.jpeg'; }
      }
+     $tab = array(); 
+     $ret = carrega_dash($tab);
 
 ?>
 
@@ -115,6 +117,45 @@ $(document).ready(function() {
                                    DashBoard</strong></span></h2>
                </div>
           </div>
+          <br />
+
+               <div class="row">
+                    <div class="col-md-2"></div>
+                    <div class="col-md-1 qua-3">
+                         <p><?php echo number_format($tab['emp'], 0, ",", "."); ?></p>
+                         <span><?php echo 'Empresas'; ?></span>
+                    </div>
+                    <div class="col-md-1 qua-3">
+                         <p><?php echo number_format($tab['csu'], 0, ",", "."); ?></p>
+                         <span><?php echo 'Consultores'; ?></span>
+                    </div>
+                    <div class="col-md-1 qua-3">
+                         <p><?php echo number_format($tab['cli'], 0, ",", "."); ?></p>
+                         <span><?php echo 'Clientes'; ?></span>
+                    </div>
+                    <div class="col-md-1 qua-3">
+                         <p><?php echo number_format($tab['ser'], 0, ",", "."); ?></p>
+                         <span><?php echo 'Serviços'; ?></span>
+                    </div>
+                    <div class="col-md-1 qua-3">
+                         <p><?php echo number_format($tab['pro'], 0, ",", "."); ?></p>
+                         <span><?php echo 'Propostas'; ?></span>
+                    </div>
+                    <div class="col-md-1 qua-3">
+                         <p><?php echo number_format($tab['con'], 0, ",", "."); ?></p>
+                         <span><?php echo 'Contratos'; ?></span>
+                    </div>
+                    <div class="col-md-1 qua-3">
+                         <p><?php echo number_format($tab['log'], 0, ",", "."); ?></p>
+                         <span><?php echo 'Logs'; ?></span>
+                    </div>
+                    <div class="col-md-1 qua-3">
+                         <p><?php echo number_format($tab['usu'], 0, ",", "."); ?></p>
+                         <span><?php echo 'Usuários'; ?></span>
+                    </div>
+                    <div class="col-md-2"></div>
+               </div>
+
           <br /><br />
           <div class="row">
                <div class="col-md-12 text-center">
@@ -128,5 +169,57 @@ $(document).ready(function() {
           <img class="subir" src="img/subir.png" title="Volta a página para o seu topo." />
      </div>
 </body>
+
+<?php
+function carrega_dash(&$tab) {
+     $sta = 0;
+     $tab['emp'] = 0;
+     $tab['con'] = 0;
+     $tab['csu'] = 0;
+     $tab['cli'] = 0;
+     $tab['ser'] = 0;
+     $tab['pro'] = 0;
+     $tab['log'] = 0;
+     include_once "dados.php";
+     date_default_timezone_set("America/Sao_Paulo");
+     $com = 'Select count(*) as qtdlinhas from tb_empresa';
+     $nro = acessa_reg($com, $reg);
+     if ($nro == 1) {
+          $tab['emp'] = $reg['qtdlinhas'];
+     }        
+     $com = 'Select count(*) as qtdlinhas from tb_usuario where usuempresa = ' . $_SESSION['wrkcodemp'];
+     $nro = acessa_reg($com, $reg);
+     if ($nro == 1) {
+          $tab['usu'] = $reg['qtdlinhas'];
+     }        
+     $com = 'Select count(*) as qtdlinhas from tb_consultor where conempresa = ' . $_SESSION['wrkcodemp'];
+     $nro = acessa_reg($com, $reg);
+     if ($nro == 1) {
+          $tab['csu'] = $reg['qtdlinhas'];
+     }        
+     $com = 'Select count(*) as qtdlinhas from tb_cliente where cliempresa = ' . $_SESSION['wrkcodemp'];
+     $nro = acessa_reg($com, $reg);
+     if ($nro == 1) {
+          $tab['cli'] = $reg['qtdlinhas'];
+     }        
+     $com = 'Select count(*) as qtdlinhas from tb_servico where serempresa = ' . $_SESSION['wrkcodemp'] ;
+     $nro = acessa_reg($com, $reg);
+     if ($nro == 1) {
+          $tab['ser'] = $reg['qtdlinhas'];
+     }        
+     $com = 'Select count(*) as qtdlinhas from tb_contrato where conempresa = ' . $_SESSION['wrkcodemp'] ;
+     $nro = acessa_reg($com, $reg);
+     if ($nro == 1) {
+          $tab['con'] = $reg['qtdlinhas'];
+     }        
+     $com = 'Select count(*) as qtdlinhas from tb_log where logempresa = ' . $_SESSION['wrkcodemp'] ;
+     $nro = acessa_reg($com, $reg);
+     if ($nro == 1) {
+          $tab['log'] = $reg['qtdlinhas'];
+     }        
+     return $sta;
+}
+
+?>
 
 </html>

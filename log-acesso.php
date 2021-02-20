@@ -174,7 +174,7 @@ $(document).ready(function() {
                               </div>
                          </form>
                          <br /><hr />
-                         <div class="row qua-3">
+                         <div class="row">
                               <div class="tab-1 table-responsive">
                                    <table id="tab-0" class="table table-sm table-striped">
                                         <thead>

@@ -224,7 +224,7 @@ $(document).ready(function() {
                                    <option value="0" <?php echo ($tip != 0 ? '' : 'selected="selected"'); ?>>
                                         Visitante</option>
                                    <option value="1" <?php echo ($tip != 1 ? '' : 'selected="selected"'); ?>>
-                                        Colaborador</option>
+                                        Consultor</option>
                                    <option value="2" <?php echo ($tip != 2 ? '' : 'selected="selected"'); ?>>
                                         Gerência</option>
                                    <option value="3" <?php echo ($tip != 3 ? '' : 'selected="selected"'); ?>>
