@@ -81,6 +81,13 @@ $(document).ready(function() {
           }
      });
 
+     $(".cel-w").click(function() {
+          let cel = $(this).text();
+          cel = cel.replace(/[^0-9]/g, '');
+          let end = 'https://api.whatsapp.com/send?phone=55' + cel + '&text=' + 'Olá, como você está ?';
+          window.open(end);
+     });
+
      $(window).scroll(function() {
           if ($(this).scrollTop() > 100) {
                $(".subir").fadeIn(500);
@@ -131,15 +138,14 @@ $(document).ready(function() {
      </div>
      <div class="container">
           <div class="row qua-2">
-               <div class="col-md-11 text-left">
-                    <span>Consulta de Clientes</span>
+               <div class="col-md-10 text-left">
+                    <span>Lista de Clientes</span>
                </div>
-               <div class="col-md-1">
+               <div class="col-md-2 text-center">
                     <form name="frmTelNov" action="man-cliente.php?ope=1&cod=0" method="POST">
                          <div class="text-center">
-                              <button type="submit" class="bot-2" id="nov" name="novo"
-                                   title="Mostra campos para criar novo cliente no sistema"><i
-                                        class="fa fa-plus-circle fa-1g" aria-hidden="true"></i></button>
+                              <button type="submit" class="bot-4" id="nov" name="novo"
+                                   title="Mostra campos para criar novo cliente no sistema">Adicionar</button>
                          </div>
                     </form>
                </div>
@@ -202,7 +208,7 @@ function carrega_cli() {
           $txt .= "<td>" . $lin['clicidade'] . '-' . $lin['cliestado'] . "</td>";
           $txt .= "<td>" . $lin['cliemail'] . "</td>";
           $txt .= "<td>" . $lin['clitelefone'] . "</td>";
-          $txt .= "<td>" . $lin['clicelular'] . "</td>";
+          $txt .= '<td class="cel-w cur-1">' . $lin['clicelular'] . '</td>';
           $txt .= "<td>" . $lin['clicontato'] . "</td>";
           $txt .= "</tr>";
           echo $txt; 

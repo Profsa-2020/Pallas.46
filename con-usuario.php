@@ -121,15 +121,14 @@ $(document).ready(function() {
      <?php include_once "cabecalho-1.php"; ?>
      <div class="container">
           <div class="row qua-2">
-               <div class="col-md-11">
-                    <label>Consulta de Usuários</label>
+               <div class="col-md-10">
+                    <label>Lista de Usuários</label>
                </div>
-               <div class="col-md-1">
+               <div class="col-md-2">
                     <form name="frmTelNov" action="man-usuario.php?ope=1&cod=0" method="POST">
                          <div class="text-center">
-                              <button type="submit" class="bot-2" id="nov" name="novo"
-                                   title="Mostra campos para criar novo usuário no sistema"><i
-                                        class="fa fa-plus-circle fa-1g" aria-hidden="true"></i></button>
+                              <button type="submit" class="bot-4" id="nov" name="novo"
+                                   title="Mostra campos para criar novo usuário no sistema">Adicionar</button>
                          </div>
                     </form>
                </div>
@@ -138,7 +137,7 @@ $(document).ready(function() {
      <div class="container-fluid">
           <div class="row">
                <div class="col-md-12">
-                    <div class="row qua-3">
+                    <div class="row">
                          <div class="tab-1 table-responsive">
                               <table id="tab-0" class="table table-sm table-striped">
                                    <thead>

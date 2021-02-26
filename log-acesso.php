@@ -135,6 +135,7 @@ $(document).ready(function() {
                $ret = gravar_log(10,"Entrada na página de Log para verificação de acessos de usuários: " . $dti . " até " . $dtf);  
           }
      }
+     
 ?>
 
 <body id="box00">

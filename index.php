@@ -65,43 +65,41 @@ $(document).ready(function() {
      <div class="entrada">
           <div class="qua-1 animated bounceInDown">
                <form class="cpo-0" id="frmLogin" name="frmLogin" action="" method="POST">
-                    <br />
                     <div class="row">
                          <a href="http://www.searchmidia.com.br/">
                               <img class="ima-1" src="img/logo-04.png" alt="Logotipo da empresa SearchMidiaa"
                                    title="Acesso ao site principal da empresa SearchMidia" />
                          </a>
                     </div>
-                    <br />
                     <div class="row">
                          <div class="col s1"></div>
                          <div class="input-field col s10">
                               <i class="cor-1 material-icons prefix">email</i>
                               <input type="email" class="center" id="ema" name="ema" maxlength="75" value="" required >
-                              <label for="nome">E-mail do usuário para acesso ...</label>
+                              <label for="nome">Usuário / Login</label>
                          </div>
                          <div class="col s1"></div>
                     </div>
-
                     <div class="row">
                          <div class="col s1"></div>
                          <div class="input-field col s10">
                               <i class="cor-1 material-icons prefix">lock</i>
                               <input type="password" class="center" id="sen" name="sen" maxlength="15" value="" required >
-                              <label for="senha">Senha de acesso ao sistema ...</label>
+                              <label for="senha">Sua senha</label>
                          </div>
                          <div class="col s1"></div>
                     </div>
-
                     <div class="row">
-                         <input class="bot-1" type="submit" id="ent" name="entrar" value="Entrar" />
+                         <input class="bot-4" type="submit" id="ent" name="entrar" value="ENTRAR" />
                          <br /><br />
                          <input type="checkbox" id="lem" name="lembrete" value="S" />
                          <label class="tit-1" for="lem">Lembrar Login</label>
                          <br /><br />
                          <span class="tit-2"><a href="recupera.php">Esqueci a senha</a></span>
                     </div>
-                    <br />
+                    <div class="row">
+                         <span class="tit-3">Nosso sistema não realiza vendas ou compartilhamentos. Sistema é designado para gerenciamento de cliente, contatos, contas entre outros. TERMOS DE USO.</span>
+                    </div>
                </form>
           </div>
      </div>

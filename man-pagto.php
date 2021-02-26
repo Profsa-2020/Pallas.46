@@ -186,15 +186,14 @@ $(document).ready(function() {
      <div class="container">
           <div class="qua-0">
                <div class="row qua-2">
-                    <div class="col-md-11 text-left">
+                    <div class="col-md-10 text-left">
                          <span>Manutenção de Forma de Pagto</span>
                     </div>
-                    <div class="col-md-1 text-center">
+                    <div class="col-md-2 text-center">
                          <form name="frmTelNov" action="man-pagto.php?ope=1&cod=0" method="POST">
                               <div class="text-center">
-                                   <button type="submit" class="bot-2" id="nov" name="novo"
-                                        title="Mostra campos para criar novo Forma de Pagto no sistema"><i
-                                             class="fa fa-plus-circle fa-1g" aria-hidden="true"></i></button>
+                                   <button type="submit" class="bot-4" id="nov" name="novo"
+                                        title="Mostra campos para criar novo Forma de Pagto no sistema">Adicionar</button>
                               </div>
                          </form>
                     </div>
@@ -259,7 +258,7 @@ $(document).ready(function() {
                          <div class="col-md-3"></div>
                          <div class="col-md-6 text-center">
                               <button type="submit" name="salvar" <?php echo $per; ?>
-                                   class="bot-1 <?php echo $del; ?> "><?php echo $bot; ?></button>
+                                   class="bot-4 <?php echo $del; ?> "><?php echo $bot; ?></button>
                          </div>
                          <div class="col-md-3"></div>
                     </div>

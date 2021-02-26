@@ -50,6 +50,8 @@
 
 <script>
 $(function() {
+     $("#tel").mask("(00)0000-0000");
+     $("#cel").mask("(00)00000-0000");
      $("#ace").mask("000.000");
      $("#val").mask("00/00/0000");
      $("#val").datepicker($.datepicker.regional["pt-BR"]);
@@ -153,15 +155,14 @@ $(document).ready(function() {
      <div class="container">
           <div class="qua-0">
                <div class="row qua-2">
-                    <div class="col-11 text-left">
+                    <div class="col-10 text-left">
                          <span>Manutenção de Usuários</span>
                     </div>
-                    <div class="col-1">
+                    <div class="col-2">
                          <form name="frmTelNov" action="man-usuario.php?ope=1&cod=0" method="POST">
                               <div class="text-center">
-                                   <button type="submit" class="bot-2" id="nov" name="novo"
-                                        title="Mostra campos para criar novo usuario no sistema"><i
-                                             class="fa fa-plus-circle fa-1g" aria-hidden="true"></i></button>
+                                   <button type="submit" class="bot-4" id="nov" name="novo"
+                                        title="Mostra campos para criar novo usuario no sistema">Adicionar</button>
                               </div>
                          </form>
                     </div>
@@ -257,19 +258,18 @@ $(document).ready(function() {
                          </div>
                     </div>
                     <br />
-                    <div class="row">
-                         <div class="col-12 text-center">
+                    <div class="row text-center">
+                         <div class="col-md-4"></div>
+                         <div class="col-2">
                               <button type="submit" id="env" name="salvar" <?php echo $per; ?>
-                                   class="bot-1 <?php echo $del; ?>"><?php echo $bot; ?></button>
+                                   class="bot-4 <?php echo $del; ?>"><?php echo $bot; ?></button>
                          </div>
-                    </div>
-                    <br />
-                    <div class="row">
-                         <div class="col-12 text-center">
+                         <div class="col-md-2">
                               <?php
-                                        echo '<a class="tit-2" href="' . $_SESSION['wrkproant'] . '.php" title="Volta a página anterior deste processamento.">Voltar</a>'
-                                   ?>
+                                   echo '<div class="bot-1" ><a href="' . $_SESSION['wrkproant'] . '.php" title="Volta a página anterior deste processamento.">Voltar</a></div>'
+                              ?>
                          </div>
+                         <div class="col-md-4"></div>
                     </div>
                     <br />
                </form>

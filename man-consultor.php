@@ -50,6 +50,8 @@
 
 <script>
 $(function() {
+     $("#tel").mask("(00)0000-0000");
+     $("#cel").mask("(00)00000-0000");
      $("#cgc").mask("000.000.000-00");
      $("#cep").mask("00000-000");
      $("#num").mask("999.999", {
@@ -283,15 +285,14 @@ $(document).ready(function() {
      <div class="container">
           <div class="qua-0">
                <div class="row qua-2">
-                    <div class="col-md-11 text-left">
+                    <div class="col-md-10 text-left">
                          <span>Manutenção de Consultores</span>
                     </div>
-                    <div class="col-md-1">
+                    <div class="col-md-2">
                          <form name="frmTelNov" action="man-consultor.php?ope=1&cod=0" method="POST">
                               <div class="text-center">
-                                   <button type="submit" class="bot-2" id="nov" name="novo"
-                                        title="Mostra campos para criar novo consultor no sistema"><i
-                                             class="fa fa-plus-circle fa-1g" aria-hidden="true"></i></button>
+                                   <button type="submit" class="bot-4" id="nov" name="novo"
+                                        title="Mostra campos para criar novo consultor no sistema">Adicionar</button>
                               </div>
                          </form>
                     </div>
@@ -341,7 +342,7 @@ $(document).ready(function() {
                          <div class="col-md-6"></div>
                          <div class="col-md-4">
                               <label>E-Mail</label>
-                              <input type="text" class="form-control" maxlength="75" id="ema" name="ema"
+                              <input type="email" class="form-control" maxlength="75" id="ema" name="ema"
                                    value="<?php echo $ema; ?>" required />
                          </div>
                     </div>
@@ -415,18 +416,17 @@ $(document).ready(function() {
                     </div>
                     <br />
                     <div class="row text-center">
-                         <div class="col-md-12">
+                         <div class="col-md-4"></div>
+                         <div class="col-md-2">
                               <button type="submit" name="salvar" <?php echo $per; ?>
-                                   class="bot-1 <?php echo $del; ?>"><?php echo $bot; ?></button>
+                                   class="bot-4 <?php echo $del; ?>"><?php echo $bot; ?></button>
                          </div>
-                    </div>
-                    <br />
-                    <div class="row">
-                         <div class="col-12 text-center">
+                         <div class="col-md-2">
                               <?php
-                                        echo '<a class="tit-2" href="' . $_SESSION['wrkproant'] . '.php" title="Volta a página anterior deste processamento.">Voltar</a>'
-                                   ?>
+                                   echo '<div class="bot-1" ><a href="' . $_SESSION['wrkproant'] . '.php" title="Volta a página anterior deste processamento.">Voltar</a></div>'
+                              ?>
                          </div>
+                         <div class="col-md-4"></div>
                     </div>
                     <br />
                </form>
@@ -442,7 +442,7 @@ $(document).ready(function() {
 function ultimo_cod() {
      $cod = 1;
      include_once "dados.php";
-     $nro = acessa_reg('Select idconsultor from tb_consultor where idconsultor = 1', $reg);
+     $nro = acessa_reg('Select idconsultor from tb_consultor order by idconsultor desc Limit 1', $reg);
      if ($nro == 1) {
           $cod = $reg['idconsultor'] + 1;
      }        

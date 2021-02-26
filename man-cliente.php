@@ -50,31 +50,32 @@
 
 <script>
 $(function() {
+     $("#tel").mask("(00)0000-0000");
+     $("#cel").mask("(00)00000-0000");
      $("#cpf").mask("000.000.000-00");
-     $("#cgc").mask("00.000.000/0000-00");
      $("#cep").mask("00000-000");
      $("#num").mask("999.999", {
           reverse: true
      });
 });
 
-if ($('#pes').prop("checked") == false) {
-     $('#cgc').val('');
-     $('#doc_c').text('Número do C.p.f.');
-     $('#doc_i').text('Registro Geral (R.G.)');
-     $("#cgc").mask("000.000.000-00");
-} else {
-     $('#cgc').val('');
-     $('#doc_c').text('Número do C.n.p.j.');
-     $('#doc_i').text('Inscrição Estadual');
-     $("#cgc").mask("00.000.000/0000-00");
-}
-
 $(document).ready(function() {
      var alt = $(window).height();
      var lar = $(window).width();
      if (lar < 800) {
           $('nav').removeClass("fixed-top");
+     }
+
+     if ($('#pes').prop("checked") == false) {
+          $('#doc_c').text('Número do C.p.f.');
+          $('#doc_i').text('Registro Geral (R.G.)');
+          $("#cgc").mask("000.000.000-00");
+          $("#cgc").mask("000.000.000-00");
+     } else {
+          $('#doc_c').text('Número do C.n.p.j.');
+          $('#doc_i').text('Inscrição Estadual');
+          $("#cgc").mask("00.000.000/0000-00");
+          $("#cgc").mask("00.000.000/0000-00");
      }
 
      $('#cgc').blur(function() {
@@ -159,6 +160,7 @@ $(document).ready(function() {
      });
 
      $('#pes').click(function() {
+          $('#cgc').val("");
           if ($('#pes').prop("checked") == false) {
                $('#doc_c').text('Número do C.p.f.');
                $('#doc_i').text('Registro Geral (R.G.)');
@@ -289,15 +291,14 @@ $(document).ready(function() {
      <div class="container">
           <div class="qua-0">
                <div class="row qua-2">
-                    <div class="col-md-11 text-left">
+                    <div class="col-md-10 text-left">
                          <span>Manutenção de Clientes</span>
                     </div>
-                    <div class="col-md-1">
+                    <div class="col-md-2">
                          <form name="frmTelNov" action="man-cliente.php?ope=1&cod=0" method="POST">
                               <div class="text-center">
-                                   <button type="submit" class="bot-2" id="nov" name="novo"
-                                        title="Mostra campos para criar novo cliente no sistema"><i
-                                             class="fa fa-plus-circle fa-1g" aria-hidden="true"></i></button>
+                                   <button type="submit" class="bot-4" id="nov" name="novo"
+                                        title="Mostra campos para criar novo cliente no sistema">Adicionar</button>
                               </div>
                          </form>
                     </div>
@@ -439,7 +440,7 @@ $(document).ready(function() {
                          </div>
                          <div class="col-md-4">
                               <label>E-Mail</label>
-                              <input type="text" class="form-control" maxlength="75" id="ema" name="ema"
+                              <input type="email" class="form-control" maxlength="75" id="ema" name="ema"
                                    value="<?php echo $ema; ?>" required />
                          </div>
                          <div class="col-md-4">
@@ -456,18 +457,17 @@ $(document).ready(function() {
                     </div>
                     <br />
                     <div class="row text-center">
-                         <div class="col-md-12">
+                         <div class="col-md-4"></div>
+                         <div class="col-md-2">
                               <button type="submit" name="salvar" <?php echo $per; ?>
-                                   class="bot-1 <?php echo $del; ?>"><?php echo $bot; ?></button>
+                                   class="bot-4 <?php echo $del; ?>"><?php echo $bot; ?></button>
                          </div>
-                    </div>
-                    <br />
-                    <div class="row">
-                         <div class="col-12 text-center">
+                         <div class="col-md-2">
                               <?php
-                                        echo '<a class="tit-2" href="' . $_SESSION['wrkproant'] . '.php" title="Volta a página anterior deste processamento.">Voltar</a>'
-                                   ?>
+                                   echo '<div class="bot-1" ><a href="' . $_SESSION['wrkproant'] . '.php" title="Volta a página anterior deste processamento.">Voltar</a></div>'
+                              ?>
                          </div>
+                         <div class="col-md-4"></div>
                     </div>
                     <br />
                </form>
@@ -483,7 +483,7 @@ $(document).ready(function() {
 function ultimo_cod() {
      $cod = 1;
      include_once "dados.php";
-     $nro = acessa_reg('Select idcliente from tb_cliente where idcliente = 1', $reg);
+     $nro = acessa_reg('Select idcliente from tb_cliente order by idcliente desc Limit 1', $reg);
      if ($nro == 1) {
           $cod = $reg['idcliente'] + 1;
      }        
@@ -570,10 +570,18 @@ function consiste_cli() {
           }
      }    
      if ($_REQUEST['cgc'] != "") {
-          $sta = valida_cgc($_REQUEST['cgc']);
-          if ($sta != 0) {
-               echo '<script>alert("Dígito de controle do C.n.p.j. não está correto");</script>';
-               return 8;
+          if (isset($_REQUEST['pes']) == false) {
+               $sta = valida_cpf($_REQUEST['cgc']);
+               if ($sta != 0) {
+                    echo '<script>alert("Dígito de controle do C.p.f. não está correto");</script>';
+                    return 8;
+               }
+          } else {
+               $sta = valida_cgc($_REQUEST['cgc']);
+               if ($sta != 0) {
+                    echo '<script>alert("Dígito de controle do C.n.p.j. não está correto");</script>';
+                    return 8;
+               }
           }
      }    
      return $sta;

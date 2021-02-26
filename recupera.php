@@ -79,7 +79,7 @@ $(document).ready(function() {
                          <div class="col s1"></div>
                     </div>
                     <div class="row">
-                         <input class="bot-1" type="submit" id="env" name="enviar" value="Enviar" />
+                         <input class="bot-4" type="submit" id="env" name="enviar" value="ENVIAR" />
                          <br /><br /><br />
                          <span class="tit-2"><a href="index.php">Voltar</a></span>
                     </div>

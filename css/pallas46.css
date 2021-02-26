@@ -1,17 +1,21 @@
-* { margin: 0; padding: 0; font-family: 'Work Sans', 'Lato', 'Open Sans',  'Verdana', 'Times New Roman'; border-collapse: collapse; }
+* { margin: 0; padding: 0; font-family: 'Calibri', 'Lato', 'Open Sans',  'Verdana', 'Times New Roman'; border-collapse: collapse; }
 
 .cab-0 { height: 0px; visibility: hidden; margin: 0px; }
 
 .bot-1 {
     cursor: pointer;
-    width: 150px;
+    width: 125px;
     height: 35px;
     color: #ffffff;
-    font-size: 15px;
-    font-weight: bold;
-    background-color: #3D5B99;
-    border-radius: 0px 20px 0px 20px;
+    font-size: 16px;
+    border: 0.5px solid #000000;
+    background-color: #4285F4;
  }
+
+ .bot-1 a, .bot-1 a:visited {
+    color: #ffffff;
+    vertical-align: middle;
+}
 
  .bot-2 {
     border: none;
@@ -23,11 +27,26 @@
     visibility: hidden;
 }
 
+.bot-4 {
+    cursor: pointer;
+    width: 125px;
+    height: 35px;
+    color: #ffffff;
+    font-size: 16px;
+    border: 0.5px solid #000000;
+    background-color: #34A853;
+}
+
+
 .cor-1 { color: red; }
 
 .cor-2 { background-color: red; }
 
 .cor-3 { color: blue; }
+
+.cur-1 {
+    cursor: pointer;
+}
 
  .ima-1 {
     width: 90%;
@@ -53,6 +72,7 @@
  .qua-0 {
     overflow: hidden;
     padding: 0px 5px;
+    margin: 0px auto;
     border: 0.5px solid #009FB7;
     box-shadow: 10px 15px 5px rgba(0,0,0,.3);
  }
@@ -92,7 +112,7 @@
      padding: 10px 15px;
      margin: 100px auto;
      animation-duration: 5s;
-     background-color: #b3b3b3;
+     background-color: #ffffff;
  }
 
  .qua-2 {
@@ -111,7 +131,7 @@
     font-size: 20px;
     font-weight: bold;
     border-radius: 10px;
-    background-color: #0033ff;
+    background-color: #4285F4;
 }
 .qua-3 p {
     font-size: 28px;
@@ -150,6 +170,13 @@
      font-size: 11px;
      text-decoration: none;
  }
+
+ .tit-3 {
+    color: #676a6c;
+    text-align: center;
+    font-size: 12px;
+    font-weight: bold;
+}
 
  .subir {
     position: fixed;

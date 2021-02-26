@@ -59,6 +59,13 @@ $(document).ready(function() {
           $('nav').removeClass("fixed-top");
      }
 
+     $(".cel-w").click(function() {
+          let cel = $(this).text();
+          cel = cel.replace(/[^0-9]/g, '');
+          let end = 'https://api.whatsapp.com/send?phone=55' + cel + '&text=' + 'Olá, como você está ?';
+          window.open(end);
+     });
+
      $('#tab-0').DataTable({
           "pageLength": 25,
           "aaSorting": [
@@ -131,15 +138,14 @@ $(document).ready(function() {
      </div>
      <div class="container">
           <div class="row qua-2">
-               <div class="col-md-11 text-left">
-                    <span>Consulta de Consultores</span>
+               <div class="col-md-10 text-left">
+                    <span>Lista de Consultores</span>
                </div>
-               <div class="col-md-1">
+               <div class="col-md-2">
                     <form name="frmTelNov" action="man-consultor.php?ope=1&cod=0" method="POST">
                          <div class="text-center">
-                              <button type="submit" class="bot-2" id="nov" name="novo"
-                                   title="Mostra campos para criar novo consultor no sistema"><i
-                                        class="fa fa-plus-circle fa-1g" aria-hidden="true"></i></button>
+                              <button type="submit" class="bot-4" id="nov" name="novo"
+                                   title="Mostra campos para criar novo consultor no sistema">Adicionar</button>
                          </div>
                     </form>
                </div>
@@ -204,7 +210,7 @@ function carrega_con() {
           $txt .= "<td>" . $lin['concidade'] . '-' . $lin['conestado'] . "</td>";
           $txt .= "<td>" . $lin['conemail'] . "</td>";
           $txt .= "<td>" . $lin['contelefone'] . "</td>";
-          $txt .= "<td>" . $lin['concelular'] . "</td>";
+          $txt .= '<td class="cel-w cur-1">' . $lin['concelular'] . '</td>';
           $txt .= "<td>" . $lin['conobservacao'] . "</td>";
           $txt .= "</tr>";
           echo $txt; 

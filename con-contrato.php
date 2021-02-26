@@ -44,13 +44,22 @@
           src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
      <link href="https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css" />
 
+     <script type="text/javascript" src="js/datepicker-pt-BR.js"></script>
+
      <script type="text/javascript" src="js/jquery.mask.min.js"></script>
 
      <link href="css/pallas46.css" rel="stylesheet" type="text/css" media="screen" />
-     <title>Empresa - Gerenciamento de Contratos - SearchMidia - Profsa Informátda Ltda</title>
+     <title>Contrato - Gerenciamento de Contratos - SearchMidia - Profsa Informátda Ltda</title>
 </head>
 
 <script>
+$(function() {
+     $("#dti").mask("99/99/9999");
+     $("#dtf").mask("99/99/9999");
+     $("#dti").datepicker($.datepicker.regional["pt-BR"]);
+     $("#dtf").datepicker($.datepicker.regional["pt-BR"]);
+});
+
 $(document).ready(function() {
 
      let alt = $(window).height();
@@ -62,14 +71,14 @@ $(document).ready(function() {
      $('#tab-0').DataTable({
           "pageLength": 25,
           "aaSorting": [
-               [4, 'asc'],
-               [3, 'asc']
+               [3, 'asc'],
+               [5, 'asc']
           ],
           "language": {
                "lengthMenu": "Demonstrar _MENU_ linhas por páginas",
                "zeroRecords": "Não existe registros a demonstrar ...",
                "info": "Mostrada página _PAGE_ de _PAGES_",
-               "infoEmpty": "Sem registros de empresas ...",
+               "infoEmpty": "Sem registros de contratos ...",
                "sSearch": "Buscar:",
                "infoFiltered": "(Consulta de _MAX_ total de linhas)",
                "oPaginate": {
@@ -112,18 +121,21 @@ $(document).ready(function() {
      if (isset($_SERVER['HTTP_REFERER']) == true) {
           if (limpa_pro($_SESSION['wrknompro']) != limpa_pro($_SERVER['HTTP_REFERER'])) {
                $_SESSION['wrkproant'] = limpa_pro($_SERVER['HTTP_REFERER']);
-               $ret = gravar_log(4, "Entrada na página de consulta de empresas - Pallas.46");  
+               $ret = gravar_log(4, "Entrada na página de consulta de contratos - Pallas.46");  
           }
      }
      if (isset($_SESSION['wrkopereg']) == false) { $_SESSION['wrkopereg'] = 0; }
      if (isset($_SESSION['wrkcodreg']) == false) { $_SESSION['wrkcodreg'] = 0; }
      if (isset($_REQUEST['ope']) == true) { $_SESSION['wrkopereg'] = $_REQUEST['ope']; }
      if (isset($_REQUEST['cod']) == true) { $_SESSION['wrkcodreg'] = $_REQUEST['cod']; }
-     $_SESSION['wrkmosavi']= 0; $_SESSION['wrkmenavi'] = "";     
-?>
+     $dti = date('d/m/Y', strtotime('-30 days'));
+     $dtf = date('d/m/Y');
+     $dti = (isset($_REQUEST['dti']) == false ? $dti : $_REQUEST['dti']);
+     $dtf = (isset($_REQUEST['dtf']) == false ? $dtf : $_REQUEST['dtf']);
+ ?>
 
 <body id="box00">
-<h1 class="cab-0">Consulta de Empresas - SearchMidia - Profsa Informática</h1>
+     <h1 class="cab-0">Consulta de Clientes - SearchMidia - Profsa Informática</h1>
      <div class="row">
           <div class="col-md-12">
                <?php include_once "cabecalho-1.php"; ?>
@@ -132,19 +144,42 @@ $(document).ready(function() {
      <div class="container">
           <div class="row qua-2">
                <div class="col-md-10 text-left">
-                    <span>Lista de Empresas</span>
+                    <span>Lista de Contratos</span>
                </div>
                <div class="col-md-2 text-center">
-                    <form name="frmTelNov" action="man-empresa.php?ope=1&cod=0" method="POST">
+                    <form name="frmTelNov" action="man-contrato.php?ope=1&cod=0" method="POST">
                          <div class="text-center">
                               <button type="submit" class="bot-4" id="nov" name="novo"
-                                   title="Mostra campos para criar nova empresa no sistema">Adicionar</button>
+                                   title="Mostra campos para criar novo contrato no sistema">Adicionar</button>
                          </div>
                     </form>
                </div>
           </div>
      </div>
-     <div class="container-fluid">
+     <div class="container">
+          <form class="tel-1 text-center" name="frmTelCon" action="" method="POST">
+               <div class="row">
+                    <div class="col-md-4"></div>
+                    <div class="col-md-2">
+                         <label>Data Inicial</label>
+                         <input type="text" class="form-control text-center" maxlength="10" id="dti" name="dti"
+                              value="<?php echo $dti; ?>" required />
+                    </div>
+                    <div class="col-md-2">
+                         <label>Data Final</label>
+                         <input type="text" class="form-control text-center" maxlength="10" id="dtf" name="dtf"
+                              value="<?php echo $dtf; ?>" required />
+                    </div>
+                    <div class="col-md-2"></div>
+                    <div class="col-md-2 text-center">
+                         <br />
+                         <button type="submit" id="con" name="consulta" class="bot-1"
+                              title="Carrega ocorrências conforme periodo solicitado pelo usuário.">Pesquisar</button>
+                    </div>
+               </div>
+               <br />
+          </form>
+          <hr />
           <div class="row">
                <div class="col-md-12">
                     <br />
@@ -152,21 +187,21 @@ $(document).ready(function() {
                          <table id="tab-0" class="table table-sm table-striped">
                               <thead>
                                    <tr>
-                                        <th width="5%">Alterar</th>
-                                        <th width="5%">Excluir</th>
-                                        <th width="5%">Código</th>
-                                        <th>Status</th>
-                                        <th>Razão Social do Destinatário</th>
-                                        <th>Número C.n.p.j.</th>
-                                        <th>Cidade - UF</th>
-                                        <th>Telefone</th>
-                                        <th>E-Mail</th>
-                                        <th>Celular</th>
-                                        <th>Nome do Contato</th>
+                                        <th width="3%">Alt</th>
+                                        <th width="3%">Exc</th>
+                                        <th width="5%">Status</th>
+                                        <th>Nome do Cliente</th>
+                                        <th>Proposta</th>
+                                        <th>Consultor</th>
+                                        <th>Pagto</th>
+                                        <th>Inicio</th>
+                                        <th>Final</th>
+                                        <th>Valor</th>
+                                        <th>Observação</th>
                                    </tr>
                               </thead>
                               <tbody>
-                                   <?php $ret = carrega_emp();  ?>
+                                   <?php $ret = carrega_con();  ?>
                               </tbody>
                          </table>
                     </div>
@@ -179,30 +214,30 @@ $(document).ready(function() {
 </body>
 
 <?php
-function carrega_emp() {
+function carrega_con() {
      include_once "dados.php";
-     if ($_SESSION['wrktipusu'] >= 3) {
-          $com = "Select * from tb_empresa order by emprazao, idempresa";
-     } else {
-          $com = "Select * from tb_empresa where idempresa = " .  $_SESSION['wrkcodemp'] . " order by emprazao, idempresa";
-     }
+     $com = "Select * from tb_contrato where conempresa = " .  $_SESSION['wrkcodemp'] . " order by idcontrato";
      $nro = leitura_reg($com, $reg);
      foreach ($reg as $lin) {
           $txt =  '<tr>';
-          $txt .= '<td class="text-center"><a href="man-empresa.php?ope=2&cod=' . $lin['idempresa'] . '" title="Efetua alteração do registro informado na linha"><i class="large material-icons">healing</i></a></td>';
-          $txt .= '<td class="lit-d text-center"><a href="man-empresa.php?ope=3&cod=' . $lin['idempresa'] . '" title="Efetua exclusão do registro informado na linha"><i class="cor-1 large material-icons">delete_forever</i></a></td>';
-          $txt .= '<td class="text-center">' . $lin['idempresa'] . '</td>';
-          if ($lin['empstatus'] == 0) {$txt .= "<td>" . "Ativo" . "</td>";}
-          if ($lin['empstatus'] == 1) {$txt .= "<td>" . "Inativo" . "</td>";}
-          if ($lin['empstatus'] == 2) {$txt .= "<td>" . "Suspenso" . "</td>";}
-          if ($lin['empstatus'] == 3) {$txt .= "<td>" . "Cancelado" . "</td>";}
-          $txt .= "<td>" . $lin['emprazao'] . "</td>";
-          $txt .= "<td>" . mascara_cpo($lin['empcnpj'], "  .   .   /    -  ") . "</td>";
-          $txt .= "<td>" . $lin['empcidade'] . '-' . $lin['empestado'] . "</td>";
-          $txt .= "<td>" . $lin['emptelefone'] . "</td>";
-          $txt .= "<td>" . $lin['empemail'] . "</td>";
-          $txt .= "<td>" . $lin['empcelular'] . "</td>";
-          $txt .= "<td>" . $lin['empcontato'] . "</td>";
+          $txt .= '<td class="text-center"><a href="man-contrato.php?ope=2&cod=' . $lin['idcontrato'] . '" title="Efetua alteração do registro informado na linha"><i class="large material-icons">healing</i></a></td>';
+          $txt .= '<td class="lit-d text-center"><a href="man-contrato.php?ope=3&cod=' . $lin['idcontrato'] . '" title="Efetua exclusão do registro informado na linha"><i class="cor-1 large material-icons">delete_forever</i></a></td>';
+          $txt .= '<td class="text-center">' . $lin['idcontrato'] . '</td>';
+          if ($lin['clistatus'] == 0) {$txt .= "<td>" . "Ativo" . "</td>";}
+          if ($lin['clistatus'] == 1) {$txt .= "<td>" . "Inativo" . "</td>";}
+          if ($lin['clistatus'] == 2) {$txt .= "<td>" . "Suspenso" . "</td>";}
+          if ($lin['clistatus'] == 3) {$txt .= "<td>" . "Cancelado" . "</td>";}
+          $txt .= "<td>" . $lin['clirazao'] . "</td>";
+          if ($lin['clipessoa'] == 0) {
+               $txt .= "<td>" . mascara_cpo($lin['clicnpj'], "   .   .   -  ") . "</td>";
+          } else {
+               $txt .= "<td>" . mascara_cpo($lin['clicnpj'], "  .   .   /    -  ") . "</td>";
+          }
+          $txt .= "<td>" . $lin['clicidade'] . '-' . $lin['cliestado'] . "</td>";
+          $txt .= "<td>" . $lin['cliemail'] . "</td>";
+          $txt .= "<td>" . $lin['clitelefone'] . "</td>";
+          $txt .= '<td class="cel-w cur-1">' . $lin['clicelular'] . '</td>';
+          $txt .= "<td>" . $lin['clicontato'] . "</td>";
           $txt .= "</tr>";
           echo $txt; 
      }
