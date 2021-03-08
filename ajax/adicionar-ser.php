@@ -43,9 +43,13 @@
      $txt .= '</thead>';
      $txt .= '<tbody>';
      foreach ($_SESSION['wrklisser']['cod'] as $key => $lin) {
+          if ($_SESSION['wrklisser']['sta'][$lin] != 1) {
+               $txt .= '<tr class="cor-1 del-1">';
+          } else {
+               $tot = $tot +  $_SESSION['wrklisser']['pre'][$lin];
+               $txt .= '<tr>';
+          }
           $qtd = $qtd + 1;
-          $tot = $tot +  $_SESSION['wrklisser']['pre'][$lin];
-          $txt .= '<tr>';
           $txt .= '<td>' . $qtd . '</td>';
           $txt .= '<td>' . retorna_dad('serdescricao', 'tb_servico', 'idservico', $key) . '</td>';
           if ($_SESSION['wrklisser']['vig'][$lin] == 0) { $txt .= '<td>' . "Esporádico" . '</td>'; }

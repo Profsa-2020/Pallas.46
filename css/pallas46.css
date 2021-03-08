@@ -51,6 +51,10 @@
     cursor: pointer;
 }
 
+.del-1 td {
+    text-decoration: line-through;
+}
+
  .ima-1 {
     width: 90%;
  }

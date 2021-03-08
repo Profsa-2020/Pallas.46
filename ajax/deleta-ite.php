@@ -1,5 +1,7 @@
 <?php
      $cha = 0;
+     $qtd = 0;
+     $tot = 0;
      $txt = "";
      $tab = array();
      session_start();
@@ -27,12 +29,13 @@
      $txt .= '</thead>';
      $txt .= '<tbody>';
      foreach ($_SESSION['wrklisser']['cod'] as $key => $lin) {
-
           $qtd = $qtd + 1;
-
-          $tot = $tot +  $_SESSION['wrklisser']['pre'][$lin];
-
-          $txt .= '<tr>';
+          if ($_SESSION['wrklisser']['sta'][$lin] != 1) {
+               $txt .= '<tr class="cor-1 del-1">';
+          } else {
+               $tot = $tot +  $_SESSION['wrklisser']['pre'][$lin];
+               $txt .= '<tr>';
+          }
           $txt .= '<td>' . $qtd . '</td>';
           $txt .= '<td>' . retorna_dad('serdescricao', 'tb_servico', 'idservico', $key) . '</td>';
           if ($_SESSION['wrklisser']['vig'][$lin] == 0) { $txt .= '<td>' . "Esporádico" . '</td>'; }
@@ -48,15 +51,15 @@
           $txt .= '<td class="text-right">' . number_format($_SESSION['wrklisser']['pre'][$lin] / $_SESSION['wrklisser']['par'][$lin], 2, ",", ".") . '</td>';
           $txt .= '<td class="lit-d text-center" cha_s="' . $key . '"><i class="cor-1 cur-1 fa fa-trash-o" aria-hidden="true" title="Efetua exclusão do serviço informado na linha para o contrato"></i></td>';
           $txt .= '</tr>';     
-
      }
      $txt .= '</tbody>';
      $txt .= '</table>';
      $txt .= '</div>';
 
      $tab['lis'] = $txt;
+     $tab['num'] = ($qtd + 1) . ' º ';
+     $tab['tot'] = 'R$ ' . number_format($tot, 2, ",", ".");
 
-
-     echo $tab['men'];     
+     echo json_encode($tab);     
 
 ?>

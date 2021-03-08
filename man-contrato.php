@@ -317,13 +317,53 @@ $(document).ready(function() {
      $cli = (isset($_REQUEST['cli']) == false ? 0  : $_REQUEST['cli']);
      $pag = (isset($_REQUEST['pag']) == false ? 0  : $_REQUEST['pag']);
      $pro = (isset($_REQUEST['pro']) == false ? 0  : $_REQUEST['pro']);
-     $sta = (isset($_REQUEST['sta']) == false ? 0  : $_REQUEST['sta']);
      $dti = (isset($_REQUEST['dti']) == false ? date('d/m/Y')  : $_REQUEST['dti']);
      $dtf = (isset($_REQUEST['dtf']) == false ? '' : $_REQUEST['dtf']);
      $ent = (isset($_REQUEST['ent']) == false ? ''  : $_REQUEST['ent']);
      $des = (isset($_REQUEST['des']) == false ? ''  : $_REQUEST['des']);
      $obs = (isset($_REQUEST['obs']) == false ? ''  : $_REQUEST['obs']);
      $con = (isset($_REQUEST['con']) == false ? $_SESSION['wrkcodcon'] : $_REQUEST['con']);
+     if ($_SESSION['wrkopereg'] == 1) { 
+          $_SESSION['wrkcodreg'] = ultimo_cod();
+          $_SESSION['wrkmostel'] = 1;
+     }
+     if ($_SESSION['wrkopereg'] == 3) { 
+          $bot = 'Deletar'; 
+          $del = "cor-2";
+          $per = ' onclick="return confirm(\'Confirma exclusão de contrato informado em tela ?\')" ';
+     }  
+     if ($_SESSION['wrkopereg'] >= 2) {
+          if (isset($_REQUEST['salvar']) == false) { 
+               $cha = $_SESSION['wrkcodreg']; $_SESSION['wrknumcha'] = $_SESSION['wrkcodreg']; $_SESSION['wrkmostel'] = 1;
+               $ret = ler_contrato($_SESSION['wrkcodreg'], $sta, $cli, $pag, $pro, $dti, $dtf, $ent, $des, $obs, $con); 
+          }
+     }
+     if (isset($_REQUEST['salvar']) == true) {
+          $_SESSION['wrknumvol'] = $_SESSION['wrknumvol'] + 1;
+          if ($_SESSION['wrkopereg'] == 1) {
+               $ret = consiste_con();
+               if ($ret == 0) {
+                    $ret = incluir_con();
+                    $ret = gravar_log(11,"Inclusão de novo contrato para venda: " . $des);
+                    $sta = 0; $cli = 0; $pag = 0; $pro = 0; $dti = ''; $dtf = ''; $ent = ''; $obs = ''; $con = 0; 
+               }
+          }
+          if ($_SESSION['wrkopereg'] == 2) {
+               $ret = consiste_con();
+               if ($ret == 0) {
+                    $ret = alterar_con();
+                    $ret = gravar_log(12,"Alteração de contrato existente: " . $des); $_SESSION['wrkmostel'] = 0;
+                    $sta = 0; $cli = 0; $pag = 0; $pro = 0; $dti = ''; $dtf = ''; $ent = ''; $obs = ''; $con = 0; 
+                    echo '<script>history.go(-' . $_SESSION['wrknumvol'] . ');</script>'; $_SESSION['wrknumvol'] = 1;
+               }
+          }
+          if ($_SESSION['wrkopereg'] == 3) {
+               $ret = excluir_con();
+               $ret = gravar_log(13,"Exclusão de contrato existente: " . $des); $_SESSION['wrkmostel'] = 0;
+               $sta = 0; $cli = 0; $pag = 0; $pro = 0; $dti = ''; $dtf = ''; $ent = ''; $obs = ''; $con = 0; 
+               echo '<script>history.go(-' . $_SESSION['wrknumvol'] . ');</script>'; $_SESSION['wrknumvol'] = 1;
+          }
+     }
 
 ?>
 
@@ -657,6 +697,141 @@ function carrega_vig() {
      $txt .= '<option value="7">Trianual</option>';
      return $txt;
 }
+
+
+function ler_contrato(&$cha, &$sta, &$cli, &$pag, &$pro, &$dti, &$dtf, &$ent, &$des, &$obs, &$con) {
+     include_once "dados.php";
+     $nro = acessa_reg('Select * from tb_contrato where idcontrato = ' . $cha, $reg);
+     if ($nro == 0 || $reg == false) {
+          echo '<script>alert("Número do contrato informado não cadastrado");</script>';
+          $nro = 1;
+     }else{
+          $cha = $reg['idcliente'];
+          $des = $reg['conrazao'];
+          $fan = $reg['confantasia'];
+          $sta = $reg['constatus'];
+          $cgc = $reg['concnpj'];
+          $ins = $reg['coninscricao'];
+          $con = $reg['concontato'];
+          $sit = $reg['consite'];
+          $ema = $reg['conemail'];
+          $tel = $reg['contelefone'];
+          $cel = $reg['concelular'];
+          $cep = $reg['concep'];
+          $end = $reg['conendereco'];
+          $num = $reg['connumeroend'];
+          $com = $reg['concomplemento'];
+          $bai = $reg['conbairro'];
+          $cid = $reg['concidade'];
+          $est = $reg['conestado'];
+          $pes = $reg['conpessoa'];
+          $gru = $reg['congrupo'];
+          $aut = $reg['conautorizante'];
+          $cpf = $reg['concpf'];
+          $car = $reg['concargo'];
+
+          $obs = $reg['conobservacao'];
+          $_SESSION['wrkcodreg'] = $reg['idcontrato'];
+     }
+     return $cha;
+}      
+
+function incluir_con() {
+     $ret = 0;
+     include_once "dados.php";
+     $sql  = "insert into tb_contrato (";
+     $sql .= "conempresa, ";
+     $sql .= "conproposta, ";
+     $sql .= "constatus, ";
+     $sql .= "concliente, ";
+     $sql .= "conconsultor, ";
+     $sql .= "conpagto, ";
+     $sql .= "conperdesconto, ";
+     $sql .= "condataent, ";
+     $sql .= "condatafim, ";
+     $sql .= "convaltotal, ";
+     $sql .= "convalentrada, ";
+     $sql .= "conobservacao, ";
+     $sql .= "keyinc, ";
+     $sql .= "datinc ";
+     $sql .= ") value ( ";
+     $sql .= "'" . $_SESSION['wrkcodemp'] . "',";
+     $sql .= "'" . $_REQUEST['pro'] . "',";
+     $sql .= "'" . $_REQUEST['sta'] . "',";
+     $sql .= "'" . $_REQUEST['cli'] . "',";
+     $sql .= "'" . $_REQUEST['con'] . "',";
+     $sql .= "'" . $_REQUEST['pag'] . "',";
+     $sql .= "'" . $_REQUEST['des'] . "',";
+     $sql .= "'" . $_REQUEST['ent'] . "',";
+     $sql .= "'" . $_REQUEST['fim'] . "',";
+     $sql .= "'" . $_REQUEST['tot'] . "',";
+     $sql .= "'" . $_REQUEST['ent'] . "',";
+     $sql .= "'" . $_REQUEST['obs'] . "',";
+     $sql .= "'" . $_SESSION['wrkideusu'] . "',";
+     $sql .= "'" . date("Y/m/d H:i:s") . "')";
+     $ret = comando_tab($sql, $nro, $ult, $men);
+     if ($ret == true) {
+          echo '<script>alert("Registro incluído no sistema com Sucesso !");</script>';
+     }else{
+          print_r($sql);
+          echo '<script>alert("Erro na gravação do registro solicitado !");</script>';
+     }
+     return $ret;
+ }
+ 
+ function alterar_con() {
+     $ret = 0;
+     include_once "dados.php";
+     $sql  = "update tb_contrato set ";
+     $sql .= "concnpj = '". limpa_nro($_REQUEST['cgc']) . "', ";
+     $sql .= "constatus = '". $_REQUEST['sta'] . "', ";
+     $sql .= "coninscricao = '". $_REQUEST['ins'] . "', ";
+     $sql .= "conrazao = '". $_REQUEST['des'] . "', ";
+     $sql .= "confantasia = '". $_REQUEST['fan'] . "', ";
+     $sql .= "concep = '". limpa_nro($_REQUEST['cep']) . "', ";
+     $sql .= "conendereco = '". $_REQUEST['end'] . "', ";
+     $sql .= "connumeroend = '". limpa_nro($_REQUEST['num']) . "', ";
+     $sql .= "concomplemento = '". $_REQUEST['com'] . "', ";
+     $sql .= "conbairro = '". $_REQUEST['bai'] . "', ";
+     $sql .= "concidade = '". $_REQUEST['cid'] . "', ";
+     $sql .= "conestado = '". $_REQUEST['est'] . "', ";
+     $sql .= "contelefone = '". $_REQUEST['tel'] . "', ";
+     $sql .= "concelular = '". $_REQUEST['cel'] . "', ";
+     $sql .= "concontato =  '". $_REQUEST['con'] . "', ";
+     $sql .= "conemail = '". $_REQUEST['ema'] . "', ";
+     $sql .= "consite = '". $_REQUEST['sit'] . "', ";
+     $sql .= "congrupo = '". $_REQUEST['gru'] . "', ";
+     $sql .= "conautorizante = '". $_REQUEST['aut'] . "', ";
+     $sql .= "concargo = '". $_REQUEST['car'] . "', ";
+     $sql .= "concpf = '". limpa_nro($_REQUEST['cpf']) . "', ";
+     $sql .= "conpessoa = '". (isset($_REQUEST['pes']) == false ? 0 : 1 ) . "', ";
+     $sql .= "conobservacao = '". $_REQUEST['obs'] . "', ";
+     $sql .= "keyalt = '" . $_SESSION['wrkideusu'] . "', ";
+     $sql .= "datalt = '" . date("Y/m/d H:i:s") . "' ";
+     $sql .= "where idcontrato = " . $_SESSION['wrkcodreg'];
+     $ret = comando_tab($sql, $nro, $ult, $men);
+     if ($ret == true) {
+          echo '<script>alert("Registro alterado no sistema com Sucesso !");</script>';
+     }else{
+          print_r($sql);
+          echo '<script>alert("Erro na regravação do registro solicitado !");</script>';
+     }
+     return $ret;
+}
+
+function excluir_con() {
+     $ret = 0;
+     include_once "dados.php";
+     $sql  = "delete from tb_contrato where idcontrato = " . $_SESSION['wrkcodreg'] ;
+     $ret = comando_tab($sql, $nro, $cha, $men);
+     if ($ret == true) {
+          echo '<script>alert("Registro excluído no sistema com Sucesso !");</script>';
+     }else{
+          print_r($sql);
+          echo '<script>alert("Erro na exclusão do registro solicitado !");</script>';
+     }
+     return $ret;
+ }
 
 ?>
 
