@@ -54,8 +54,8 @@
 
 <script>
 $(function() {
-     $("#par_s").mask("00");
-     $("#cod_s").mask("000.000");
+     $(".num-s").mask("00");
+     $(".cod-s").mask("000.000");
      $("#dti").mask("00/00/0000");
      $("#dtf").mask("00/00/0000");
      $("#cep").mask("00000-000");
@@ -77,195 +77,24 @@ $(document).ready(function() {
           $('nav').removeClass("fixed-top");
      }
 
-     $("#frmTelMan").submit(function() {
-          var cli = $('#cli').val();
-          var con = $('#con').val();
-          var pag = $('#pag').val();
-          var dti = $('#dti').val();
-          var dtf = $('#dtf').val();
-          if (cli == "" || cli == "0") {
-               alert("Deve ser informado o cliente para este contrato, obrigatoriamente !");
-               return false;
-          } else if (con == "" || con == "0") {
-               alert("Deve ser informado consultor para este contrato, obrigatoriamente !");
-               return false;
-          } else if (pag == "" || pag == "0") {
-               alert("Deve ser informado forma de pagamento para o contrato solicitado !");
-               return false;
-          } else if (dti == "") {
-               alert("Deve ser informado a data de início do contrato, obrigatoriamente !");
-               return false;
-          } else if (dtf == "") {
-               alert("Deve ser informado a data de fim do contrato, obrigatoriamente !");
-               return false;
-          }
+     $("form").on("blur", ".cod-s", function() {
+          var cod = $(this).val();
+          var seq = $(this).attr("seq");
+
 
      });
 
-     $("#cod_s").change(function() {
-          var cli = $('#cli').val();
-          var pag = $('#pag').val();
-          var cod = $('#cod_s').val();
-          var ser = $('#des_s').val();
-          var ord = $('#num_s').val();
-          if (cod != "") {
-               $.getJSON("ajax/leitura-ser.php", {
-                         ord: ord,
-                         cli: cli,
-                         pag: pag,
-                         cod: cod,
-                         ser: ser
-                    })
-                    .done(function(data) {
-                         if (data.men != "") {
-                              alert(data.men);
-                              $('#cod_s').val('');
-                              $('#des_s').val(0);
-                         } else {
-                              $('#cod_s').val(data.cod);
-                              $('#des_s').val(data.cod);
-                              $('#vig_s').val(data.vig);
-                              $('#pre_s').val(data.uni);
-                              $('#ser_t').val(data.tta);
-                              $('#val_s').val(data.uni);
-                              $('#val_t').val(data.tta);
-                         }
-                    }).fail(function(data) {
-                         console.log('Erro: ' + JSON.stringify(data));
-                         alert(
-                              "Erro ocorrido no processamento do item de serviço do contrato"
-                              );
-                    });
-          }
+     $("form").on("change", ".des-s", function() {
+          var des = $(this).val();
+
+
      });
 
-     $("#des_s").change(function() {
-          var cod = 0;
-          var cli = $('#cli').val();
-          var pag = $('#pag').val();
-          var ser = $('#des_s').val();
-          var ord = $('#num_s').val();
-          if (ser != 0) {
-               $.getJSON("ajax/leitura-ser.php", {
-                         ord: ord,
-                         cli: cli,
-                         pag: pag,
-                         cod: cod,
-                         ser: ser
-                    })
-                    .done(function(data) {
-                         if (data.men != "") {
-                              alert(data.men);
-                              $('#cod_s').val('');
-                              $('#des_s').val(0);
-                         } else {
-                              $('#cod_s').val(data.cod);
-                              $('#des_s').val(data.cod);
-                              $('#vig_s').val(data.vig);
-                              $('#pre_s').val(data.uni);
-                              $('#val_s').val(data.uni);
-                              $('#val_t').val(data.tta);
-                              $('#ser_t').val(data.tta);
-                         }
-                    }).fail(function(data) {
-                         console.log('Erro: ' + JSON.stringify(data));
-                         alert(
-                              "Erro ocorrido no processamento do serviço informado no contrato"
-                              );
-                    });
-          }
-     });
+     $("form").on("change", ".num-s", function() {
+          var des = $(this).val();
+          var seq = $(this).attr("seq");
 
-     $("#par_s").blur(function() {
-          var pag = $('#pag').val();
-          var par = $('#par_s').val();
-          var ser = $('#ser_t').val();
-          $.get("ajax/valida-par.php", {
-                    par: par,
-                    ser: ser
-               })
-               .done(function(data) {
-                    if (data != "") {
-                         par = 1;
-                         alert(data);
-                         $('#par_s').val(1);
-                         $('#val_s').val($('#pre_s').val());
-                    }
-               });
-          if (isNaN(par) == false) {
-               var val = 0;
-               if (par == 0) {
-                    val = parseFloat(ser, 10);
-               } else {
-                    val = ser / parseInt(par, 10);
-               }
-               val = val.toLocaleString("pt-BR", {
-                    style: "currency",
-                    currency: "BRL"
-               });
-               $('#val_s').val(val);
-          }
-     });
 
-     $("form").on("click", ".lit-d", function() {
-          var cha = $(this).attr("cha_s");
-          $.getJSON("ajax/deleta-ite.php", {
-                    cha: cha
-               })
-               .done(function(data) {
-                    if (data.men != "") {
-                         alert(data.men);
-                    } else {
-                         $('#tot_c').text(data.tot);
-                         $('#lis_s').html(data.lis);
-                    }
-               }).fail(function(data) {
-                    console.log('Erro: ' + JSON.stringify(data));
-                    alert(
-                         "Erro ocorrido no processamento do exclusão do serviço informado"
-                    );
-               });
-     });
-
-     $("#gra_s").click(function() {
-          var dad = $('#frmMosSer').serialize();
-          $.post("ajax/adicionar-ser.php", dad, function(data) {
-               if (data.men != "") {
-                    alert(data.men);
-               } else {
-
-                    $('#num_s').val(data.num);
-                    $('#cod_s').val('');
-                    $('#des_s').val(0);
-                    $('#vig_s').val(0);
-                    $('#pre_s').val('');
-                    $('#obs_s').val('');
-                    $('#val_s').val('');
-                    $('#par_s').val(1);
-                    $('#val_t').val(0);
-                    $('#ser_t').val(0);
-                    $('#tot_c').text(data.tot);
-                    $('#lis_s').html(data.lis);
-               }
-          }, "json");
-     });
-
-     $("#itens").click(function() {
-          var cli = $('#cli').val();
-          var con = $('#con').val();
-          var pag = $('#pag').val();
-          var dti = $('#dti').val();
-          if (cli == "" || cli == "0") {
-               alert("Não foi informado ainda cliente para este contrato !");
-          } else if (con == "" || con == "0") {
-               alert("Não foi informado ainda consultor para este contrato !");
-          } else if (pag == "" || pag == "0") {
-               alert("Não foi informado ainda forma de pagamento para o contrato !");
-          } else if (dti == "") {
-               alert("Não foi informado ainda data de início do contrato !");
-          } else {
-               $('#ser-con').modal('show');
-          }
      });
 
      $(window).scroll(function() {
@@ -306,15 +135,13 @@ $(document).ready(function() {
      }
      if (isset($_SESSION['wrkopereg']) == false) { $_SESSION['wrkopereg'] = 0; }
      if (isset($_SESSION['wrkcodreg']) == false) { $_SESSION['wrkcodreg'] = 0; }
-     if (isset($_SESSION['wrklisser']) == false) { $_SESSION['wrklisser'] = array(); }
+     if (isset($_SESSION['wrknumvol']) == false) { $_SESSION['wrknumvol'] = 1; }
      if (isset($_REQUEST['ope']) == true) { $_SESSION['wrkopereg'] = $_REQUEST['ope']; }
      if (isset($_REQUEST['cod']) == true) { $_SESSION['wrkcodreg'] = $_REQUEST['cod']; }
-
-     if ($_SESSION['wrkopereg'] == 1) { $_SESSION['wrklisser'] = array(); }
-
      $cod = (isset($_REQUEST['cod']) == false ? 0  : $_REQUEST['cod']);
      $sta = (isset($_REQUEST['sta']) == false ? 0  : $_REQUEST['sta']);
      $cli = (isset($_REQUEST['cli']) == false ? 0  : $_REQUEST['cli']);
+     $con = (isset($_REQUEST['con']) == false ? 0  : $_REQUEST['con']);
      $pag = (isset($_REQUEST['pag']) == false ? 0  : $_REQUEST['pag']);
      $pro = (isset($_REQUEST['pro']) == false ? 0  : $_REQUEST['pro']);
      $sta = (isset($_REQUEST['sta']) == false ? 0  : $_REQUEST['sta']);
@@ -323,7 +150,6 @@ $(document).ready(function() {
      $ent = (isset($_REQUEST['ent']) == false ? ''  : $_REQUEST['ent']);
      $des = (isset($_REQUEST['des']) == false ? ''  : $_REQUEST['des']);
      $obs = (isset($_REQUEST['obs']) == false ? ''  : $_REQUEST['obs']);
-     $con = (isset($_REQUEST['con']) == false ? $_SESSION['wrkcodcon'] : $_REQUEST['con']);
 
 ?>
 
@@ -341,7 +167,7 @@ $(document).ready(function() {
                          <span>Manutenção de Contratos</span>
                     </div>
                     <div class="col-md-2">
-                         <form id="frmTelNov" name="frmTelNov" action="man-contrato.php?ope=1&cod=0" method="POST">
+                         <form name="frmTelNov" action="man-contrato.php?ope=1&cod=0" method="POST">
                               <div class="text-center">
                                    <button type="submit" class="bot-4" id="nov" name="novo"
                                         title="Mostra campos para criar novo contrato no sistema">Adicionar</button>
@@ -349,7 +175,7 @@ $(document).ready(function() {
                          </form>
                     </div>
                </div>
-               <form class="tel-1" id="frmTelMan" name="frmTelMan" action="" method="POST">
+               <form class="tel-1" name="frmTelMan" action="" method="POST">
                     <div class="row">
                          <div class="col-md-2"></div>
                          <div class="col-md-8">
@@ -442,7 +268,7 @@ $(document).ready(function() {
                          <div class="col-md-2 text-center"><br />
                               <h5><strong>
                                         <?php
-                                   echo '<span id="tot_c" class="bg-danger text-white">';
+                                   echo '<span class="bg-danger text-white">';
                                    echo '&nbsp; R$ ' . number_format($tot, 2, ",", ".") . ' &nbsp; ';
                                    echo '</span>';
                               ?>
@@ -451,122 +277,57 @@ $(document).ready(function() {
                     </div>
                     <br />
                     <div class="row">
-                         <div class="col-sm-3"></div>
-                         <div class="col-sm-2 text-center">
+                         <div class="col-md-12">
+                              <div class="tab-1 table-responsive">
+                                   <table class="table table-sm">
+                                        <thead class="bg-primary text-white">
+                                             <tr>
+                                                  <th class="text-center" width="5%">Exc</th>
+                                                  <th width="8%">Código</th>
+                                                  <th>Descrição do Serviço</th>
+                                                  <th width="10%" class="text-center">Vigência</th>
+                                                  <th width="15%">Preço</th>
+                                                  <th width="8%">Nº Parcelas</th>
+                                                  <th width="15%">Valor Parcela</th>
+                                             </tr>
+                                        </thead>
+                                        <tbody>
+                                             <?php
+                                        $txt = "";
+                                        for ($ind = 0; $ind <= 5; $ind++) {
+                                             $txt =  '<tr>';
+                                             $txt .=  '<td class="text-center">' . '<i class="exc-s cor-1 cur-1 large material-icons" seq="' . $ind . '">delete_forever</i>' . '</td>';
+                                             $txt .=  '<td>' . '<input type="text" class="cod-s form-control text-center" maxlength="6" name="cod[]" seq="' . $ind . '" value="" />' . '</td>';
+                                             $txt .=  '<td>' . '<select name="ser[]" class="des-s form-control">' . carrega_ser() . '</select>' .  '</td>';
+                                             $txt .=  '<td>' . '<select name="vig[]" class="vig-s form-control">' . carrega_vig() . '</select>' .  '</td>';
+                                             $txt .=  '<td>' . '<input type="text" class="form-control text-right" maxlength="10" name="pre[]" value="" disabled />' . '</td>';
+                                             $txt .=  '<td>' . '<input type="text" class="num-s form-control text-center" maxlength="2" name="par[]" seq="' . $ind . '" value="" />' . '</td>';
+                                             $txt .=  '<td>' . '<input type="text" class="form-control text-right" maxlength="10" name="val[]" value="" disabled />' . '</td>';
+                                             $txt .=  '</tr>';
+                                             echo $txt;
+                                        }
+                              ?>
+                                        </tbody>
+                                   </table>
+                              </div>
+                         </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                         <div class="col-6 text-right">
                               <button type="submit" name="salvar" <?php echo $per; ?>
                                    class="bot-4 <?php echo $del; ?>"><?php echo $bot; ?></button>
                          </div>
-                         <div class="col-sm-2 text-center">
-                              <button type="button" class="bot-1" id="volta" name="volta"
-                                   onclick="location.href='<?php echo $_SESSION['wrkproant'] . ".php"; ?>'">Voltar</button>
+                         <div class="col-6 text-center">
+                              <?php
+                                   echo '<div class="bot-1 text-center" ><a href="' . $_SESSION['wrkproant'] . '.php" title="Volta a página anterior deste processamento.">Voltar</a></div>'
+                              ?>
                          </div>
-                         <div class="col-sm-2 text-center">
-                              <button type="button" id="itens" name="itens" class="bot-4">Serviços</button>
-                         </div>
-                         <div class="col-sm-3"></div>
                     </div>
                     <br />
-                    <input type="hidden" id="val_t" name="val_t" value="0" />
                </form>
           </div>
      </div>
-
-     <!----------------------------------------------------------------------------------->
-     <div class="modal fade" id="ser-con" tabindex="-1" role="dialog" aria-labelledby="tel-con" aria-hidden="true"
-          data-backdrop="static">
-          <div class="modal-dialog  modal-lg" role="document">
-               <!-- modal-sm modal-lg modal-xl -->
-               <form id="frmMosSer" name="frmMosSer" action="man-contrato.php" method="POST">
-                    <div class="modal-content">
-                         <div class="modal-header  bg-primary text-white">
-                              <h5 class="modal-title" id="tel-con">Serviços do Contrato</h5>
-                              <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
-                                   <span aria-hidden="true">&times;</span>
-                              </button>
-                         </div>
-                         <div class="tel-1 modal-body">
-                              <div class="row">
-                                   <div class="col-md-5"></div>
-                                   <div class="col-md-2 text-center">
-                                        <label>Número</label>
-                                        <strong><input type="text" class="form-control text-center" maxlength="7"
-                                                  id="num_s" name="num_s" value="1 º " disabled /></strong>
-                                   </div>
-                                   <div class="col-md-5"></div>
-                              </div>
-                              <div class="row">
-                                   <div class="col-md-5"></div>
-                                   <div class="col-md-2 text-center">
-                                        <label>Código do Serviço</label>
-                                        <strong><input type="text" class="form-control text-center" maxlength="7"
-                                                  id="cod_s" name="cod_s" value="" riquered /></strong>
-                                   </div>
-                                   <div class="col-md-5"></div>
-                              </div>
-                              <div class="row">
-                                   <div class="col-md-12">
-                                        <label>Descrição do Serviço</label>
-                                        <select id="des_s" name="des_s" class="form-control">
-                                             <?php echo carrega_ser(); ?>
-                                        </select>
-                                   </div>
-                              </div>
-                              <div class="row">
-                                   <div class="col-md-4 text-center"></div>
-                                   <div class="col-md-4">
-                                        <label>Vigência</label>
-                                        <select id="vig_s" name="vig_s" class="form-control">
-                                             <?php echo carrega_vig(); ?>
-                                        </select>
-                                   </div>
-                                   <div class="col-md-4"></div>
-                              </div>
-                              <div class="row">
-                                   <div class="col-md-4">
-                                        <label>Preço</label>
-                                        <input type="text" class="form-control text-center" maxlength="10" id="pre_s"
-                                             name="pre_s" value="" disabled />
-                                   </div>
-                                   <div class="col-md-1"></div>
-                                   <div class="col-md-2">
-                                        <label>Nº de Parcelas</label>
-                                        <input type="text" class="form-control text-center" maxlength="2" id="par_s"
-                                             name="par_s" value="1" required />
-                                   </div>
-                                   <div class="col-md-1"></div>
-                                   <div class="col-md-4">
-                                        <label>Valor da Parcela</label>
-                                        <input type="text" class="form-control text-center" maxlength="10" id="val_s"
-                                             name="val_s" value="" disabled />
-                                   </div>
-                              </div>
-                              <div class="row">
-                                   <div class="col-md-12">
-                                        <label>Observação para o Serviço</label>
-                                        <textarea class="form-control" rows="3" id="obs_s" name="obs_s"></textarea>
-                                   </div>
-                              </div>
-                              <br />
-                         </div>
-                         <div class="row">
-                              <div class="col-md-12">
-                                   <div id="lis_s"></div>
-                              </div>
-                         </div>
-                         <div class="modal-footer">
-                              <button type="button" id="gra_s" name="salvar"
-                                   class="btn btn-outline-success">Adicionar</button>
-                              <button type="button" id="fec_s" name="fechar" class="btn btn-outline-danger"
-                                   data-dismiss="modal">Fechar</button>
-                         </div>
-                    </div>
-                    <input type="hidden" id="ser_t" name="ser_t" value="0" />
-               </form>
-          </div>
-     </div>
-     <!----------------------------------------------------------------------------------->
-
-
 </body>
 <?php
 function ultimo_cod() {

@@ -70,6 +70,7 @@
                $_SESSION['wrknomusu'] = $reg['usunome'];
                $_SESSION['wrktipusu'] = $reg['usutipo'];
                $_SESSION['wrkcodemp'] = $reg['usuempresa'];
+               $_SESSION['wrkcodcon'] = $reg['usuconsultor'];
                $_SESSION['wrkemausu'] = $reg['usuemail'];
                $_SESSION['wrkstausu'] = $reg['usustatus'];
                $_SESSION['wrkdatini'] = $reg['usuvalidade'];

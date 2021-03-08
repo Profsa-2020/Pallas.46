@@ -37,6 +37,9 @@
     background-color: #34A853;
 }
 
+.bot-5 {
+    cursor: no-drop; /* not-allowed e no-drop - não permite clicar */
+}
 
 .cor-1 { color: red; }
 
@@ -115,6 +118,14 @@
      background-color: #ffffff;
  }
 
+ @media only screen and (max-width: 900px) {  
+    .qua-1 { width: 90%; }
+}
+
+@media only screen and (min-width: 900px) {  
+    body { overflow-x: hidden; }
+}
+
  .qua-2 {
     width: 100%;
     color: #000000;
@@ -145,18 +156,24 @@
     border-right: 1px solid #E9ECEF;
 }
 
+.tab-2 {
+    font-size: 12px;
+    margin: 0px 5px;
+    padding: 0px 5px;
+}
+
 .tel-1 label {
     font-size: 14px !important;    
     color: #918e8e !important;    
 }
 
-.tel-1 input[type=text], .tel-1 input[type=email], .tel-1 textarea {
+.tel-1 input[type=text], .tel-1 input[type=email], .tel-1 textarea, .tel-1 select {
     font-size: 14px !important;    
     padding: 2px 10px !important;    
     color: #676a6c !important;    
  }
 
- .tel-1 input[type=text]:hover, .tel-1 input[type=email]:hover, .tel-1 textarea:hover {
+ .tel-1 input[type=text]:hover, .tel-1 input[type=email]:hover, .tel-1 textarea:hover, .tel-1 select:hover {
     font-weight: bold !important;    
  }
 

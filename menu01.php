@@ -40,7 +40,7 @@
      <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.0/Chart.min.js"></script>
 
      <link href="css/pallas46.css" rel="stylesheet" type="text/css" media="screen" />
-     <title>Login - Gerenciamento de Contratos - SearchMidia - Profsa Informátda Ltda</title>
+     <title>Menu - Gerenciamento de Contratos - SearchMidia - Profsa Informátda Ltda</title>
 </head>
 
 <script>

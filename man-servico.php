@@ -246,7 +246,7 @@ $(document).ready(function() {
                               <label>Vigência</label><br />
                               <select name="vig" class="form-control">
                                    <option value="0" <?php echo ($vig != 0 ? '' : 'selected="selected"'); ?>>
-                                        Esporárido
+                                        Esporádico
                                    </option>
                                    <option value="1" <?php echo ($vig != 1 ? '' : 'selected="selected"'); ?>>
                                         Mensal

@@ -90,6 +90,18 @@ $(document).ready(function() {
           }
      });
 
+     $('#sta').change(function() {
+          $('#tab-0 tbody').empty();
+     });
+
+     $('#dti').change(function() {
+          $('#tab-0 tbody').empty();
+     });
+
+     $('#dtf').change(function() {
+          $('#tab-0 tbody').empty();
+     });
+
      $(window).scroll(function() {
           if ($(this).scrollTop() > 100) {
                $(".subir").fadeIn(500);
@@ -132,6 +144,7 @@ $(document).ready(function() {
      $dtf = date('d/m/Y');
      $dti = (isset($_REQUEST['dti']) == false ? $dti : $_REQUEST['dti']);
      $dtf = (isset($_REQUEST['dtf']) == false ? $dtf : $_REQUEST['dtf']);
+     $sta = (isset($_REQUEST['sta']) == false ? 00 : $_REQUEST['sta']);
  ?>
 
 <body id="box00">
@@ -170,7 +183,32 @@ $(document).ready(function() {
                          <input type="text" class="form-control text-center" maxlength="10" id="dtf" name="dtf"
                               value="<?php echo $dtf; ?>" required />
                     </div>
-                    <div class="col-md-2"></div>
+                    <div class="col-md-2">
+                         <label>Status</label><br />
+                         <select id="sta" name="sta" class="form-control">
+                              <option value="0" <?php echo ($sta != 0 ? '' : 'selected="selected"'); ?>>
+                                   Normal
+                              </option>
+                              <option value="1" <?php echo ($sta != 1 ? '' : 'selected="selected"'); ?>>
+                                   Proposta
+                              </option>
+                              <option value="2" <?php echo ($sta != 2 ? '' : 'selected="selected"'); ?>>
+                                   Não Aceita
+                              </option>
+                              <option value="3" <?php echo ($sta != 3 ? '' : 'selected="selected"'); ?>>
+                                   Aberto
+                              </option>
+                              <option value="4" <?php echo ($sta != 4 ? '' : 'selected="selected"'); ?>>
+                                   Cancelado
+                              </option>
+                              <option value="5" <?php echo ($sta != 5 ? '' : 'selected="selected"'); ?>>
+                                   Suspenso
+                              </option>
+                              <option value="6" <?php echo ($sta != 6 ? '' : 'selected="selected"'); ?>>
+                                   Encerrado
+                              </option>
+                         </select>
+                    </div>
                     <div class="col-md-2 text-center">
                          <br />
                          <button type="submit" id="con" name="consulta" class="bot-1"

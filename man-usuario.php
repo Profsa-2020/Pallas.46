@@ -95,6 +95,7 @@ $(document).ready(function() {
      $ema = (isset($_REQUEST['ema']) == false ? '' : $_REQUEST['ema']);
      $tel = (isset($_REQUEST['tel']) == false ? '' : $_REQUEST['tel']);
      $cel = (isset($_REQUEST['cel']) == false ? '' : $_REQUEST['cel']);
+     $con = (isset($_REQUEST['con']) == false ? 0 : $_REQUEST['con']);
      $val = (isset($_REQUEST['val']) == false ? '' : $_REQUEST['val']);
      $ace = (isset($_REQUEST['ace']) == false ? 0 : $_REQUEST['ace']);
      $emp = (isset($_REQUEST['emp']) == false ? 0 : $_REQUEST['emp']);
@@ -112,7 +113,7 @@ $(document).ready(function() {
     if ($_SESSION['wrkopereg'] >= 2) {
           if (isset($_REQUEST['salvar']) == false) { 
               $cha = $_SESSION['wrkcodreg']; $_SESSION['wrkmostel'] = 1;
-              $ret = ler_usuario($cha, $nom, $sta, $tip, $sen, $ema, $val, $ace, $tel, $cel, $emp); 
+              $ret = ler_usuario($cha, $nom, $sta, $tip, $sen, $ema, $val, $ace, $tel, $cel, $emp, $con); 
           }
       }
       if (isset($_REQUEST['salvar']) == true) {
@@ -123,7 +124,7 @@ $(document).ready(function() {
                   $ret = incluir_usu();
                   $ret = enviar_ema($_REQUEST['ema']);
                   $ret = gravar_log(11,"Inclusão de novo usuário: " . $nom);
-                  $sen = ''; $nom = ''; $ema = ''; $sta = ''; $tip = ''; $val = ''; $ace = ''; $tel = '';  $cel = ''; $emp = 0;
+                  $sen = ''; $nom = ''; $ema = ''; $sta = ''; $tip = ''; $val = ''; $ace = ''; $tel = '';  $cel = ''; $emp = 0; $con = 0;
               }
           }
           if ($_SESSION['wrkopereg'] == 2) {
@@ -132,14 +133,14 @@ $(document).ready(function() {
                   $ret = alterar_usu();
                   $ret = enviar_ema($_REQUEST['ema']);
                   $ret = gravar_log(12,"Alteração de usuário existente: " . $nom); $_SESSION['wrkmostel'] = 0;
-                  $sen = ''; $nom = ''; $ema = ''; $sta = ''; $tip = ''; $val = ''; $ace = ''; $tel = '';  $cel = ''; $emp = 0;
+                  $sen = ''; $nom = ''; $ema = ''; $sta = ''; $tip = ''; $val = ''; $ace = ''; $tel = '';  $cel = ''; $emp = 0; $con = 0;
                   echo '<script>history.go(-' . $_SESSION['wrknumvol'] . ');</script>'; $_SESSION['wrknumvol'] = 1;
               }
           }
           if ($_SESSION['wrkopereg'] == 3) {
               $ret = excluir_usu();
               $ret = gravar_log(13,"Exclusão de usuário existente: " . $nom); $_SESSION['wrkmostel'] = 0;
-              $sen = ''; $nom = ''; $ema = ''; $sta = ''; $tip = ''; $val = ''; $ace = ''; $tel = '';  $cel = ''; $emp = 0;
+              $sen = ''; $nom = ''; $ema = ''; $sta = ''; $tip = ''; $val = ''; $ace = ''; $tel = '';  $cel = ''; $emp = 0; $con = 0;
               echo '<script>history.go(-' . $_SESSION['wrknumvol'] . ');</script>'; $_SESSION['wrknumvol'] = 1;
           }
       }
@@ -204,6 +205,16 @@ $(document).ready(function() {
                               <label>Empresa do Usuário</label>
                               <select id="emp" name="emp" class="form-control">
                                    <?php $ret = carrega_emp($emp); ?>
+                              </select>
+                         </div>
+                         <div class="col-md-2"></div>
+                    </div>
+                    <div class="row">
+                         <div class="col-md-2"></div>
+                         <div class="col-md-8">
+                              <label>Nome do Consultor</label>
+                              <select id="con" name="con" class="form-control">
+                                   <?php $ret = carrega_con($con); ?>
                               </select>
                          </div>
                          <div class="col-md-2"></div>
@@ -306,7 +317,25 @@ function ultimo_cod() {
      return $sta;
 }
 
- function ler_usuario(&$cha, &$nom, &$sta, &$tip, &$sen, &$ema, &$val, &$ace, &$tel, &$cel, &$emp) {
+function carrega_con($con) {
+     $sta = 0;
+     include_once "dados.php";    
+     if ($con == 0) {
+          echo '<option value="0" selected="selected">Selecione consultor desejado ...</option>';
+     }
+     $com = "Select idconsultor, connome from tb_consultor where constatus = 0 and conempresa = " . $_SESSION['wrkcodemp'] . " order by connome, idconsultor";
+     $nro = leitura_reg($com, $reg);
+     foreach ($reg as $lin) {
+          if ($lin['idconsultor'] != $con) {
+               echo  '<option value ="' . $lin['idconsultor'] . '">' . $lin['connome'] . '</option>'; 
+          } else {
+               echo  '<option value ="' . $lin['idconsultor'] . '" selected="selected">' . $lin['connome'] . '</option>';
+          }
+     }
+     return $sta;
+}
+
+ function ler_usuario(&$cha, &$nom, &$sta, &$tip, &$sen, &$ema, &$val, &$ace, &$tel, &$cel, &$emp, &$con) {
      include_once "dados.php";
      $nro = acessa_reg("Select * from tb_usuario where idsenha = " . $cha, $reg);            
      if ($nro == 0 || $reg == false) {
@@ -322,6 +351,7 @@ function ultimo_cod() {
           $tel = $reg['usutelefone'];
           $cel = $reg['usucelular'];
           $ema = $reg['usuemail'];
+          $con = $reg['usuconsultor'];
           $emp = $reg['usuempresa'];
           if ($reg['usuvalidade'] != null) { 
                $val = date('d/m/Y',strtotime($reg['usuvalidade'])); 
@@ -386,6 +416,7 @@ function ultimo_cod() {
      $sql .= "usutipo, ";
      $sql .= "usuacessos, ";
      $sql .= "usuvalidade, ";
+     $sql .= "usuconsultor, ";
      $sql .= "usuempresa, ";
      $sql .= "keyinc, ";
      $sql .= "datinc ";
@@ -399,6 +430,7 @@ function ultimo_cod() {
      $sql .= "'" . $_REQUEST['tip'] . "',";
      $sql .= "'" . ($ace == "" || $ace == "0" ? '999999' : $ace) . "',";
      $sql .= "'" . ($val == "--" ? date('Y-m-d', strtotime('+180 days')) : $val) . "',";
+     $sql .= "'" . $_REQUEST['con'] . "',";
      $sql .= "'" . $_REQUEST['emp'] . "',";
      $sql .= "'" . $_SESSION['wrkideusu'] . "',";
      $sql .= "'" . date("Y/m/d H:i:s") . "')";
@@ -426,6 +458,7 @@ function alterar_usu() {
      $sql .= "usutelefone = '". $_REQUEST['tel'] . "', ";
      $sql .= "usucelular = '". $_REQUEST['cel'] . "', ";
      $sql .= "usuempresa = '". $_REQUEST['emp'] . "', ";
+     $sql .= "usuconsultor = '". $_REQUEST['con'] . "', ";
      $sql .= "usuacessos = '". ($ace == "0" ? '1000000' : $ace) . "', ";
      $sql .= "usuvalidade =  ". ($val == "--" ? 'null' : "'" . $val . "'") . " , ";
      $sql .= "keyalt = '" . $_SESSION['wrkideusu'] . "', ";
