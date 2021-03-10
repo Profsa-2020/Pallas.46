@@ -511,6 +511,10 @@ function consiste_con() {
           echo '<script>alert("Número do C.n.p.j. da consultor pode estar em branco");</script>';
           return 7;
      }
+     if (strlen($_REQUEST['obs']) > 500) {
+          echo '<script>alert("Observação do consultor não pode ter mais de 500 caracteres");</script>';
+          $sta = 1;
+     }       
      if ($_REQUEST['est'] != "") {
           if (valida_est(strtoupper($_REQUEST['est'])) == 0) {
                echo '<script>alert("Estado da Federação da consultor informado não é válido");</script>';

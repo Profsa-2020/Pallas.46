@@ -144,7 +144,9 @@ $(document).ready(function() {
      $dtf = date('d/m/Y');
      $dti = (isset($_REQUEST['dti']) == false ? $dti : $_REQUEST['dti']);
      $dtf = (isset($_REQUEST['dtf']) == false ? $dtf : $_REQUEST['dtf']);
-     $sta = (isset($_REQUEST['sta']) == false ? 00 : $_REQUEST['sta']);
+     $sta = (isset($_REQUEST['sta']) == false ? 9 : $_REQUEST['sta']);
+     $tab = array(); $ret = carrega_val($sta, $dti, $dtf, $tab);
+
  ?>
 
 <body id="box00">
@@ -172,7 +174,7 @@ $(document).ready(function() {
      <div class="container">
           <form class="tel-1 text-center" name="frmTelCon" action="" method="POST">
                <div class="row">
-                    <div class="col-md-4"></div>
+                    <div class="col-md-3"></div>
                     <div class="col-md-2">
                          <label>Data Inicial</label>
                          <input type="text" class="form-control text-center" maxlength="10" id="dti" name="dti"
@@ -186,6 +188,9 @@ $(document).ready(function() {
                     <div class="col-md-2">
                          <label>Status</label><br />
                          <select id="sta" name="sta" class="form-control">
+                              <option value="9" <?php echo ($sta != 9 ? '' : 'selected="selected"'); ?>>
+                                   Todos
+                              </option>
                               <option value="0" <?php echo ($sta != 0 ? '' : 'selected="selected"'); ?>>
                                    Normal
                               </option>
@@ -209,6 +214,7 @@ $(document).ready(function() {
                               </option>
                          </select>
                     </div>
+                    <div class="col-md-1"></div>
                     <div class="col-md-2 text-center">
                          <br />
                          <button type="submit" id="con" name="consulta" class="bot-1"
@@ -217,6 +223,29 @@ $(document).ready(function() {
                </div>
                <br />
           </form>
+          <hr />
+          <div class="row text-center">
+               <div class="col-md-3">
+                    <strong>
+                         <span>Geral: R$ <?php echo number_format($tab[9], 2, ",", "."); ?></span>
+                    </strong>
+               </div>
+               <div class="col-md-3">
+                    <strong>
+                         <span>Normal: R$ <?php echo number_format($tab[0], 2, ",", "."); ?></span>
+                    </strong>
+               </div>
+               <div class="col-md-3">
+                    <strong>
+                         <span>Propostas: R$ <?php echo number_format($tab[1], 2, ",", "."); ?></span>
+                    </strong>
+               </div>
+               <div class="col-md-3">
+                    <strong>
+                         <span>Em Aberto: R$ <?php echo number_format($tab[3], 2, ",", "."); ?></span>
+                    </strong>
+               </div>
+          </div>
           <hr />
           <div class="row">
                <div class="col-md-12">
@@ -229,17 +258,16 @@ $(document).ready(function() {
                                         <th width="3%">Exc</th>
                                         <th width="5%">Status</th>
                                         <th>Nome do Cliente</th>
-                                        <th>Proposta</th>
+                                        <th class="text-center">Proposta</th>
                                         <th>Consultor</th>
-                                        <th>Pagto</th>
                                         <th>Inicio</th>
                                         <th>Final</th>
                                         <th>Valor</th>
-                                        <th>Observação</th>
+                                        <th>Desconto</th>
                                    </tr>
                               </thead>
                               <tbody>
-                                   <?php $ret = carrega_con();  ?>
+                                   <?php $ret = carrega_con($sta, $dti, $dtf);  ?>
                               </tbody>
                          </table>
                     </div>
@@ -252,33 +280,63 @@ $(document).ready(function() {
 </body>
 
 <?php
-function carrega_con() {
+function carrega_con($sta, $dti, $dtf) {
      include_once "dados.php";
-     $com = "Select * from tb_contrato where conempresa = " .  $_SESSION['wrkcodemp'] . " order by idcontrato";
+     $dti = substr($dti,6,4) . "-" . substr($dti,3,2) . "-" . substr($dti,0,2) . " 00:00:00";
+     $dtf = substr($dtf,6,4) . "-" . substr($dtf,3,2) . "-" . substr($dtf,0,2) . " 23:59:59";
+     $com  = "Select C.*, X.connome, Y.clirazao from ((tb_contrato C left join tb_consultor X on C.conconsultor = X.idconsultor) left join tb_cliente Y on C.concliente = Y.idcliente) ";
+     $com .= " where C.conempresa = " .  $_SESSION['wrkcodemp'] . " ";
+     $com .= " and condataemi between '" . $dti . "' and '" . $dtf . "' ";
+     if ($sta != 9) {$com .= " and C.constatus = " . $sta; }
+     $com .= " order by C.idcontrato";
      $nro = leitura_reg($com, $reg);
      foreach ($reg as $lin) {
           $txt =  '<tr>';
           $txt .= '<td class="text-center"><a href="man-contrato.php?ope=2&cod=' . $lin['idcontrato'] . '" title="Efetua alteração do registro informado na linha"><i class="large material-icons">healing</i></a></td>';
           $txt .= '<td class="lit-d text-center"><a href="man-contrato.php?ope=3&cod=' . $lin['idcontrato'] . '" title="Efetua exclusão do registro informado na linha"><i class="cor-1 large material-icons">delete_forever</i></a></td>';
-          $txt .= '<td class="text-center">' . $lin['idcontrato'] . '</td>';
-          if ($lin['clistatus'] == 0) {$txt .= "<td>" . "Ativo" . "</td>";}
-          if ($lin['clistatus'] == 1) {$txt .= "<td>" . "Inativo" . "</td>";}
-          if ($lin['clistatus'] == 2) {$txt .= "<td>" . "Suspenso" . "</td>";}
-          if ($lin['clistatus'] == 3) {$txt .= "<td>" . "Cancelado" . "</td>";}
-          $txt .= "<td>" . $lin['clirazao'] . "</td>";
-          if ($lin['clipessoa'] == 0) {
-               $txt .= "<td>" . mascara_cpo($lin['clicnpj'], "   .   .   -  ") . "</td>";
-          } else {
-               $txt .= "<td>" . mascara_cpo($lin['clicnpj'], "  .   .   /    -  ") . "</td>";
-          }
-          $txt .= "<td>" . $lin['clicidade'] . '-' . $lin['cliestado'] . "</td>";
-          $txt .= "<td>" . $lin['cliemail'] . "</td>";
-          $txt .= "<td>" . $lin['clitelefone'] . "</td>";
-          $txt .= '<td class="cel-w cur-1">' . $lin['clicelular'] . '</td>';
-          $txt .= "<td>" . $lin['clicontato'] . "</td>";
+          if ($lin['constatus'] == 0) {$txt .= '<td>' . "Normal" . '</td>';}
+          if ($lin['constatus'] == 1) {$txt .= '<td>' . "Proposta" . '</td>';}
+          if ($lin['constatus'] == 2) {$txt .= '<td>' . "Não Aceita" . '</td>';}
+          if ($lin['constatus'] == 3) {$txt .= '<td>' . "Em Aberto" . '</td>';}
+          if ($lin['constatus'] == 4) {$txt .= '<td>' . "Cancelado" . '</td>';}
+          if ($lin['constatus'] == 5) {$txt .= '<td>' . "Suspenso" . '</td>';}
+          if ($lin['constatus'] == 6) {$txt .= '<td>' . "Finalizado" . '</td>';}
+          $txt .= '<td>' . $lin['clirazao'] . '</td>';
+          $txt .= '<td class="text-center">' . ($lin['conproposta'] == 0 ? 'Não' : 'Sim') . '</td>';
+          $txt .= '<td>' . $lin['connome'] . '</td>';
+          $txt .= '<td>' . date('d/m/Y',strtotime($lin['condataemi'])) . '</td>';
+          $txt .= '<td>' . date('d/m/Y',strtotime($lin['condatafim'])) . '</td>';
+          $txt .= '<td class="text-right">' . number_format($lin['convaltotal'], 2, ",", ".") . '</td>';
+          $txt .= '<td class="text-right">' . number_format($lin['convaldesconto'], 2, ",", ".") . '</td>';
           $txt .= "</tr>";
           echo $txt; 
      }
+}
+
+function carrega_val($sta, $dti, $dtf, &$tab) {
+     $qtd = 0;
+     $tab[0] = 0;
+     $tab[1] = 0;
+     $tab[2] = 0;
+     $tab[3] = 0;
+     $tab[4] = 0;
+     $tab[5] = 0;
+     $tab[6] = 0;
+     $tab[9] = 0;
+     include_once "dados.php";
+     date_default_timezone_set("America/Sao_Paulo");
+     $dti = substr($dti,6,4) . "-" . substr($dti,3,2) . "-" . substr($dti,0,2) . " 00:00:00";
+     $dtf = substr($dtf,6,4) . "-" . substr($dtf,3,2) . "-" . substr($dtf,0,2) . " 23:59:59";
+     $com  = "Select * from tb_contrato where conempresa = " .  $_SESSION['wrkcodemp'] . " ";
+     $com .= " and condataemi between '" . $dti . "' and '" . $dtf . "' ";
+     if ($sta != 9) {$com .= " and .constatus = " . $sta; }
+     $nro = leitura_reg($com, $reg);
+     foreach ($reg as $lin) {
+          $qtd = $qtd + 1;
+          $tab[9] += $lin['convaltotal'];
+          $tab[$lin['constatus']] += $lin['convaltotal'];
+     }
+     return $qtd;
 }
 
 ?>

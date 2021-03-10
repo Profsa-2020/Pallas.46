@@ -62,7 +62,7 @@ $(function() {
      $("#ent").mask("000.000,00", {
           reverse: true
      });
-     $("#des").mask("99,99", {
+     $("#des").mask("00,00", {
           reverse: true
      });
      $("#dti").datepicker($.datepicker.regional["pt-BR"]);
@@ -78,11 +78,15 @@ $(document).ready(function() {
      }
 
      $("#frmTelMan").submit(function() {
+          var dat = "";
+          var val = $('#tot_g').val();
+          var ent = $('#ent').val();
           var cli = $('#cli').val();
           var con = $('#con').val();
           var pag = $('#pag').val();
           var dti = $('#dti').val();
           var dtf = $('#dtf').val();
+          var obs = $('#obs').val();
           if (cli == "" || cli == "0") {
                alert("Deve ser informado o cliente para este contrato, obrigatoriamente !");
                return false;
@@ -98,8 +102,73 @@ $(document).ready(function() {
           } else if (dtf == "") {
                alert("Deve ser informado a data de fim do contrato, obrigatoriamente !");
                return false;
+          } else if (obs.lenght > 500) {
+               alert("Número de caracteres da observação do contrato maior que 500 !");
+               return false;
+          } else if (parseFloat(val, 10) == 0) {
+               alert("Valor total do contrato solicitado não pode ser igual a ZERO !");
+               return false;
+          } else if (ent.trim() != "") {
+               var ent = ent.replace('.', '').replace(',', '.');
+               if (parseFloat(ent, 10) > parseFloat(val, 10)) {
+                    alert("Valor da entrada não pode ser maior que o valor do contrato !");
+                    return false;
+               }
+          }
+          var dti = $('#dti').val().split("/");
+          var dtf = $('#dtf').val().split("/");
+          dti = dti[2] + dti[1] + dti[0];
+          dtf = dtf[2] + dtf[1] + dtf[0];
+          if (dti > dtf) {
+               alert("Data de inicio do contrato não pode ser maior que a final !");
+               return false;
           }
 
+     });
+
+     $("#dti").change(function() {
+          if ($('#dti').val() != "") {
+               var dti = $('#dti').val().split("/");
+               if (parseInt(dti[0], 10) < 1 || parseInt(dti[0], 10) > 31) {
+                    $('#dti').val("");
+                    alert("Dia informado para a data deve ser entre 01 e 31  !");
+               } else if (parseInt(dti[1], 10) < 1 || parseInt(dti[1], 10) > 12) {
+                    $('#dti').val("");
+                    alert("Mês informado para a data deve ser entre 01 e 12  !");
+               } else if (parseInt(dti[2], 10) < 2020 || parseInt(dti[2], 10) > 2026) {
+                    $('#dti').val("");
+                    alert("Ano informado para a data deve ser entre 2001 e 2026 !");
+               }
+          }          
+     });
+
+     $("#dtf").change(function() {
+          if ($('#dtf').val() != "") {
+               var dtf = $('#dtf').val().split("/");
+               if (parseInt(dtf[0], 10) < 1 || parseInt(dtf[0], 10) > 31) {
+                    $('#dtf').val("");
+                    alert("Dia informado para a data deve ser entre 01 e 31  !");
+               } else if (parseInt(dtf[1], 10) < 1 || parseInt(dtf[1], 10) > 12) {
+                    $('#dtf').val("");
+                    alert("Mês informado para a data deve ser entre 01 e 12  !");
+               } else if (parseInt(dtf[2], 10) < 2020 || parseInt(dtf[2], 10) > 2026) {
+                    $('#dtf').val("");
+                    alert("Ano informado para a data deve ser entre 2001 e 2026 !");
+               }
+          }          
+     });
+
+     $("#des").blur(function() {
+          var des = $('#des').val();
+          $.get("ajax/valida-des.php", {
+                    des: des
+               })
+               .done(function(data) {
+                    if (data != "") {
+                         alert(data);
+                         $('#des').val(0);
+                    }
+               });
      });
 
      $("#cod_s").change(function() {
@@ -216,6 +285,7 @@ $(document).ready(function() {
                     if (data.men != "") {
                          alert(data.men);
                     } else {
+                         $('#tot_g').val(data.ger);
                          $('#tot_c').text(data.tot);
                          $('#lis_s').html(data.lis);
                     }
@@ -228,12 +298,13 @@ $(document).ready(function() {
      });
 
      $("#gra_s").click(function() {
+          var dti = $('#dti').val();
+          var dtf = $('#dtf').val();
           var dad = $('#frmMosSer').serialize();
-          $.post("ajax/adicionar-ser.php", dad, function(data) {
+          $.post("ajax/adicionar-ser.php", dad + '&dti=' + dti + '&dtf=' + dtf, function(data) {
                if (data.men != "") {
                     alert(data.men);
                } else {
-
                     $('#num_s').val(data.num);
                     $('#cod_s').val('');
                     $('#des_s').val(0);
@@ -244,6 +315,8 @@ $(document).ready(function() {
                     $('#par_s').val(1);
                     $('#val_t').val(0);
                     $('#ser_t').val(0);
+                    $('#dtf').val(data.dtf);
+                    $('#tot_g').val(data.ger);
                     $('#tot_c').text(data.tot);
                     $('#lis_s').html(data.lis);
                }
@@ -288,9 +361,9 @@ $(document).ready(function() {
 
 <?php
      $ret = 00;
-     $tot = 00;
      $per = "";
      $del = "";
+     $ite_c = "";
      $bot = "Salvar";
      include_once "dados.php";
      include_once "profsa.php";
@@ -306,11 +379,10 @@ $(document).ready(function() {
      }
      if (isset($_SESSION['wrkopereg']) == false) { $_SESSION['wrkopereg'] = 0; }
      if (isset($_SESSION['wrkcodreg']) == false) { $_SESSION['wrkcodreg'] = 0; }
+     if (isset($_SESSION['wrkvalcon']) == false) { $_SESSION['wrkvalcon'] = 0; }
      if (isset($_SESSION['wrklisser']) == false) { $_SESSION['wrklisser'] = array(); }
      if (isset($_REQUEST['ope']) == true) { $_SESSION['wrkopereg'] = $_REQUEST['ope']; }
      if (isset($_REQUEST['cod']) == true) { $_SESSION['wrkcodreg'] = $_REQUEST['cod']; }
-
-     if ($_SESSION['wrkopereg'] == 1) { $_SESSION['wrklisser'] = array(); }
 
      $cod = (isset($_REQUEST['cod']) == false ? 0  : $_REQUEST['cod']);
      $sta = (isset($_REQUEST['sta']) == false ? 0  : $_REQUEST['sta']);
@@ -324,8 +396,10 @@ $(document).ready(function() {
      $obs = (isset($_REQUEST['obs']) == false ? ''  : $_REQUEST['obs']);
      $con = (isset($_REQUEST['con']) == false ? $_SESSION['wrkcodcon'] : $_REQUEST['con']);
      if ($_SESSION['wrkopereg'] == 1) { 
-          $_SESSION['wrkcodreg'] = ultimo_cod();
-          $_SESSION['wrkmostel'] = 1;
+          if (isset($_REQUEST['salvar']) == false) {
+               $_SESSION['wrkcodreg'] = ultimo_cod(); $_SESSION['wrknumvol'] = 1;
+               $_SESSION['wrkmostel'] = 1; $_SESSION['wrkvalcon'] = 0; $_SESSION['wrklisser'] = array();
+          }
      }
      if ($_SESSION['wrkopereg'] == 3) { 
           $bot = 'Deletar'; 
@@ -334,33 +408,36 @@ $(document).ready(function() {
      }  
      if ($_SESSION['wrkopereg'] >= 2) {
           if (isset($_REQUEST['salvar']) == false) { 
-               $cha = $_SESSION['wrkcodreg']; $_SESSION['wrknumcha'] = $_SESSION['wrkcodreg']; $_SESSION['wrkmostel'] = 1;
+               $ite_c = carrega_ite();
+               $cha = $_SESSION['wrkcodreg']; $_SESSION['wrknumcha'] = $_SESSION['wrkcodreg']; $_SESSION['wrkmostel'] = 1; $_SESSION['wrknumvol'] = 1;
                $ret = ler_contrato($_SESSION['wrkcodreg'], $sta, $cli, $pag, $pro, $dti, $dtf, $ent, $des, $obs, $con); 
           }
      }
      if (isset($_REQUEST['salvar']) == true) {
           $_SESSION['wrknumvol'] = $_SESSION['wrknumvol'] + 1;
           if ($_SESSION['wrkopereg'] == 1) {
-               $ret = consiste_con();
+               $ret = consiste_cto();
                if ($ret == 0) {
-                    $ret = incluir_con();
-                    $ret = gravar_log(11,"Inclusão de novo contrato para venda: " . $des);
-                    $sta = 0; $cli = 0; $pag = 0; $pro = 0; $dti = ''; $dtf = ''; $ent = ''; $obs = ''; $con = 0; 
+                    $ret = incluir_cto();
+                    $ret = gravar_ser();
+                    $ret = gravar_log(11,"Inclusão de novo contrato para venda: " . $des); $_SESSION['wrkvalcon'] = 0; $_SESSION['wrklisser'] = array();
+                    $sta = 0; $cli = 0; $pag = 0; $pro = 0; $dti = date('d/m/Y'); $dtf = ''; $ent = ''; $obs = ''; $con = $_SESSION['wrkcodcon']; $_SESSION['wrknumvol'] = 1;
                }
           }
           if ($_SESSION['wrkopereg'] == 2) {
-               $ret = consiste_con();
+               $ret = consiste_cto();
                if ($ret == 0) {
-                    $ret = alterar_con();
+                    $ret = alterar_cto();
+                    $ret = gravar_ser();
                     $ret = gravar_log(12,"Alteração de contrato existente: " . $des); $_SESSION['wrkmostel'] = 0;
-                    $sta = 0; $cli = 0; $pag = 0; $pro = 0; $dti = ''; $dtf = ''; $ent = ''; $obs = ''; $con = 0; 
+                    $sta = 0; $cli = 0; $pag = 0; $pro = 0; $dti = date('d/m/Y'); $dtf = ''; $ent = ''; $obs = ''; $con = $_SESSION['wrkcodcon']; $_SESSION['wrkvalcon'] = 0; $_SESSION['wrklisser'] = array();
                     echo '<script>history.go(-' . $_SESSION['wrknumvol'] . ');</script>'; $_SESSION['wrknumvol'] = 1;
                }
           }
           if ($_SESSION['wrkopereg'] == 3) {
-               $ret = excluir_con();
+               $ret = excluir_cto();
                $ret = gravar_log(13,"Exclusão de contrato existente: " . $des); $_SESSION['wrkmostel'] = 0;
-               $sta = 0; $cli = 0; $pag = 0; $pro = 0; $dti = ''; $dtf = ''; $ent = ''; $obs = ''; $con = 0; 
+               $sta = 0; $cli = 0; $pag = 0; $pro = 0; $dti = date('d/m/Y'); $dtf = ''; $ent = ''; $obs = ''; $con = $_SESSION['wrkcodcon']; $_SESSION['wrkvalcon'] = 0; $_SESSION['wrklisser'] = array();
                echo '<script>history.go(-' . $_SESSION['wrknumvol'] . ');</script>'; $_SESSION['wrknumvol'] = 1;
           }
      }
@@ -395,7 +472,7 @@ $(document).ready(function() {
                          <div class="col-md-8">
                               <label>Nome do Consultor</label>
                               <select id="con" name="con" class="form-control">
-                                   <?php $ret = carrega_con($con); ?>
+                                   <?php $ret = carrega_csu($con); ?>
                               </select>
                          </div>
                          <div class="col-md-2">
@@ -420,7 +497,7 @@ $(document).ready(function() {
                                         Suspenso
                                    </option>
                                    <option value="6" <?php echo ($sta != 6 ? '' : 'selected="selected"'); ?>>
-                                        Encerrado
+                                        Finalizado
                                    </option>
                               </select>
                          </div>
@@ -483,7 +560,7 @@ $(document).ready(function() {
                               <h5><strong>
                                         <?php
                                    echo '<span id="tot_c" class="bg-danger text-white">';
-                                   echo '&nbsp; R$ ' . number_format($tot, 2, ",", ".") . ' &nbsp; ';
+                                   echo '&nbsp; R$ ' . number_format($_SESSION['wrkvalcon'], 2, ",", ".") . ' &nbsp; ';
                                    echo '</span>';
                               ?>
                                    </strong></h5>
@@ -506,7 +583,7 @@ $(document).ready(function() {
                          <div class="col-sm-3"></div>
                     </div>
                     <br />
-                    <input type="hidden" id="val_t" name="val_t" value="0" />
+                    <input type="hidden" id="tot_g" name="tot_g" value="<?php echo $_SESSION['wrkvalcon']; ?>" />
                </form>
           </div>
      </div>
@@ -590,7 +667,7 @@ $(document).ready(function() {
                          </div>
                          <div class="row">
                               <div class="col-md-12">
-                                   <div id="lis_s"></div>
+                                   <div id="lis_s"><?php echo $ite_c; ?></div>
                               </div>
                          </div>
                          <div class="modal-footer">
@@ -601,6 +678,7 @@ $(document).ready(function() {
                          </div>
                     </div>
                     <input type="hidden" id="ser_t" name="ser_t" value="0" />
+                    <input type="hidden" id="val_t" name="val_t" value="0" />
                </form>
           </div>
      </div>
@@ -614,7 +692,7 @@ function ultimo_cod() {
      include_once "dados.php";
      $nro = acessa_reg('Select idcontrato from tb_contrato order by idcontrato desc Limit 1', $reg);
      if ($nro == 1) {
-          $cod = $reg['idcliente'] + 1;
+          $cod = $reg['idcontrato'] + 1;
      }        
      return $cod;
 }
@@ -637,7 +715,7 @@ function carrega_cli($cli) {
      return $sta;
 }
 
-function carrega_con($con) {
+function carrega_csu($con) {
      $sta = 0;
      include_once "dados.php";    
      if ($con == 0) {
@@ -706,38 +784,62 @@ function ler_contrato(&$cha, &$sta, &$cli, &$pag, &$pro, &$dti, &$dtf, &$ent, &$
           echo '<script>alert("Número do contrato informado não cadastrado");</script>';
           $nro = 1;
      }else{
-          $cha = $reg['idcliente'];
-          $des = $reg['conrazao'];
-          $fan = $reg['confantasia'];
+          $cha = $reg['idcontrato'];
+          $cli = $reg['concliente'];
+          $pag = $reg['conpagto'];
           $sta = $reg['constatus'];
-          $cgc = $reg['concnpj'];
-          $ins = $reg['coninscricao'];
-          $con = $reg['concontato'];
-          $sit = $reg['consite'];
-          $ema = $reg['conemail'];
-          $tel = $reg['contelefone'];
-          $cel = $reg['concelular'];
-          $cep = $reg['concep'];
-          $end = $reg['conendereco'];
-          $num = $reg['connumeroend'];
-          $com = $reg['concomplemento'];
-          $bai = $reg['conbairro'];
-          $cid = $reg['concidade'];
-          $est = $reg['conestado'];
-          $pes = $reg['conpessoa'];
-          $gru = $reg['congrupo'];
-          $aut = $reg['conautorizante'];
-          $cpf = $reg['concpf'];
-          $car = $reg['concargo'];
-
+          $pro = $reg['conproposta'];
+          $dti = date('d/m/Y',strtotime($reg['condataemi']));
+          $con = $reg['conconsultor'];
+          $dtf = date('d/m/Y',strtotime($reg['condatafim']));
           $obs = $reg['conobservacao'];
+          $ent = number_format($reg['convalentrada'], 2, ",", ".");
+          $des = number_format($reg['conperdesconto'], 2, ",", ".");
           $_SESSION['wrkcodreg'] = $reg['idcontrato'];
+          $_SESSION['wrkvalcon'] = $reg['convaltotal'];
      }
      return $cha;
 }      
 
-function incluir_con() {
+function consiste_cto() {
+     $sta = 0;
+     if (trim($_REQUEST['cli']) == "" || trim($_REQUEST['cli']) == "0") {
+          echo '<script>alert("Razão Social da cliente não pode estar em branco");</script>';
+          return 1;
+     }
+     if (trim($_REQUEST['con']) == "" || trim($_REQUEST['con']) == "0") {
+          echo '<script>alert("Nome do Consultor do contrato não pode estar em branco");</script>';
+          return 1;
+     }
+     if (trim($_REQUEST['pag']) == "" || trim($_REQUEST['pag']) == "0") {
+          echo '<script>alert("Forma de Pagamento do contrato não pode estar em branco");</script>';
+          return 1;
+     }
+     if ($_SESSION['wrkvalcon'] == 0) {
+          echo '<script>alert("Valor total do contrato informado não pode ser igual a ZERO");</script>';
+          $sta = 1;
+     }       
+     if (strlen($_REQUEST['obs']) > 500) {
+          echo '<script>alert("Observação do contrato não pode ter mais de 500 caracteres");</script>';
+          $sta = 1;
+     }       
+     if (trim($_REQUEST['dti']) == "" || trim($_REQUEST['dti']) == "/  /") {
+          echo '<script>alert("Data inicial do contrato não pode ser em branco");</script>';
+          $sta = 1;
+     }       
+     if (trim($_REQUEST['dtf']) == "" || trim($_REQUEST['dtf']) == "/  /") {
+          echo '<script>alert("Data final do contrato não pode ser em branco");</script>';
+          $sta = 1;
+     }       
+     return $sta;
+}    
+
+function incluir_cto() {
      $ret = 0;
+     $des = 0;
+     if ($_REQUEST['des'] != "") {
+          $des = round($_SESSION['wrkvalcon'] * str_replace(",", ".", str_replace(".", "", $_REQUEST['des'])) / 100, 2);
+     }
      include_once "dados.php";
      $sql  = "insert into tb_contrato (";
      $sql .= "conempresa, ";
@@ -747,29 +849,32 @@ function incluir_con() {
      $sql .= "conconsultor, ";
      $sql .= "conpagto, ";
      $sql .= "conperdesconto, ";
-     $sql .= "condataent, ";
+     $sql .= "condataemi, ";
      $sql .= "condatafim, ";
      $sql .= "convaltotal, ";
+     $sql .= "convaldesconto, ";
      $sql .= "convalentrada, ";
      $sql .= "conobservacao, ";
      $sql .= "keyinc, ";
      $sql .= "datinc ";
      $sql .= ") value ( ";
      $sql .= "'" . $_SESSION['wrkcodemp'] . "',";
-     $sql .= "'" . $_REQUEST['pro'] . "',";
+     $sql .= "'" . (isset($_REQUEST['pro']) == false ? '0' : '1') . "',";
      $sql .= "'" . $_REQUEST['sta'] . "',";
      $sql .= "'" . $_REQUEST['cli'] . "',";
      $sql .= "'" . $_REQUEST['con'] . "',";
      $sql .= "'" . $_REQUEST['pag'] . "',";
-     $sql .= "'" . $_REQUEST['des'] . "',";
-     $sql .= "'" . $_REQUEST['ent'] . "',";
-     $sql .= "'" . $_REQUEST['fim'] . "',";
-     $sql .= "'" . $_REQUEST['tot'] . "',";
-     $sql .= "'" . $_REQUEST['ent'] . "',";
+     $sql .= "'" . ($_REQUEST['des'] == "" ? '0' : str_replace(",", ".", str_replace(".", "", $_REQUEST['des']))) . "',";
+     $sql .= "'" . inverte_dat(1, $_REQUEST['dti']) . "',";
+     $sql .= "'" . inverte_dat(1, $_REQUEST['dtf']) . "',";
+     $sql .= "'" . $_SESSION['wrkvalcon'] . "',";
+     $sql .= "'" . $des . "',";
+     $sql .= "'" . ($_REQUEST['des'] == "" ? '0' : str_replace(",", ".", str_replace(".", "", $_REQUEST['ent']))) . "',";
      $sql .= "'" . $_REQUEST['obs'] . "',";
      $sql .= "'" . $_SESSION['wrkideusu'] . "',";
      $sql .= "'" . date("Y/m/d H:i:s") . "')";
      $ret = comando_tab($sql, $nro, $ult, $men);
+     $_SESSION['wrkcodreg'] = $ult;
      if ($ret == true) {
           echo '<script>alert("Registro incluído no sistema com Sucesso !");</script>';
      }else{
@@ -779,32 +884,25 @@ function incluir_con() {
      return $ret;
  }
  
- function alterar_con() {
+ function alterar_cto() {
      $ret = 0;
+     $des = 0;
+     if ($_REQUEST['des'] != "") {
+          $des = round($_SESSION['wrkvalcon'] * str_replace(",", ".", str_replace(".", "", $_REQUEST['des'])) / 100, 2);
+     }
      include_once "dados.php";
      $sql  = "update tb_contrato set ";
-     $sql .= "concnpj = '". limpa_nro($_REQUEST['cgc']) . "', ";
+     $sql .= "conproposta = '". (isset($_REQUEST['pro']) == false ? '0' : '1') . "', ";
      $sql .= "constatus = '". $_REQUEST['sta'] . "', ";
-     $sql .= "coninscricao = '". $_REQUEST['ins'] . "', ";
-     $sql .= "conrazao = '". $_REQUEST['des'] . "', ";
-     $sql .= "confantasia = '". $_REQUEST['fan'] . "', ";
-     $sql .= "concep = '". limpa_nro($_REQUEST['cep']) . "', ";
-     $sql .= "conendereco = '". $_REQUEST['end'] . "', ";
-     $sql .= "connumeroend = '". limpa_nro($_REQUEST['num']) . "', ";
-     $sql .= "concomplemento = '". $_REQUEST['com'] . "', ";
-     $sql .= "conbairro = '". $_REQUEST['bai'] . "', ";
-     $sql .= "concidade = '". $_REQUEST['cid'] . "', ";
-     $sql .= "conestado = '". $_REQUEST['est'] . "', ";
-     $sql .= "contelefone = '". $_REQUEST['tel'] . "', ";
-     $sql .= "concelular = '". $_REQUEST['cel'] . "', ";
-     $sql .= "concontato =  '". $_REQUEST['con'] . "', ";
-     $sql .= "conemail = '". $_REQUEST['ema'] . "', ";
-     $sql .= "consite = '". $_REQUEST['sit'] . "', ";
-     $sql .= "congrupo = '". $_REQUEST['gru'] . "', ";
-     $sql .= "conautorizante = '". $_REQUEST['aut'] . "', ";
-     $sql .= "concargo = '". $_REQUEST['car'] . "', ";
-     $sql .= "concpf = '". limpa_nro($_REQUEST['cpf']) . "', ";
-     $sql .= "conpessoa = '". (isset($_REQUEST['pes']) == false ? 0 : 1 ) . "', ";
+     $sql .= "concliente = '". $_REQUEST['cli'] . "', ";
+     $sql .= "conconsultor = '". $_REQUEST['con'] . "', ";
+     $sql .= "conpagto = '". $_REQUEST['pag'] . "', ";
+     $sql .= "conperdesconto = '". ($_REQUEST['des'] == "" ? '0' : str_replace(",", ".", str_replace(".", "", $_REQUEST['des']))) . "', ";
+     $sql .= "condataemi = '". inverte_dat(1, $_REQUEST['dti']) . "', ";
+     $sql .= "condatafim = '". inverte_dat(1, $_REQUEST['dti']) . "', ";
+     $sql .= "convaltotal = '". $_SESSION['wrkvalcon'] . "', ";
+     $sql .= "convalentrada = '". str_replace(",", ".", str_replace(".", "", $_REQUEST['ent'])) . "', ";
+     $sql .= "convaldesconto = '". $des . "', ";
      $sql .= "conobservacao = '". $_REQUEST['obs'] . "', ";
      $sql .= "keyalt = '" . $_SESSION['wrkideusu'] . "', ";
      $sql .= "datalt = '" . date("Y/m/d H:i:s") . "' ";
@@ -819,9 +917,11 @@ function incluir_con() {
      return $ret;
 }
 
-function excluir_con() {
+function excluir_cto() {
      $ret = 0;
      include_once "dados.php";
+     $sql  = "delete from tb_contrato_s where itecontrato = " . $_SESSION['wrkcodreg'] ;
+     $ret = comando_tab($sql, $nro, $cha, $men);
      $sql  = "delete from tb_contrato where idcontrato = " . $_SESSION['wrkcodreg'] ;
      $ret = comando_tab($sql, $nro, $cha, $men);
      if ($ret == true) {
@@ -831,7 +931,117 @@ function excluir_con() {
           echo '<script>alert("Erro na exclusão do registro solicitado !");</script>';
      }
      return $ret;
- }
+}
+
+function carrega_ite() {
+     $txt = ""; $qtd = 0;
+     include_once "dados.php";
+     $com  = "Select I.*, S.serdescricao from (tb_contrato_s I left join tb_servico S on I.iteservico = S.idservico)  where I.iteempresa = " .  $_SESSION['wrkcodemp'] . " and I.itecontrato = " . $_SESSION['wrkcodreg'] . " order by I.iditem";
+     $nro = leitura_reg($com, $reg);
+     if ($nro > 0) {
+          $txt .= '<div class="tab-2 table-responsive">';
+          $txt .= '<table class="table table-sm">';
+          $txt .= '<thead>';
+          $txt .= '<tr>';
+          $txt .= '<th>Nº</th>';
+          $txt .= '<th width="35%">Descrição do Serviço</th>';
+          $txt .= '<th>Vigência</th>';
+          $txt .= '<th>Preço</th>';
+          $txt .= '<th>Parcelas</th>';
+          $txt .= '<th>Valor</th>';
+          $txt .= '<th class="text-center">Excluir</th>';
+          $txt .= '</tr>';
+          $txt .= '</thead>';
+          $txt .= '<tbody>';     
+     }
+     foreach ($reg as $lin) {
+          $qtd = $qtd + 1;
+          $txt .= '<tr>';     
+          $txt .= '<td>' . $qtd . '</td>';
+          $txt .= '<td>' . $lin['serdescricao'] . '</td>';
+          if ($lin['itevigencia'] == 0) { $txt .= '<td>' . "Esporádico" . '</td>'; }
+          if ($lin['itevigencia'] == 1) { $txt .= '<td>' . "Mensal" . '</td>'; }
+          if ($lin['itevigencia'] == 2) { $txt .= '<td>' . "Bimestral" . '</td>'; }
+          if ($lin['itevigencia'] == 3) { $txt .= '<td>' . "Trimestral" . '</td>'; }
+          if ($lin['itevigencia'] == 4) { $txt .= '<td>' . "Semestral" . '</td>'; }
+          if ($lin['itevigencia'] == 5) { $txt .= '<td>' . "Anual" . '</td>'; }
+          if ($lin['itevigencia'] == 6) { $txt .= '<td>' . "Bianual" . '</td>'; }
+          if ($lin['itevigencia'] == 7) { $txt .= '<td>' . "Trianual" . '</td>'; }
+          $txt .= '<td class="text-right">' . number_format($lin['itepreco'], 2, ",", ".") . '</td>';
+          $txt .= '<td class="text-center">' . $lin['iteparcela'] . '</td>';
+          $txt .= '<td class="text-right">' . number_format($lin['itepreco'] / $lin['iteparcela'], 2, ",", ".") . '</td>';
+          $txt .= '<td class="lit-d text-center" cha_s="' . $lin['iteservico'] . '"><i class="cor-1 cur-1 fa fa-trash-o" aria-hidden="true" title="Efetua exclusão do serviço informado na linha para o contrato"></i></td>';
+          $txt .= '</tr>';    
+          $cod = $lin['iteservico'];
+          $_SESSION['wrklisser']['sta'][$cod] = 1;
+          $_SESSION['wrklisser']['cod'][$cod] = $lin['iteservico'];
+          $_SESSION['wrklisser']['vig'][$cod] = $lin['itevigencia'];
+          $_SESSION['wrklisser']['par'][$cod] = $lin['iteparcela'];
+          $_SESSION['wrklisser']['pre'][$cod] = $lin['itepreco'];
+          $_SESSION['wrklisser']['obs'][$cod] = $lin['iteobservacao'];
+     }
+     if ($nro > 0) {
+          $txt .= '</tbody>';
+          $txt .= '</table>';
+          $txt .= '</div>';     
+     }
+     return $txt;
+}
+
+function gravar_ser() {
+     $ret = 0; $qtd = 1; $mes = 0;
+     include_once "dados.php";
+     $sql  = "delete from tb_contrato_s where itecontrato = " . $_SESSION['wrkcodreg'] ;
+     $ret = comando_tab($sql, $nro, $cha, $men);
+     if ($ret == false) {
+          print_r($sql);
+          echo '<script>alert("Erro na exclusão do serviços solicitados !!");</script>';
+     }
+     foreach ($_SESSION['wrklisser']['cod'] as $key => $lin) {
+          if ($_SESSION['wrklisser']['sta'][$lin] == 1) {
+               $sql  = "insert into tb_contrato_s (";
+               $sql .= "iteempresa, ";
+               $sql .= "itecontrato, ";
+               $sql .= "itestatus, ";
+               $sql .= "itesequencia, ";
+               $sql .= "iteservico, ";
+               $sql .= "itemeses, ";
+               $sql .= "iteparcela, ";
+               $sql .= "itevigencia, ";
+               $sql .= "itedataini, ";
+               $sql .= "itedatafim, ";
+               $sql .= "itequantidade, ";
+               $sql .= "itepreco, ";
+               $sql .= "itedesconto, ";
+               $sql .= "iteobservacao, ";
+               $sql .= "keyinc, ";
+               $sql .= "datinc ";
+               $sql .= ") value ( ";
+               $sql .= "'" . $_SESSION['wrkcodemp'] . "',";
+               $sql .= "'" . $_SESSION['wrkcodreg'] . "',";
+               $sql .= "'" . $_REQUEST['sta'] . "',";
+               $sql .= "'" . $qtd . "',"; $qtd += 1;
+               $sql .= "'" . $lin . "',";
+               $sql .= "'" . $mes . "',";
+               $sql .= "'" . $_SESSION['wrklisser']['par'][$lin] . "',";
+               $sql .= "'" . $_SESSION['wrklisser']['vig'][$lin] . "',";
+               $sql .= "'" . inverte_dat(1, $_REQUEST['dti']) . "',";
+               $sql .= "'" . inverte_dat(1, $_REQUEST['dtf']) . "',";
+               $sql .= "'" . '1' . "',";
+               $sql .= "'" . $_SESSION['wrklisser']['pre'][$lin] . "',";
+               $sql .= "'" . ($_REQUEST['des'] == "" ? '0' : str_replace(",", ".", str_replace(".", "", $_REQUEST['des']))) . "',";
+               $sql .= "'" . 'Cadastro efetuado: ' . date("d/m/Y/ H:i:s") . "',";
+               $sql .= "'" . $_SESSION['wrkideusu'] . "',";
+               $sql .= "'" . date("Y-m-d H:i:s") . "')";
+               $ret = comando_tab($sql, $nro, $ult, $men);
+               if ($ret == false) {
+                    print_r($sql);
+                    echo '<script>alert("Erro na gravação do serviço solicitado !!");</script>';
+               }     
+          }
+     }
+     return $ret;
+}
 
 ?>
 

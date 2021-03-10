@@ -51,6 +51,8 @@
 <script>
 $(function() {
      $("#par").mask("00");
+     $("#av1").mask("000");
+     $("#av2").mask("000");
      $("#tel").mask("(00)0000-0000");
      $("#cel").mask("(00)00000-0000");
      $("#cgc").mask("00.000.000/0000-00");
@@ -234,6 +236,8 @@ $(document).ready(function() {
      $sit = (isset($_REQUEST['sit']) == false ? "" : $_REQUEST['sit']);
      $fx1 = (isset($_REQUEST['fx1']) == false ? "" : $_REQUEST['fx1']);
      $fx2 = (isset($_REQUEST['fx2']) == false ? "" : $_REQUEST['fx2']);
+     $av1 = (isset($_REQUEST['av1']) == false ? "" : $_REQUEST['av1']);
+     $av2 = (isset($_REQUEST['av2']) == false ? "" : $_REQUEST['av2']);
      $par = (isset($_REQUEST['par']) == false ? "" : $_REQUEST['par']);
      $des = (isset($_REQUEST['des']) == false ? '' : str_replace("'", "´", $_REQUEST['des']));
      $fan = (isset($_REQUEST['fan']) == false ? '' : str_replace("'", "´", $_REQUEST['fan']));
@@ -251,7 +255,7 @@ $(document).ready(function() {
      if ($_SESSION['wrkopereg'] >= 2) {
           if (isset($_REQUEST['salvar']) == false) { 
                $cha = $_SESSION['wrkcodreg']; $_SESSION['wrknumcha'] = $_SESSION['wrkcodreg']; $_SESSION['wrkmostel'] = 1;
-               $ret = ler_empresa($_SESSION['wrkcodreg'], $cgc, $des, $fan, $ema, $sta, $tel, $cep, $end, $num, $com, $bai, $cid, $est, $ins, $cel, $con, $sit, $fx1, $fx2, $par, $obs); 
+               $ret = ler_empresa($_SESSION['wrkcodreg'], $cgc, $des, $fan, $ema, $sta, $tel, $cep, $end, $num, $com, $bai, $cid, $est, $ins, $cel, $con, $sit, $fx1, $fx2, $av1, $av2,$par, $obs); 
           }
      }
      if (isset($_REQUEST['salvar']) == true) {
@@ -261,7 +265,7 @@ $(document).ready(function() {
                if ($ret == 0) {
                     $ret = incluir_emp();
                     $ret = gravar_log(11,"Inclusão de nova empresa para venda: " . $des);
-                    $des = ''; $ema = ''; $sta = 00; $cpf = ''; $tel = ''; $cel = ''; $obs = ''; $cep = ''; $end = ''; $num = ''; $com = ''; $bai = ''; $cid = ''; $est = ''; $reg = ''; $nas = ''; $obs = ''; $fx1 = ''; $fx2 = ''; $par = ''; 
+                    $des = ''; $ema = ''; $sta = 0; $cpf = ''; $tel = ''; $cel = ''; $obs = ''; $cep = ''; $end = ''; $num = ''; $com = ''; $bai = ''; $cid = ''; $est = ''; $reg = ''; $nas = ''; $obs = ''; $fx1 = ''; $fx2 = ''; $av1 = ''; $av2 = ''; $par = ''; 
                }
           }
           if ($_SESSION['wrkopereg'] == 2) {
@@ -269,14 +273,14 @@ $(document).ready(function() {
                if ($ret == 0) {
                     $ret = alterar_emp();
                     $ret = gravar_log(12,"Alteração de empresa existente: " . $des); $_SESSION['wrkmostel'] = 0;
-                    $des = ''; $ema = ''; $sta = 00; $cpf = ''; $tel = ''; $cel = ''; $obs = ''; $cep = ''; $end = ''; $num = ''; $com = ''; $bai = ''; $cid = ''; $est = ''; $reg = ''; $nas = ''; $obs = ''; $fx1 = ''; $fx2 = '';  $par = ''; 
+                    $des = ''; $ema = ''; $sta = 00; $cpf = ''; $tel = ''; $cel = ''; $obs = ''; $cep = ''; $end = ''; $num = ''; $com = ''; $bai = ''; $cid = ''; $est = ''; $reg = ''; $nas = ''; $obs = ''; $fx1 = ''; $fx2 = '';  $av1 = ''; $av2 = ''; $par = ''; 
                     echo '<script>history.go(-' . $_SESSION['wrknumvol'] . ');</script>'; $_SESSION['wrknumvol'] = 1;
                }
           }
           if ($_SESSION['wrkopereg'] == 3) {
                $ret = excluir_emp();
                $ret = gravar_log(13,"Exclusão de empresa existente: " . $des); $_SESSION['wrkmostel'] = 0;
-               $des = ''; $ema = ''; $sta = 00; $cpf = ''; $tel = ''; $cel = ''; $obs = ''; $cep = ''; $end = ''; $num = ''; $com = ''; $bai = ''; $cid = ''; $est = ''; $reg = ''; $nas = ''; $obs = ''; $fx1 = ''; $fx2 = '';  $par = ''; 
+               $des = ''; $ema = ''; $sta = 00; $cpf = ''; $tel = ''; $cel = ''; $obs = ''; $cep = ''; $end = ''; $num = ''; $com = ''; $bai = ''; $cid = ''; $est = ''; $reg = ''; $nas = ''; $obs = ''; $fx1 = ''; $fx2 = ''; $av1 = ''; $av2 = ''; $par = ''; 
                echo '<script>history.go(-' . $_SESSION['wrknumvol'] . ');</script>'; $_SESSION['wrknumvol'] = 1;
           }
      }
@@ -351,7 +355,17 @@ $(document).ready(function() {
                               <input type="text" class="form-control" maxlength="9" id="cep" name="cep"
                                    value="<?php echo $cep; ?>" required />
                          </div>
-                         <div class="col-md-6"></div>
+                         <div class="col-md-4"></div>
+                         <div class="col-md-1">
+                              <label>Aviso I</label>
+                              <input type="text" class="form-control text-center" maxlength="3" id="av1" name="av1"
+                                   value="<?php echo $av1; ?>" required />
+                         </div>
+                         <div class="col-md-1">
+                              <label>Aviso II</label>
+                              <input type="text" class="form-control text-center" maxlength="3" id="av2" name="av2"
+                                   value="<?php echo $av2; ?>" required />
+                         </div>
                          <div class="col-md-2">
                               <label>Máximo de Parcelas</label>
                               <input type="text" class="form-control text-center" maxlength="2" id="par" name="par"
@@ -497,7 +511,7 @@ function ultimo_cod() {
      return $cod;
 }
 
-function ler_empresa(&$cha, &$cgc, &$des, &$fan, &$ema, &$sta, &$tel, &$cep, &$end, &$num, &$com, &$bai, &$cid, &$est, &$ins, &$cel, &$con, &$sit, &$fx1, &$fx2,&$par, &$obs) {
+function ler_empresa(&$cha, &$cgc, &$des, &$fan, &$ema, &$sta, &$tel, &$cep, &$end, &$num, &$com, &$bai, &$cid, &$est, &$ins, &$cel, &$con, &$sit, &$fx1, &$fx2, &$av1, &$av2, &$par, &$obs) {
      include_once "dados.php";
      $nro = acessa_reg('Select * from tb_empresa where idempresa = ' . $cha, $reg);
      if ($nro == 0 || $reg == false) {
@@ -524,6 +538,8 @@ function ler_empresa(&$cha, &$cgc, &$des, &$fan, &$ema, &$sta, &$tel, &$cep, &$e
           $par = $reg['empparcelas'];
           $ins = $reg['empinscricao'];
           $obs = $reg['empobservacao'];
+          $av1 = $reg['empaviso1'];
+          $av2 = $reg['empaviso2'];
           $fx1 = number_format($reg['empfaixa1'], 2, ",", ".");
           $fx2 = number_format($reg['empfaixa2'], 2, ",", ".");
           $_SESSION['wrkcodreg'] = $reg['idempresa'];
@@ -543,6 +559,10 @@ function consiste_emp() {
      }
      if (trim($_REQUEST['ema']) == "") {
           echo '<script>alert("E-mail da empresa não pode estar em branco");</script>';
+          return 3;
+     }
+     if (trim($_REQUEST['av1']) >= trim($_REQUEST['av2'])) {
+          echo '<script>alert("Número de dias de Aviso I deve ser menor que Aviso II");</script>';
           return 3;
      }
      if (trim($_REQUEST['cgc']) == "" || trim($_REQUEST['cgc']) == "../-") {
@@ -585,6 +605,8 @@ function incluir_emp() {
      $sql .= "empcontato, ";
      $sql .= "empwebsite, ";
      $sql .= "empfaixa1, ";
+     $sql .= "empaviso1, ";
+     $sql .= "empaviso2, ";
      $sql .= "empparcelas, ";
      $sql .= "empobservacao, ";
      $sql .= "keyinc, ";
@@ -608,6 +630,8 @@ function incluir_emp() {
      $sql .= "'" . $_REQUEST['con'] . "',";
      $sql .= "'" . $_REQUEST['sit'] . "',";
      $sql .= "'" . str_replace(",", ".", $_REQUEST['fx1']) . "',";
+     $sql .= "'" . str_replace(",", ".", $_REQUEST['av1']) . "',";
+     $sql .= "'" . str_replace(",", ".", $_REQUEST['av2']) . "',";
      $sql .= "'" . $_REQUEST['par'] . "',";
      $sql .= "'" . $_REQUEST['obs'] . "',";
      $sql .= "'" . $_SESSION['wrkideusu'] . "',";
@@ -643,7 +667,9 @@ function incluir_emp() {
      $sql .= "empcontato =  '". $_REQUEST['con'] . "', ";
      $sql .= "empemail = '". $_REQUEST['ema'] . "', ";
      $sql .= "empwebsite = '". $_REQUEST['sit'] . "', ";
-     $sql .= "empparcelas = '". $_REQUEST['par'] . "', ";
+     $sql .= "empparcelas = '". $_REQUEST['par'] . "', ";     
+     $sql .= "empaviso1 = '". $_REQUEST['av1'] . "', ";
+     $sql .= "empaviso2 = '". $_REQUEST['av2'] . "', ";
      $sql .= "empfaixa1 = '". str_replace(",", ".", $_REQUEST['fx1']) . "', ";
      $sql .= "empobservacao = '". $_REQUEST['obs'] . "', ";
      $sql .= "keyalt = '" . $_SESSION['wrkideusu'] . "', ";

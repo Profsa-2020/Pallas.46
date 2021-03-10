@@ -58,6 +58,8 @@
 
      $tab['lis'] = $txt;
      $tab['num'] = ($qtd + 1) . ' º ';
+     $_SESSION['wrkvalcon'] = $tot;
+     $tab['ger'] = $_SESSION['wrkvalcon'];
      $tab['tot'] = 'R$ ' . number_format($tot, 2, ",", ".");
 
      echo json_encode($tab);     

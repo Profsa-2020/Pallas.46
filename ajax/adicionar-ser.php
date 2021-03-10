@@ -2,7 +2,12 @@
      $cod = 0;
      $qtd = 0;
      $tot = 0;
+     $ant = 0;
+     $mes = 0;
      $txt = "";
+     $dti = "";
+     $dtf = "";
+     $dat = "";
      $tab = array();
      session_start();
      $tab['men'] = '';
@@ -11,6 +16,10 @@
      include_once "../profsa.php";
      date_default_timezone_set("America/Sao_Paulo");
      if (isset($_REQUEST['cod_s']) == true) { $cod = $_REQUEST['cod_s']; }
+     if (isset($_REQUEST['dti']) == true) { $dti = $_REQUEST['dti']; }
+     if (isset($_REQUEST['dtf']) == true) { $dtf = $_REQUEST['dtf']; }
+     if ($dti == "") { $dti = date('d/m/Y'); }
+     $dti = str_replace("/", "-", $dti);   
      if ($_REQUEST['cod_s'] == "" || $_REQUEST['cod_s'] == "0") {
           $tab['men'] = 'Não pode ser adicionado serviço sem informação de código';
      }
@@ -52,26 +61,33 @@
           $qtd = $qtd + 1;
           $txt .= '<td>' . $qtd . '</td>';
           $txt .= '<td>' . retorna_dad('serdescricao', 'tb_servico', 'idservico', $key) . '</td>';
-          if ($_SESSION['wrklisser']['vig'][$lin] == 0) { $txt .= '<td>' . "Esporádico" . '</td>'; }
-          if ($_SESSION['wrklisser']['vig'][$lin] == 1) { $txt .= '<td>' . "Mensal" . '</td>'; }
-          if ($_SESSION['wrklisser']['vig'][$lin] == 2) { $txt .= '<td>' . "Bimestral" . '</td>'; }
-          if ($_SESSION['wrklisser']['vig'][$lin] == 3) { $txt .= '<td>' . "Trimestral" . '</td>'; }
-          if ($_SESSION['wrklisser']['vig'][$lin] == 4) { $txt .= '<td>' . "Semestral" . '</td>'; }
-          if ($_SESSION['wrklisser']['vig'][$lin] == 5) { $txt .= '<td>' . "Anual" . '</td>'; }
-          if ($_SESSION['wrklisser']['vig'][$lin] == 6) { $txt .= '<td>' . "Bianual" . '</td>'; }
-          if ($_SESSION['wrklisser']['vig'][$lin] == 7) { $txt .= '<td>' . "Trianual" . '</td>'; }
+          if ($_SESSION['wrklisser']['vig'][$lin] == 0) { $txt .= '<td>' . "Esporádico" . '</td>'; $mes = 0; }
+          if ($_SESSION['wrklisser']['vig'][$lin] == 1) { $txt .= '<td>' . "Mensal" . '</td>'; $mes = 1; }
+          if ($_SESSION['wrklisser']['vig'][$lin] == 2) { $txt .= '<td>' . "Bimestral" . '</td>';  $mes = 2; }
+          if ($_SESSION['wrklisser']['vig'][$lin] == 3) { $txt .= '<td>' . "Trimestral" . '</td>';  $mes = 3; }
+          if ($_SESSION['wrklisser']['vig'][$lin] == 4) { $txt .= '<td>' . "Semestral" . '</td>';  $mes = 6; }
+          if ($_SESSION['wrklisser']['vig'][$lin] == 5) { $txt .= '<td>' . "Anual" . '</td>';  $mes = 12; }
+          if ($_SESSION['wrklisser']['vig'][$lin] == 6) { $txt .= '<td>' . "Bianual" . '</td>';  $mes = 24; }
+          if ($_SESSION['wrklisser']['vig'][$lin] == 7) { $txt .= '<td>' . "Trianual" . '</td>';  $mes = 36; }
           $txt .= '<td class="text-right">' . number_format($_SESSION['wrklisser']['pre'][$lin], 2, ",", ".") . '</td>';
           $txt .= '<td class="text-center">' . $_SESSION['wrklisser']['par'][$lin] . '</td>';
           $txt .= '<td class="text-right">' . number_format($_SESSION['wrklisser']['pre'][$lin] / $_SESSION['wrklisser']['par'][$lin], 2, ",", ".") . '</td>';
           $txt .= '<td class="lit-d text-center" cha_s="' . $key . '"><i class="cor-1 cur-1 fa fa-trash-o" aria-hidden="true" title="Efetua exclusão do serviço informado na linha para o contrato"></i></td>';
           $txt .= '</tr>';     
+          if ($mes >= $ant && $dtf == "") {
+               $ant = $mes;
+               $dat = date('d/m/Y', strtotime('+' . $mes . ' months', strtotime($dti)));
+          }
      }
      $txt .= '</tbody>';
      $txt .= '</table>';
      $txt .= '</div>';
 
      $tab['lis'] = $txt;
+     $tab['dtf'] = $dat;
      $tab['num'] = ($qtd + 1) . ' º ';
+     $_SESSION['wrkvalcon'] = $tot;
+     $tab['ger'] = $_SESSION['wrkvalcon'];
      $tab['tot'] = 'R$ ' . number_format($tot, 2, ",", ".");
 
      echo json_encode($tab);     

@@ -562,6 +562,10 @@ function consiste_cli() {
           echo '<script>alert("Estado da Federação da cliente informado não é válido");</script>';
           return 8;
      }
+     if (strlen($_REQUEST['obs']) > 500) {
+          echo '<script>alert("Observação do cliente não pode ter mais de 500 caracteres");</script>';
+          $sta = 1;
+     }       
      if ($_REQUEST['cpf'] != "") {
           $sta = valida_cpf($_REQUEST['cpf']);
           if ($sta != 0) {
