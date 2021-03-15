@@ -58,13 +58,15 @@ $(function() {
      $("#cod_s").mask("000.000");
      $("#dti").mask("00/00/0000");
      $("#dtf").mask("00/00/0000");
+     $("#dte").mask("00/00/0000");
      $("#cep").mask("00000-000");
      $("#ent").mask("000.000,00", {
           reverse: true
      });
-     $("#des").mask("00,00", {
+     $("#per_s").mask("00,00", {
           reverse: true
      });
+     $("#dte").datepicker($.datepicker.regional["pt-BR"]);
      $("#dti").datepicker($.datepicker.regional["pt-BR"]);
      $("#dtf").datepicker($.datepicker.regional["pt-BR"]);
 });
@@ -81,6 +83,7 @@ $(document).ready(function() {
           var dat = "";
           var val = $('#tot_g').val();
           var ent = $('#ent').val();
+          var dte = $('#dte').val();
           var cli = $('#cli').val();
           var con = $('#con').val();
           var pag = $('#pag').val();
@@ -139,7 +142,7 @@ $(document).ready(function() {
                     $('#dti').val("");
                     alert("Ano informado para a data deve ser entre 2001 e 2026 !");
                }
-          }          
+          }
      });
 
      $("#dtf").change(function() {
@@ -155,18 +158,24 @@ $(document).ready(function() {
                     $('#dtf').val("");
                     alert("Ano informado para a data deve ser entre 2001 e 2026 !");
                }
-          }          
+          }
      });
 
-     $("#des").blur(function() {
-          var des = $('#des').val();
+     $("#dtf").blur(function() {
+          if ($('#dtf').val() == "") {
+               $('#dtf').val($('#dti').val());
+          }
+     });
+
+     $("#per_s").blur(function() {
+          var per = $('#per_s').val();
           $.get("ajax/valida-des.php", {
-                    des: des
+                    des: per
                })
                .done(function(data) {
                     if (data != "") {
                          alert(data);
-                         $('#des').val(0);
+                         $('#per_s').val(0);
                     }
                });
      });
@@ -177,6 +186,7 @@ $(document).ready(function() {
           var cod = $('#cod_s').val();
           var ser = $('#des_s').val();
           var ord = $('#num_s').val();
+          var per = $('#per_s').val();
           if (cod != "") {
                $.getJSON("ajax/leitura-ser.php", {
                          ord: ord,
@@ -203,7 +213,7 @@ $(document).ready(function() {
                          console.log('Erro: ' + JSON.stringify(data));
                          alert(
                               "Erro ocorrido no processamento do item de serviço do contrato"
-                              );
+                         );
                     });
           }
      });
@@ -214,6 +224,7 @@ $(document).ready(function() {
           var pag = $('#pag').val();
           var ser = $('#des_s').val();
           var ord = $('#num_s').val();
+          var per = $('#per_s').val();
           if (ser != 0) {
                $.getJSON("ajax/leitura-ser.php", {
                          ord: ord,
@@ -240,7 +251,7 @@ $(document).ready(function() {
                          console.log('Erro: ' + JSON.stringify(data));
                          alert(
                               "Erro ocorrido no processamento do serviço informado no contrato"
-                              );
+                         );
                     });
           }
      });
@@ -315,6 +326,7 @@ $(document).ready(function() {
                     $('#par_s').val(1);
                     $('#val_t').val(0);
                     $('#ser_t').val(0);
+                    $('#per_s').val(0);
                     $('#dtf').val(data.dtf);
                     $('#tot_g').val(data.ger);
                     $('#tot_c').text(data.tot);
@@ -392,7 +404,7 @@ $(document).ready(function() {
      $dti = (isset($_REQUEST['dti']) == false ? date('d/m/Y')  : $_REQUEST['dti']);
      $dtf = (isset($_REQUEST['dtf']) == false ? '' : $_REQUEST['dtf']);
      $ent = (isset($_REQUEST['ent']) == false ? ''  : $_REQUEST['ent']);
-     $des = (isset($_REQUEST['des']) == false ? ''  : $_REQUEST['des']);
+     $dte = (isset($_REQUEST['dte']) == false ? ''  : $_REQUEST['dte']);
      $obs = (isset($_REQUEST['obs']) == false ? ''  : $_REQUEST['obs']);
      $con = (isset($_REQUEST['con']) == false ? $_SESSION['wrkcodcon'] : $_REQUEST['con']);
      if ($_SESSION['wrkopereg'] == 1) { 
@@ -408,9 +420,9 @@ $(document).ready(function() {
      }  
      if ($_SESSION['wrkopereg'] >= 2) {
           if (isset($_REQUEST['salvar']) == false) { 
-               $ite_c = carrega_ite();
                $cha = $_SESSION['wrkcodreg']; $_SESSION['wrknumcha'] = $_SESSION['wrkcodreg']; $_SESSION['wrkmostel'] = 1; $_SESSION['wrknumvol'] = 1;
-               $ret = ler_contrato($_SESSION['wrkcodreg'], $sta, $cli, $pag, $pro, $dti, $dtf, $ent, $des, $obs, $con); 
+               $ret = ler_contrato($_SESSION['wrkcodreg'], $sta, $cli, $pag, $pro, $dti, $dtf, $dte, $ent, $obs, $con); 
+               $ite_c = carrega_ite($dti, $dtf);
           }
      }
      if (isset($_REQUEST['salvar']) == true) {
@@ -420,8 +432,10 @@ $(document).ready(function() {
                if ($ret == 0) {
                     $ret = incluir_cto();
                     $ret = gravar_ser();
-                    $ret = gravar_log(11,"Inclusão de novo contrato para venda: " . $des); $_SESSION['wrkvalcon'] = 0; $_SESSION['wrklisser'] = array();
-                    $sta = 0; $cli = 0; $pag = 0; $pro = 0; $dti = date('d/m/Y'); $dtf = ''; $ent = ''; $obs = ''; $con = $_SESSION['wrkcodcon']; $_SESSION['wrknumvol'] = 1;
+                    $ret = atualiza_des($val_t, $val_d, $per_d);
+                    $nom = retorna_dad('clirazao', 'tb_cliente', 'idcliente', $cli);
+                    $ret = gravar_log(11,"Inclusão de novo contrato para venda: " . $nom); $_SESSION['wrkvalcon'] = 0; $_SESSION['wrklisser'] = array();
+                    $sta = 0; $cli = 0; $pag = 0; $pro = 0; $dti = date('d/m/Y'); $dtf = ''; $dte = ''; $ent = ''; $obs = ''; $con = $_SESSION['wrkcodcon']; $_SESSION['wrknumvol'] = 1;
                }
           }
           if ($_SESSION['wrkopereg'] == 2) {
@@ -429,15 +443,18 @@ $(document).ready(function() {
                if ($ret == 0) {
                     $ret = alterar_cto();
                     $ret = gravar_ser();
-                    $ret = gravar_log(12,"Alteração de contrato existente: " . $des); $_SESSION['wrkmostel'] = 0;
-                    $sta = 0; $cli = 0; $pag = 0; $pro = 0; $dti = date('d/m/Y'); $dtf = ''; $ent = ''; $obs = ''; $con = $_SESSION['wrkcodcon']; $_SESSION['wrkvalcon'] = 0; $_SESSION['wrklisser'] = array();
+                    $ret = atualiza_des($val_t, $val_d, $per_d);
+                    $nom = retorna_dad('clirazao', 'tb_cliente', 'idcliente', $cli);
+                    $ret = gravar_log(12,"Alteração de contrato existente: " . $nom); $_SESSION['wrkmostel'] = 0;
+                    $sta = 0; $cli = 0; $pag = 0; $pro = 0; $dti = date('d/m/Y'); $dtf = ''; $dte = ''; $ent = ''; $obs = ''; $con = $_SESSION['wrkcodcon']; $_SESSION['wrkvalcon'] = 0; $_SESSION['wrklisser'] = array();
                     echo '<script>history.go(-' . $_SESSION['wrknumvol'] . ');</script>'; $_SESSION['wrknumvol'] = 1;
                }
           }
           if ($_SESSION['wrkopereg'] == 3) {
                $ret = excluir_cto();
-               $ret = gravar_log(13,"Exclusão de contrato existente: " . $des); $_SESSION['wrkmostel'] = 0;
-               $sta = 0; $cli = 0; $pag = 0; $pro = 0; $dti = date('d/m/Y'); $dtf = ''; $ent = ''; $obs = ''; $con = $_SESSION['wrkcodcon']; $_SESSION['wrkvalcon'] = 0; $_SESSION['wrklisser'] = array();
+               $nom = retorna_dad('clirazao', 'tb_cliente', 'idcliente', $cli);
+               $ret = gravar_log(13,"Exclusão de contrato existente: " . $nom); $_SESSION['wrkmostel'] = 0;
+               $sta = 0; $cli = 0; $pag = 0; $pro = 0; $dti = date('d/m/Y'); $dtf = ''; $dte = ''; $ent = ''; $obs = ''; $con = $_SESSION['wrkcodcon']; $_SESSION['wrkvalcon'] = 0; $_SESSION['wrklisser'] = array();
                echo '<script>history.go(-' . $_SESSION['wrknumvol'] . ');</script>'; $_SESSION['wrknumvol'] = 1;
           }
      }
@@ -527,16 +544,16 @@ $(document).ready(function() {
                          <div class="col-md-2"></div>
                     </div>
                     <div class="row">
-                         <div class="col-md-2"></div>
+                         <div class="col-md-1"></div>
                          <div class="col-md-2">
                               <label>Data Inicial</label>
                               <input type="text" class="form-control text-center" maxlength="10" id="dti" name="dti"
                                    value="<?php echo $dti; ?>" required />
                          </div>
                          <div class="col-md-2">
-                              <label>Data Final</label>
-                              <input type="text" class="form-control text-center" maxlength="10" id="dtf" name="dtf"
-                                   value="<?php echo $dtf; ?>" required />
+                              <label>Data Entrada</label>
+                              <input type="text" class="form-control text-center" maxlength="10" id="dte" name="dte"
+                                   value="<?php echo $dte; ?>" />
                          </div>
                          <div class="col-md-2">
                               <label>Entrada - R$</label>
@@ -544,22 +561,25 @@ $(document).ready(function() {
                                    value="<?php echo $ent; ?>" />
                          </div>
                          <div class="col-md-2">
-                              <label>Desconto - %</label>
-                              <input type="text" class="form-control text-center" maxlength="5" id="des" name="des"
-                                   value="<?php echo $des; ?>" />
+                              <label>Data Final</label>
+                              <input type="text" class="form-control text-center" maxlength="10" id="dtf" name="dtf"
+                                   value="<?php echo $dtf; ?>" required />
                          </div>
-                         <div class="col-md-2"></div>
+                         <div class="col-md-2 text-center"><br />
+                              <button type="button" id="itens" name="itens" class="bot-4">Serviços</button>
+                         </div>
+                         <div class="col-md-1"></div>
                     </div>
                     <div class="row">
                          <div class="col-md-2"></div>
                          <div class="col-md-8">
-                              <label>Observação para o Contrato</label>
+                              <label>Briefing do Contrato</label>
                               <textarea class="form-control" rows="3" id="obs" name="obs"><?php echo $obs; ?></textarea>
                          </div>
                          <div class="col-md-2 text-center"><br />
                               <h5><strong>
                                         <?php
-                                   echo '<span id="tot_c" class="bg-danger text-white">';
+                                   echo '<span id="tot_c" class="bg-primary text-white">';
                                    echo '&nbsp; R$ ' . number_format($_SESSION['wrkvalcon'], 2, ",", ".") . ' &nbsp; ';
                                    echo '</span>';
                               ?>
@@ -568,7 +588,7 @@ $(document).ready(function() {
                     </div>
                     <br />
                     <div class="row">
-                         <div class="col-sm-3"></div>
+                         <div class="col-sm-4"></div>
                          <div class="col-sm-2 text-center">
                               <button type="submit" name="salvar" <?php echo $per; ?>
                                    class="bot-4 <?php echo $del; ?>"><?php echo $bot; ?></button>
@@ -577,10 +597,7 @@ $(document).ready(function() {
                               <button type="button" class="bot-1" id="volta" name="volta"
                                    onclick="location.href='<?php echo $_SESSION['wrkproant'] . ".php"; ?>'">Voltar</button>
                          </div>
-                         <div class="col-sm-2 text-center">
-                              <button type="button" id="itens" name="itens" class="bot-4">Serviços</button>
-                         </div>
-                         <div class="col-sm-3"></div>
+                         <div class="col-sm-4"></div>
                     </div>
                     <br />
                     <input type="hidden" id="tot_g" name="tot_g" value="<?php echo $_SESSION['wrkvalcon']; ?>" />
@@ -629,14 +646,19 @@ $(document).ready(function() {
                                    </div>
                               </div>
                               <div class="row">
-                                   <div class="col-md-4 text-center"></div>
-                                   <div class="col-md-4">
+                                   <div class="col-md-3 text-center"></div>
+                                   <div class="col-md-3">
                                         <label>Vigência</label>
                                         <select id="vig_s" name="vig_s" class="form-control">
                                              <?php echo carrega_vig(); ?>
                                         </select>
                                    </div>
-                                   <div class="col-md-4"></div>
+                                   <div class="col-md-3">
+                                        <label>Desconto - %</label>
+                                        <input type="text" class="form-control text-center" maxlength="5" id="per_s"
+                                             name="per_s" value="0,00" riquered />
+                                   </div>
+                                   <div class="col-md-3"></div>
                               </div>
                               <div class="row">
                                    <div class="col-md-4">
@@ -659,7 +681,7 @@ $(document).ready(function() {
                               </div>
                               <div class="row">
                                    <div class="col-md-12">
-                                        <label>Observação para o Serviço</label>
+                                        <label>BRIEFING</label>
                                         <textarea class="form-control" rows="3" id="obs_s" name="obs_s"></textarea>
                                    </div>
                               </div>
@@ -777,7 +799,7 @@ function carrega_vig() {
 }
 
 
-function ler_contrato(&$cha, &$sta, &$cli, &$pag, &$pro, &$dti, &$dtf, &$ent, &$des, &$obs, &$con) {
+function ler_contrato(&$cha, &$sta, &$cli, &$pag, &$pro, &$dti, &$dtf, &$dte, &$ent, &$obs, &$con) {
      include_once "dados.php";
      $nro = acessa_reg('Select * from tb_contrato where idcontrato = ' . $cha, $reg);
      if ($nro == 0 || $reg == false) {
@@ -793,8 +815,12 @@ function ler_contrato(&$cha, &$sta, &$cli, &$pag, &$pro, &$dti, &$dtf, &$ent, &$
           $con = $reg['conconsultor'];
           $dtf = date('d/m/Y',strtotime($reg['condatafim']));
           $obs = $reg['conobservacao'];
+          if ($reg['condataent'] == null) {
+               $dte = "";
+          } else {
+               $dte = date('d/m/Y',strtotime($reg['condataent']));
+          }
           $ent = number_format($reg['convalentrada'], 2, ",", ".");
-          $des = number_format($reg['conperdesconto'], 2, ",", ".");
           $_SESSION['wrkcodreg'] = $reg['idcontrato'];
           $_SESSION['wrkvalcon'] = $reg['convaltotal'];
      }
@@ -836,10 +862,6 @@ function consiste_cto() {
 
 function incluir_cto() {
      $ret = 0;
-     $des = 0;
-     if ($_REQUEST['des'] != "") {
-          $des = round($_SESSION['wrkvalcon'] * str_replace(",", ".", str_replace(".", "", $_REQUEST['des'])) / 100, 2);
-     }
      include_once "dados.php";
      $sql  = "insert into tb_contrato (";
      $sql .= "conempresa, ";
@@ -848,9 +870,9 @@ function incluir_cto() {
      $sql .= "concliente, ";
      $sql .= "conconsultor, ";
      $sql .= "conpagto, ";
-     $sql .= "conperdesconto, ";
      $sql .= "condataemi, ";
      $sql .= "condatafim, ";
+     $sql .= "condataent, ";
      $sql .= "convaltotal, ";
      $sql .= "convaldesconto, ";
      $sql .= "convalentrada, ";
@@ -864,11 +886,11 @@ function incluir_cto() {
      $sql .= "'" . $_REQUEST['cli'] . "',";
      $sql .= "'" . $_REQUEST['con'] . "',";
      $sql .= "'" . $_REQUEST['pag'] . "',";
-     $sql .= "'" . ($_REQUEST['des'] == "" ? '0' : str_replace(",", ".", str_replace(".", "", $_REQUEST['des']))) . "',";
      $sql .= "'" . inverte_dat(1, $_REQUEST['dti']) . "',";
      $sql .= "'" . inverte_dat(1, $_REQUEST['dtf']) . "',";
+     $sql .= " " . ($_REQUEST['dte'] == "" ? "NULL" : "'" . inverte_dat(1, $_REQUEST['dte']) . "'") . " ,";
      $sql .= "'" . $_SESSION['wrkvalcon'] . "',";
-     $sql .= "'" . $des . "',";
+     $sql .= "'" . '0' . "',";
      $sql .= "'" . ($_REQUEST['des'] == "" ? '0' : str_replace(",", ".", str_replace(".", "", $_REQUEST['ent']))) . "',";
      $sql .= "'" . $_REQUEST['obs'] . "',";
      $sql .= "'" . $_SESSION['wrkideusu'] . "',";
@@ -886,10 +908,6 @@ function incluir_cto() {
  
  function alterar_cto() {
      $ret = 0;
-     $des = 0;
-     if ($_REQUEST['des'] != "") {
-          $des = round($_SESSION['wrkvalcon'] * str_replace(",", ".", str_replace(".", "", $_REQUEST['des'])) / 100, 2);
-     }
      include_once "dados.php";
      $sql  = "update tb_contrato set ";
      $sql .= "conproposta = '". (isset($_REQUEST['pro']) == false ? '0' : '1') . "', ";
@@ -897,12 +915,14 @@ function incluir_cto() {
      $sql .= "concliente = '". $_REQUEST['cli'] . "', ";
      $sql .= "conconsultor = '". $_REQUEST['con'] . "', ";
      $sql .= "conpagto = '". $_REQUEST['pag'] . "', ";
-     $sql .= "conperdesconto = '". ($_REQUEST['des'] == "" ? '0' : str_replace(",", ".", str_replace(".", "", $_REQUEST['des']))) . "', ";
      $sql .= "condataemi = '". inverte_dat(1, $_REQUEST['dti']) . "', ";
-     $sql .= "condatafim = '". inverte_dat(1, $_REQUEST['dti']) . "', ";
+     $sql .= "condatafim = '". inverte_dat(1, $_REQUEST['dtf']) . "', ";
+     if ($_REQUEST['dte'] != "") {
+          $sql .= "condataent = '". inverte_dat(1, $_REQUEST['dte']) . "', ";
+     }
      $sql .= "convaltotal = '". $_SESSION['wrkvalcon'] . "', ";
      $sql .= "convalentrada = '". str_replace(",", ".", str_replace(".", "", $_REQUEST['ent'])) . "', ";
-     $sql .= "convaldesconto = '". $des . "', ";
+     $sql .= "convaldesconto = '". '0' . "', ";
      $sql .= "conobservacao = '". $_REQUEST['obs'] . "', ";
      $sql .= "keyalt = '" . $_SESSION['wrkideusu'] . "', ";
      $sql .= "datalt = '" . date("Y/m/d H:i:s") . "' ";
@@ -933,7 +953,7 @@ function excluir_cto() {
      return $ret;
 }
 
-function carrega_ite() {
+function carrega_ite($dti, &$dtf) {
      $txt = ""; $qtd = 0;
      include_once "dados.php";
      $com  = "Select I.*, S.serdescricao from (tb_contrato_s I left join tb_servico S on I.iteservico = S.idservico)  where I.iteempresa = " .  $_SESSION['wrkcodemp'] . " and I.itecontrato = " . $_SESSION['wrkcodreg'] . " order by I.iditem";
@@ -946,7 +966,9 @@ function carrega_ite() {
           $txt .= '<th>Nº</th>';
           $txt .= '<th width="35%">Descrição do Serviço</th>';
           $txt .= '<th>Vigência</th>';
+          $txt .= '<th>Data Final</th>';
           $txt .= '<th>Preço</th>';
+          $txt .= '<th>Desconto</th>';
           $txt .= '<th>Parcelas</th>';
           $txt .= '<th>Valor</th>';
           $txt .= '<th class="text-center">Excluir</th>';
@@ -954,20 +976,23 @@ function carrega_ite() {
           $txt .= '</thead>';
           $txt .= '<tbody>';     
      }
+     $ant = 0; $mes = 0; $dtf = ""; $dti = str_replace("/", "-", $dti);
      foreach ($reg as $lin) {
           $qtd = $qtd + 1;
           $txt .= '<tr>';     
           $txt .= '<td>' . $qtd . '</td>';
           $txt .= '<td>' . $lin['serdescricao'] . '</td>';
-          if ($lin['itevigencia'] == 0) { $txt .= '<td>' . "Esporádico" . '</td>'; }
-          if ($lin['itevigencia'] == 1) { $txt .= '<td>' . "Mensal" . '</td>'; }
-          if ($lin['itevigencia'] == 2) { $txt .= '<td>' . "Bimestral" . '</td>'; }
-          if ($lin['itevigencia'] == 3) { $txt .= '<td>' . "Trimestral" . '</td>'; }
-          if ($lin['itevigencia'] == 4) { $txt .= '<td>' . "Semestral" . '</td>'; }
-          if ($lin['itevigencia'] == 5) { $txt .= '<td>' . "Anual" . '</td>'; }
-          if ($lin['itevigencia'] == 6) { $txt .= '<td>' . "Bianual" . '</td>'; }
-          if ($lin['itevigencia'] == 7) { $txt .= '<td>' . "Trianual" . '</td>'; }
+          if ($lin['itevigencia'] == 0) { $txt .= '<td>' . "Esporádico" . '</td>'; $mes = 0; }
+          if ($lin['itevigencia'] == 1) { $txt .= '<td>' . "Mensal" . '</td>';  $mes = 1; }
+          if ($lin['itevigencia'] == 2) { $txt .= '<td>' . "Bimestral" . '</td>';  $mes = 2; }
+          if ($lin['itevigencia'] == 3) { $txt .= '<td>' . "Trimestral" . '</td>';  $mes = 3; }
+          if ($lin['itevigencia'] == 4) { $txt .= '<td>' . "Semestral" . '</td>';  $mes = 6; }
+          if ($lin['itevigencia'] == 5) { $txt .= '<td>' . "Anual" . '</td>';  $mes = 12; }
+          if ($lin['itevigencia'] == 6) { $txt .= '<td>' . "Bianual" . '</td>';  $mes = 24; }
+          if ($lin['itevigencia'] == 7) { $txt .= '<td>' . "Trianual" . '</td>';  $mes = 36; }
+          $txt .= '<td>' . date('d/m/Y',strtotime($lin['itedatafim'])) . '</td>';
           $txt .= '<td class="text-right">' . number_format($lin['itepreco'], 2, ",", ".") . '</td>';
+          $txt .= '<td class="text-right">' . number_format($lin['itedesconto'], 2, ",", ".") . '</td>';
           $txt .= '<td class="text-center">' . $lin['iteparcela'] . '</td>';
           $txt .= '<td class="text-right">' . number_format($lin['itepreco'] / $lin['iteparcela'], 2, ",", ".") . '</td>';
           $txt .= '<td class="lit-d text-center" cha_s="' . $lin['iteservico'] . '"><i class="cor-1 cur-1 fa fa-trash-o" aria-hidden="true" title="Efetua exclusão do serviço informado na linha para o contrato"></i></td>';
@@ -978,7 +1003,14 @@ function carrega_ite() {
           $_SESSION['wrklisser']['vig'][$cod] = $lin['itevigencia'];
           $_SESSION['wrklisser']['par'][$cod] = $lin['iteparcela'];
           $_SESSION['wrklisser']['pre'][$cod] = $lin['itepreco'];
+          $_SESSION['wrklisser']['per'][$cod] = $lin['itedesconto'];
+          $_SESSION['wrklisser']['mes'][$cod] = $lin['itemeses'];
+          $_SESSION['wrklisser']['dtf'][$cod] = $lin['itedatafim'];
           $_SESSION['wrklisser']['obs'][$cod] = $lin['iteobservacao'];
+          if ($mes >= $ant) {
+               $ant = $mes;
+               $dtf = date('d/m/Y', strtotime('+' . $mes . ' months', strtotime($dti)));
+          }
      }
      if ($nro > 0) {
           $txt .= '</tbody>';
@@ -989,7 +1021,7 @@ function carrega_ite() {
 }
 
 function gravar_ser() {
-     $ret = 0; $qtd = 1; $mes = 0;
+     $ret = 0; $qtd = 1;
      include_once "dados.php";
      $sql  = "delete from tb_contrato_s where itecontrato = " . $_SESSION['wrkcodreg'] ;
      $ret = comando_tab($sql, $nro, $cha, $men);
@@ -1005,7 +1037,6 @@ function gravar_ser() {
                $sql .= "itestatus, ";
                $sql .= "itesequencia, ";
                $sql .= "iteservico, ";
-               $sql .= "itemeses, ";
                $sql .= "iteparcela, ";
                $sql .= "itevigencia, ";
                $sql .= "itedataini, ";
@@ -1013,6 +1044,7 @@ function gravar_ser() {
                $sql .= "itequantidade, ";
                $sql .= "itepreco, ";
                $sql .= "itedesconto, ";
+               $sql .= "itemeses, ";
                $sql .= "iteobservacao, ";
                $sql .= "keyinc, ";
                $sql .= "datinc ";
@@ -1022,14 +1054,14 @@ function gravar_ser() {
                $sql .= "'" . $_REQUEST['sta'] . "',";
                $sql .= "'" . $qtd . "',"; $qtd += 1;
                $sql .= "'" . $lin . "',";
-               $sql .= "'" . $mes . "',";
                $sql .= "'" . $_SESSION['wrklisser']['par'][$lin] . "',";
                $sql .= "'" . $_SESSION['wrklisser']['vig'][$lin] . "',";
                $sql .= "'" . inverte_dat(1, $_REQUEST['dti']) . "',";
-               $sql .= "'" . inverte_dat(1, $_REQUEST['dtf']) . "',";
+               $sql .= "'" . $_SESSION['wrklisser']['dtf'][$lin] . "',";
                $sql .= "'" . '1' . "',";
                $sql .= "'" . $_SESSION['wrklisser']['pre'][$lin] . "',";
-               $sql .= "'" . ($_REQUEST['des'] == "" ? '0' : str_replace(",", ".", str_replace(".", "", $_REQUEST['des']))) . "',";
+               $sql .= "'" . $_SESSION['wrklisser']['per'][$lin] . "',";
+               $sql .= "'" . $_SESSION['wrklisser']['mes'][$lin] . "',";
                $sql .= "'" . 'Cadastro efetuado: ' . date("d/m/Y/ H:i:s") . "',";
                $sql .= "'" . $_SESSION['wrkideusu'] . "',";
                $sql .= "'" . date("Y-m-d H:i:s") . "')";
@@ -1043,6 +1075,34 @@ function gravar_ser() {
      return $ret;
 }
 
+function atualiza_des(&$val_t, &$val_d, &$per_d) {
+     $ret = 0; $val_d = 0; $val_t = 0; $per_d = 0;
+     $com  = "Select Sum(itepreco) as convalor from tb_contrato_s where iteempresa = " .  $_SESSION['wrkcodemp'] . " and itecontrato = " . $_SESSION['wrkcodreg'];
+     $nro = leitura_reg($com, $reg);
+     foreach ($reg as $lin) {
+          $val_t = $lin['convalor'];
+     }
+     if ($val_t > 0) {
+          $com  = "Select * from tb_contrato_s where itedesconto > 0 and iteempresa = " .  $_SESSION['wrkcodemp'] . " and itecontrato = " . $_SESSION['wrkcodreg'];
+          $nro = leitura_reg($com, $reg);
+          foreach ($reg as $lin) {               
+               $val_d += $val_d + $lin['itepreco'] * $lin['itedesconto'] / 100;
+          }
+          $per_d = $val_d / $val_t * 100;
+          $sql  = "update tb_contrato set ";
+          $sql .= "conperdesconto = '". round($per_d, 4) . "', ";
+          $sql .= "convaldesconto = '". $val_d . "', ";
+          $sql .= "keyalt = '" . $_SESSION['wrkideusu'] . "', ";
+          $sql .= "datalt = '" . date("Y/m/d H:i:s") . "' ";
+          $sql .= "where idcontrato = " . $_SESSION['wrkcodreg'];
+          $ret = comando_tab($sql, $nro, $ult, $men);
+          if ($ret == false) {
+               print_r($sql);
+               echo '<script>alert("Erro na regravação do desconto do contrato !");</script>';
+          }
+     }
+     return $ret;
+}
 ?>
 
 </html>

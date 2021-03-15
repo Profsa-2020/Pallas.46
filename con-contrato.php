@@ -71,8 +71,8 @@ $(document).ready(function() {
      $('#tab-0').DataTable({
           "pageLength": 25,
           "aaSorting": [
-               [3, 'asc'],
-               [5, 'asc']
+               [4, 'asc'],
+               [6, 'asc']
           ],
           "language": {
                "lengthMenu": "Demonstrar _MENU_ linhas por páginas",
@@ -256,6 +256,7 @@ $(document).ready(function() {
                                    <tr>
                                         <th width="3%">Alt</th>
                                         <th width="3%">Exc</th>
+                                        <th>Contrato</th>
                                         <th width="5%">Status</th>
                                         <th>Nome do Cliente</th>
                                         <th class="text-center">Proposta</th>
@@ -264,6 +265,7 @@ $(document).ready(function() {
                                         <th>Final</th>
                                         <th>Valor</th>
                                         <th>Desconto</th>
+                                        <th>Visualizar</th>
                                    </tr>
                               </thead>
                               <tbody>
@@ -294,6 +296,7 @@ function carrega_con($sta, $dti, $dtf) {
           $txt =  '<tr>';
           $txt .= '<td class="text-center"><a href="man-contrato.php?ope=2&cod=' . $lin['idcontrato'] . '" title="Efetua alteração do registro informado na linha"><i class="large material-icons">healing</i></a></td>';
           $txt .= '<td class="lit-d text-center"><a href="man-contrato.php?ope=3&cod=' . $lin['idcontrato'] . '" title="Efetua exclusão do registro informado na linha"><i class="cor-1 large material-icons">delete_forever</i></a></td>';
+          $txt .= '<td class="text-center">' . str_pad($lin['idcontrato'], 6, "0", STR_PAD_LEFT)  . '</td>';
           if ($lin['constatus'] == 0) {$txt .= '<td>' . "Normal" . '</td>';}
           if ($lin['constatus'] == 1) {$txt .= '<td>' . "Proposta" . '</td>';}
           if ($lin['constatus'] == 2) {$txt .= '<td>' . "Não Aceita" . '</td>';}
@@ -308,6 +311,7 @@ function carrega_con($sta, $dti, $dtf) {
           $txt .= '<td>' . date('d/m/Y',strtotime($lin['condatafim'])) . '</td>';
           $txt .= '<td class="text-right">' . number_format($lin['convaltotal'], 2, ",", ".") . '</td>';
           $txt .= '<td class="text-right">' . number_format($lin['convaldesconto'], 2, ",", ".") . '</td>';
+          $txt .= '<td class="cur-1 text-center">' . '<a href="visualiza-pdf.php?cod=' . $lin['idcontrato'] .  '" target="_blank">' . '<i class="fa fa-print fa-2x" aria-hidden="true" title="Cria janela com modelo do impresso do contrato solicitado ..."></i>' . '</a>' . '</td>';
           $txt .= "</tr>";
           echo $txt; 
      }

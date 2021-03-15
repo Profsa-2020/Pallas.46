@@ -31,11 +31,13 @@
      }
      if ($tab['men'] == "") {
           $_SESSION['wrklisser']['sta'][$cod] = 1;
+          $_SESSION['wrklisser']['mes'][$cod] = 0;
           $_SESSION['wrklisser']['cod'][$cod] = $_REQUEST['cod_s'];
           $_SESSION['wrklisser']['vig'][$cod] = $_REQUEST['vig_s'];
           $_SESSION['wrklisser']['par'][$cod] = $_REQUEST['par_s'];
           $_SESSION['wrklisser']['pre'][$cod] = $_REQUEST['ser_t'];
           $_SESSION['wrklisser']['obs'][$cod] = $_REQUEST['obs_s'];
+          $_SESSION['wrklisser']['per'][$cod] = str_replace(",", ".", $_REQUEST['per_s']);
      }
      $txt .= '<div class="tab-2 table-responsive">';
      $txt .= '<table class="table table-sm">';
@@ -44,7 +46,9 @@
      $txt .= '<th>Nº</th>';
      $txt .= '<th width="35%">Descrição do Serviço</th>';
      $txt .= '<th>Vigência</th>';
+     $txt .= '<th>Data Final</th>';
      $txt .= '<th>Preço</th>';
+     $txt .= '<th>Desconto</th>';
      $txt .= '<th>Parcelas</th>';
      $txt .= '<th>Valor</th>';
      $txt .= '<th class="text-center">Excluir</th>';
@@ -69,12 +73,16 @@
           if ($_SESSION['wrklisser']['vig'][$lin] == 5) { $txt .= '<td>' . "Anual" . '</td>';  $mes = 12; }
           if ($_SESSION['wrklisser']['vig'][$lin] == 6) { $txt .= '<td>' . "Bianual" . '</td>';  $mes = 24; }
           if ($_SESSION['wrklisser']['vig'][$lin] == 7) { $txt .= '<td>' . "Trianual" . '</td>';  $mes = 36; }
+          $txt .= '<td>' . date('d/m/Y', strtotime('+' . $mes . ' months', strtotime($dti))) . '</td>';
           $txt .= '<td class="text-right">' . number_format($_SESSION['wrklisser']['pre'][$lin], 2, ",", ".") . '</td>';
+          $txt .= '<td class="text-right">' . number_format($_SESSION['wrklisser']['per'][$lin], 2, ",", ".") . '</td>';
           $txt .= '<td class="text-center">' . $_SESSION['wrklisser']['par'][$lin] . '</td>';
           $txt .= '<td class="text-right">' . number_format($_SESSION['wrklisser']['pre'][$lin] / $_SESSION['wrklisser']['par'][$lin], 2, ",", ".") . '</td>';
           $txt .= '<td class="lit-d text-center" cha_s="' . $key . '"><i class="cor-1 cur-1 fa fa-trash-o" aria-hidden="true" title="Efetua exclusão do serviço informado na linha para o contrato"></i></td>';
           $txt .= '</tr>';     
-          if ($mes >= $ant && $dtf == "") {
+          $_SESSION['wrklisser']['mes'][$lin] = $mes;
+          $_SESSION['wrklisser']['dtf'][$lin] = date('Y-m-d', strtotime('+' . $mes . ' months', strtotime($dti)));
+          if ($mes >= $ant) {
                $ant = $mes;
                $dat = date('d/m/Y', strtotime('+' . $mes . ' months', strtotime($dti)));
           }
@@ -84,9 +92,9 @@
      $txt .= '</div>';
 
      $tab['lis'] = $txt;
-     $tab['dtf'] = $dat;
      $tab['num'] = ($qtd + 1) . ' º ';
      $_SESSION['wrkvalcon'] = $tot;
+     $tab['dtf'] = ($dat == "" ? $dtf : $dat);
      $tab['ger'] = $_SESSION['wrkvalcon'];
      $tab['tot'] = 'R$ ' . number_format($tot, 2, ",", ".");
 
