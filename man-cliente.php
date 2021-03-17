@@ -618,6 +618,7 @@ function incluir_cli() {
      $sql .= "clicargo, ";
      $sql .= "clicpf, ";
      $sql .= "cligrupo, ";
+     $sql .= "cliconsultor, ";
      $sql .= "cliobservacao, ";
      $sql .= "keyinc, ";
      $sql .= "datinc ";
@@ -645,6 +646,7 @@ function incluir_cli() {
      $sql .= "'" . $_REQUEST['car'] . "',";
      $sql .= "'" . limpa_nro($_REQUEST['cpf']) . "',";
      $sql .= "'" . $_REQUEST['gru'] . "',";
+     $sql .= "'" . $_SESSION['wrkcodcon'] . "',";
      $sql .= "'" . $_REQUEST['obs'] . "',";
      $sql .= "'" . $_SESSION['wrkideusu'] . "',";
      $sql .= "'" . date("Y/m/d H:i:s") . "')";

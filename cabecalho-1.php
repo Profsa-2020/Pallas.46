@@ -65,12 +65,8 @@
                               aria-hidden="true"></i><br /> Contratos </a>
                </li>
                <li class="nav-item">
-                    <a class="nav-link" href="consulta-pro.php"><i class="fa fa-search fa-1g"
-                              aria-hidden="true"></i><br /> Consultas </a>
-               </li>
-               <li class="nav-item">
-                    <a class="nav-link" href="processo-con.php"><i class="fa fa-cogs fa-1g"
-                              aria-hidden="true"></i><br /> Processos </a>
+                    <a class="nav-link" href="consulta-con.php"><i class="fa fa-search fa-1g"
+                              aria-hidden="true"></i><br /> Consulta </a>
                </li>
                <li class="nav-item">
                     <a class="nav-link" href="con-usuario.php"><i class="fa fa-user-circle-o fa-1g"

@@ -37,13 +37,97 @@
           integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous">
      </script>
 
-     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.0/Chart.min.js"></script>
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.0/Chart.min.js"></script> <!-- 2.9.4 / 2.7.0 -->
 
      <link href="css/pallas46.css" rel="stylesheet" type="text/css" media="screen" />
      <title>Menu - Gerenciamento de Contratos - SearchMidia - Profsa Informátda Ltda</title>
 </head>
 
 <script>
+
+$.ajax({     
+          url: 'ajax/grafico-men.php',
+          type: 'POST',
+          dataType: 'json',
+          data: {
+               cod: 0
+          },
+          success: function(data) {
+               tit = data.tit;
+               qtd = data.qtd;
+               cor = data.cor;
+               var ctx = document.getElementsByClassName("grafico-1");
+               var chartGraph = new Chart(ctx, {
+                    type: 'pie',
+                    data: {
+                         labels: tit,
+                         datasets: [{
+                              label: "Contratos por Vigência",
+                              data: qtd,
+                              borderWidth: 1,
+                              borderColor: '#000000',
+                              backgroundColor: cor,
+                         }]
+                    }
+               });
+          }
+     });
+
+     $.ajax({
+               url: 'ajax/grafico-ano.php',
+               type: 'POST',
+               dataType: 'json',
+               data: {
+                    cod: 1
+               },
+               success: function(data) {
+                    tit = data.tit;
+                    val = data.val;
+                    cor = data.cor;
+                    var ctx = document.getElementsByClassName("grafico-2");
+                    var chartGraph = new Chart(ctx, {
+                         type: 'bar',
+                         data: {
+                              labels: tit,
+                              datasets: [{
+                                   label: "Faturamento Anual",
+                                   data: val,
+                                   borderWidth: 0.5,
+                                   backgroundColor: cor,
+                              }]
+                         }
+                    });
+               }
+          });
+
+     $.ajax({     
+          url: 'ajax/grafico-sta.php',
+          type: 'POST',
+          dataType: 'json',
+          data: {
+               cod: 2
+          },
+          success: function(data) {
+               tit = data.tit;
+               qtd = data.qtd;
+               cor = data.cor;
+               var ctx = document.getElementsByClassName("grafico-3");
+               var chartGraph = new Chart(ctx, {
+                    type: 'pie',
+                    data: {
+                         labels: tit,
+                         datasets: [{
+                              label: "Contratos por Status",
+                              data: qtd,
+                              borderWidth: 1,
+                              borderColor: '#000000',
+                              backgroundColor: cor,
+                         }]
+                    }
+               });
+          }
+     });
+
 $(document).ready(function() {
      var alt = $(window).height();
      var lar = $(window).width();
@@ -119,49 +203,66 @@ $(document).ready(function() {
           </div>
           <br />
 
-               <div class="row">
-                    <div class="col-md-2"></div>
-                    <div class="col-md-1 qua-3">
-                         <p><?php echo number_format($tab['emp'], 0, ",", "."); ?></p>
-                         <span><?php echo 'Empresas'; ?></span>
-                    </div>
-                    <div class="col-md-1 qua-3">
-                         <p><?php echo number_format($tab['csu'], 0, ",", "."); ?></p>
-                         <span><?php echo 'Consultores'; ?></span>
-                    </div>
-                    <div class="col-md-1 qua-3">
-                         <p><?php echo number_format($tab['cli'], 0, ",", "."); ?></p>
-                         <span><?php echo 'Clientes'; ?></span>
-                    </div>
-                    <div class="col-md-1 qua-3">
-                         <p><?php echo number_format($tab['ser'], 0, ",", "."); ?></p>
-                         <span><?php echo 'Serviços'; ?></span>
-                    </div>
-                    <div class="col-md-1 qua-3">
-                         <p><?php echo number_format($tab['pro'], 0, ",", "."); ?></p>
-                         <span><?php echo 'Propostas'; ?></span>
-                    </div>
-                    <div class="col-md-1 qua-3">
-                         <p><?php echo number_format($tab['con'], 0, ",", "."); ?></p>
-                         <span><?php echo 'Contratos'; ?></span>
-                    </div>
-                    <div class="col-md-1 qua-3">
-                         <p><?php echo number_format($tab['log'], 0, ",", "."); ?></p>
-                         <span><?php echo 'Logs'; ?></span>
-                    </div>
-                    <div class="col-md-1 qua-3">
-                         <p><?php echo number_format($tab['usu'], 0, ",", "."); ?></p>
-                         <span><?php echo 'Usuários'; ?></span>
-                    </div>
-                    <div class="col-md-2"></div>
+          <div class="row">
+               <div class="col-md-2"></div>
+               <div class="col-md-1 qua-3">
+                    <p><?php echo number_format($tab['emp'], 0, ",", "."); ?></p>
+                    <span><?php echo 'Empresas'; ?></span>
                </div>
+               <div class="col-md-1 qua-3">
+                    <p><?php echo number_format($tab['csu'], 0, ",", "."); ?></p>
+                    <span><?php echo 'Consultores'; ?></span>
+               </div>
+               <div class="col-md-1 qua-3">
+                    <p><?php echo number_format($tab['cli'], 0, ",", "."); ?></p>
+                    <span><?php echo 'Clientes'; ?></span>
+               </div>
+               <div class="col-md-1 qua-3">
+                    <p><?php echo number_format($tab['ser'], 0, ",", "."); ?></p>
+                    <span><?php echo 'Serviços'; ?></span>
+               </div>
+               <div class="col-md-1 qua-3">
+                    <p><?php echo number_format($tab['pro'], 0, ",", "."); ?></p>
+                    <span><?php echo 'Propostas'; ?></span>
+               </div>
+               <div class="col-md-1 qua-3">
+                    <p><?php echo number_format($tab['con'], 0, ",", "."); ?></p>
+                    <span><?php echo 'Contratos'; ?></span>
+               </div>
+               <div class="col-md-1 qua-3">
+                    <p><?php echo number_format($tab['log'], 0, ",", "."); ?></p>
+                    <span><?php echo 'Logs'; ?></span>
+               </div>
+               <div class="col-md-1 qua-3">
+                    <p><?php echo number_format($tab['usu'], 0, ",", "."); ?></p>
+                    <span><?php echo 'Usuários'; ?></span>
+               </div>
+               <div class="col-md-2"></div>
+          </div>
+          <br />
+          <div class="row text-center"">
+               <div class="col-sm-4">
+                    <h3><strong>Contratos por Vigência</strong></h3>
+                    <canvas class="grafico-1"></canvas>
+               </div>
+               <div class="col-sm-4">
+                    <h3><strong> </strong></h3>
+                    <canvas class="grafico-2"></canvas>
+               </div>
+               <div class="col-sm-4">
+               <h3><strong>Contratos por Status</strong></h3>
+                    <canvas class="grafico-3"></canvas>
+               </div>
+          </div>
+          <br />
 
-          <br /><br />
+          <!--
           <div class="row">
                <div class="col-md-12 text-center">
                     <img class="ima-2 img-fluid  animated zoomInUp" src="img/logo-02.png" />
                </div>
           </div>
+          - ->
 
      </div>
      <br />

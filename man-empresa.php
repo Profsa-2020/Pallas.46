@@ -201,7 +201,7 @@ $(document).ready(function() {
      include_once "profsa.php";
      $_SESSION['wrknompro'] = __FILE__;
      if ($_SESSION['wrktipusu'] <= 2) {
-          echo '<script>alert("Nível de usuário não permite acesso a manutenção de usuários");</script>';
+          echo '<script>alert("Nível de usuário não permite acesso a está opção do sistema");</script>';
           echo '<script>history.go(-1);</script>';
      }
      date_default_timezone_set("America/Sao_Paulo");

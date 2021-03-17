@@ -399,11 +399,11 @@ $(document).ready(function() {
      if ($_SESSION['wrktipusu'] <= 1) { // 0-Visitante, 1-Consultor
           $con_l = " disabled ";
      }
-     $cod = (isset($_REQUEST['cod']) == false ? 0  : $_REQUEST['cod']);
-     $sta = (isset($_REQUEST['sta']) == false ? 0  : $_REQUEST['sta']);
-     $cli = (isset($_REQUEST['cli']) == false ? 0  : $_REQUEST['cli']);
+     $cod = (isset($_REQUEST['cod']) == false ? 0 : $_REQUEST['cod']);
+     $sta = (isset($_REQUEST['sta']) == false ? 1 : $_REQUEST['sta']);
+     $cli = (isset($_REQUEST['cli']) == false ? 0 : $_REQUEST['cli']);
      $pag = (isset($_REQUEST['pag']) == false ? 0  : $_REQUEST['pag']);
-     $pro = (isset($_REQUEST['pro']) == false ? 0  : $_REQUEST['pro']);
+     $pro = (isset($_REQUEST['pro']) == false ? 1 : $_REQUEST['pro']);
      $dti = (isset($_REQUEST['dti']) == false ? date('d/m/Y')  : $_REQUEST['dti']);
      $dtf = (isset($_REQUEST['dtf']) == false ? '' : $_REQUEST['dtf']);
      $ent = (isset($_REQUEST['ent']) == false ? ''  : $_REQUEST['ent']);

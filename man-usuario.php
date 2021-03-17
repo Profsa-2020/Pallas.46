@@ -70,7 +70,7 @@ $(document).ready(function() {
      include_once "dados.php";
      include_once "profsa.php";
      $_SESSION['wrknompro'] = __FILE__;
-     if ($_SESSION['wrktipusu'] <= 1) {
+     if ($_SESSION['wrktipusu'] <= 2) {
           echo '<script>alert("Nível de usuário não permite acesso a manutenção de usuários");</script>';
           echo '<script>history.go(-1);</script>';
      }

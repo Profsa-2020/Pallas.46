@@ -107,7 +107,11 @@ $(document).ready(function() {
     include_once "dados.php";
     include_once "profsa.php";
     $_SESSION['wrknompro'] = __FILE__;
-    date_default_timezone_set("America/Sao_Paulo");
+    if ($_SESSION['wrktipusu'] <= 2) {
+     echo '<script>alert("Nível de usuário não permite acesso a está opção do sistema");</script>';
+     echo '<script>history.go(-1);</script>';
+}
+date_default_timezone_set("America/Sao_Paulo");
     if (isset($_SERVER['HTTP_REFERER']) == true) {
           if (limpa_pro($_SESSION['wrknompro']) != limpa_pro($_SERVER['HTTP_REFERER'])) {
                $_SESSION['wrknomant'] = limpa_pro($_SERVER['HTTP_REFERER']);

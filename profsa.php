@@ -50,7 +50,7 @@ function gravar_log($ope = 0, $obs = "", $cod = "") {
      if (isset($_SESSION['wrknompro']) == true) {$prg = $_SESSION['wrknompro'];}
      if (isset($_SESSION['wrknomant']) == true) {$ant = $_SESSION['wrknomant'];}
      if (isset($_SESSION['wrknumdoc']) == true) {$doc = $_SESSION['wrknumdoc'];}
-     if (isset($_SESSION['wrkideusu']) == true) {$nro = $_SESSION['wrkideusu'];}
+     if (isset($_SESSION['wrkcodcon']) == true) {$nro = $_SESSION['wrkcodcon'];}
      if (isset($_SESSION['wrkcidusu']) == true) {$cid = $_SESSION['wrkcidusu'];}
      if (isset($_SESSION['wrkestusu']) == true) {$est = $_SESSION['wrkestusu'];} 
      if ($nom == "") { $nom = substr(get_current_user(), 0, 50); }
@@ -320,5 +320,26 @@ function mascara_cpo($cpo, $mas) {	// Formata campos com máscara
      return $ret;
  }
 
+ function mes_ano($dat) {
+     $nom = '';
+     if (strlen($dat) <= 2) {
+          $mes = $dat;
+     }else{
+          $mes = substr($dat, 3, 2);
+     }
+     if ($mes == 1)  { $nom = 'Janeiro'; }
+     if ($mes == 2)  { $nom = 'Fevereiro'; }
+     if ($mes == 3)  { $nom = 'Março'; }
+     if ($mes == 4)  { $nom = 'Abril'; }
+     if ($mes == 5)  { $nom = 'Maio'; }
+     if ($mes == 6)  { $nom = 'Junho'; }
+     if ($mes == 7)  { $nom = 'Julho'; }
+     if ($mes == 8)  { $nom = 'Agosto'; }
+     if ($mes == 9)  { $nom = 'Setembro'; }
+     if ($mes == 10) { $nom = 'Outubro'; }
+     if ($mes == 11) { $nom = 'Novembro'; }
+     if ($mes == 12) { $nom = 'Dezembro'; }
+     return $nom;
+ }
 
 ?>
