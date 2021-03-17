@@ -5,7 +5,7 @@ function envia_email($end_ema, $asu_ema, $tex_env, $nom_usu, $anexo_1, $anexo_2)
      if ($asu_ema == "") {
           $asu_ema ="Re-envio de login e senha a usuário do sistema !";
      }
-     $headers  = 'From: suporte@searchmidia.com.br' . "\r\n";
+     $headers  = 'From: suporte@clickgest.com.br' . "\r\n";
      $headers .= 'MIME-Version: 1.0' . "\r\n";
      $headers .= 'Content-type: text/html; charset=UTF-8' . "\r\n";
      $envio = mail($end_ema, $asu_ema, $tex_env, $headers);

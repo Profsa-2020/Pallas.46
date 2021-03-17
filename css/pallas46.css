@@ -58,7 +58,7 @@
 }
 
  .ima-1 {
-    width: 90%;
+    width: 75%;
  }
  
  .ima-2 {
@@ -68,7 +68,7 @@
 .login {
     width: 100%;
     height: 100vh;
-    background-image: url(../img/fundo-01.jpg);
+    background-image: url(../img/fundo-04.jpg);
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;

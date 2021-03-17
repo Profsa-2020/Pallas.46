@@ -66,9 +66,9 @@ $(document).ready(function() {
           <div class="qua-1 animated bounceInDown">
                <form class="cpo-0" id="frmLogin" name="frmLogin" action="" method="POST">
                     <div class="row">
-                         <a href="http://www.searchmidia.com.br/">
-                              <img class="ima-1" src="img/logo-04.png" alt="Logotipo da empresa SearchMidiaa"
-                                   title="Acesso ao site principal da empresa SearchMidia" />
+                         <a href="http://www.clickgest.com.br/">
+                              <img class="ima-1" src="img/logo-11.png" alt="Logotipo da empresa ClickGesta"
+                                   title="Acesso ao site principal da empresa ClickGest" />
                          </a>
                     </div>
                     <div class="row">

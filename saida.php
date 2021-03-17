@@ -65,23 +65,23 @@
 ?>
 
 <body>
-     <h1 class="cab-0">Página de Saída Sistema SearchMidia Marketing de Resultados - Profsa Informática Ltda</h1>
+     <h1 class="cab-0">Página de Saída Sistema ClickGest Marketing de Resultados - Profsa Informática Ltda</h1>
      <div id="particles-js" class="sai-1 text-center">
           <br /> <br /> <br />
           <div class="ima-2 animated zoomInUp text-center">
                <div class="row text-center">
                     <div class="col-md-12">
                          <a href="index.php">
-                              <img class="img-fluid" src="img/logo-01.png" class="img-responsive center-block"
-                                   alt="Logotipo da empresa SearchMidia Marketing de Resultados"
-                                   title="Acesso ao site principal da SearchMidia Marketing de Resultados" />
+                              <img class="img-fluid" src="img/logo-13.png" class="img-responsive center-block"
+                                   alt="Logotipo da empresa ClickGest Marketing de Resultados"
+                                   title="Acesso ao site principal da ClickGest Marketing de Resultados" />
                          </a>
                     </div>
                </div>
           </div>
           <br /><hr /><br />
           <div class="saida animated fadeInUp text-center">
-               <h2><strong>Obrigado por utilizar o sistema da SearchMidia Marketing de Resultados</strong></h2>
+               <h2><strong>Obrigado por utilizar o sistema da ClickGest Marketing de Resultados</strong></h2>
                <br />
                <h4><strong><?php echo $nom; ?></strong></h4>
                <h5><strong><?php echo $ema; ?></strong></h5>
