@@ -390,6 +390,12 @@ function carrega_con($con) {
                return 5;
           }
      }
+     if ($_REQUEST['tip'] <= 2) {
+          if (trim($_REQUEST['con']) == "" || trim($_REQUEST['con']) == "0") {
+               echo '<script>alert("Para tipo consultor deve ser informado seu código respectivo");</script>';
+               return 1;
+          }      
+     }
      include_once "dados.php";     
      $nro = acessa_reg("Select idsenha from tb_usuario where usuemail = '" . $_REQUEST['ema'] . "'", $reg);       
      if ($nro > 0) {

@@ -140,6 +140,9 @@ function carrega_con($cod) {
      $txt .= '<!DOCTYPE html>';
      $txt .= '<html lang="pt_br">';
      $txt .= '<head>';
+     $txt .= '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />';
+     $txt .= '<meta name="description" content="Profsa Informática - Gerenciamento de Contratos - SearchMidia" />';
+     $txt .= '<meta name="author" content="Paulo Rogério Souza" />';
      $txt .= '<style type="text/css">';
      $txt .= 'body { font-family: Lato}';
      $txt .= '.corpo { width: 1000px; height: auto; margin: 10px auto; border: 0.25px solid #bab8b8; }';
@@ -150,19 +153,16 @@ function carrega_con($cod) {
      $txt .= '.con-a span:nth-child(2) { font-size: 18px;  font-weight: bold; }';
 
      $txt .= '.ser-a { margin: 0px 10px; font-size: 20px;  font-weight: bold; }';
-     $txt .= '.ser-b {margin: 0px 10px; width: 100%;  display: grid; grid-template-columns: 500px auto auto auto auto; }';
-     $txt .= '.ser-b span:nth-child(1) { font-weight: bold; }';
-     $txt .= '.ser-b span:nth-child(2) { font-weight: bold; }';
-     $txt .= '.ser-b span:nth-child(3) { font-weight: bold; }';
-     $txt .= '.ser-b span:nth-child(4) { font-weight: bold; }';
-     $txt .= '.ser-b span:nth-child(5) { font-weight: bold; }';
-     $txt .= '.ser-b .col-3 { text-align: right; }';
-     $txt .= '.ser-b .col-4 { text-align: center; }';
 
      $txt .= '.lit-a { font-weight: bold; }';
      $txt .= '.ima-a { margin: 10px 0px; }';
 
      $txt .= '.rod-a { text-align: right; font-size: 14px; }';
+
+     $txt .= '.tab-a { margin: 0px 10px; }';
+     $txt .= '.tab-a table { width: 95%; margin: 0px 10px; }';
+     $txt .= '.col-a { text-align: right; }';
+     $txt .= '.col-b { text-align: center; }';
 
      $txt .= '</style>';
 
@@ -221,33 +221,47 @@ function carrega_con($cod) {
      $txt .= '<div class="ser-a">';
      $txt .= '<span>Dados e Valores (em R$) dos serviços</span>';
      $txt .= '</div>';
-     $txt .= '<div class="ser-b">';
-     $txt .= '<span>Produtos / Serviços / Anúncios' . '</span>';
-     $txt .= '<span>Vigência' . '</span>';
-     $txt .= '<span>Preço' . '</span>';
-     $txt .= '<span>Parcelas' . '</span>';
-     $txt .= '<span>Valor' . '</span>';
+
+     $txt .= '<div class="tab-a">';
+     $txt .= '<table>';
+     $txt .= '<thead>';
+     $txt .= '<tr>';
+     $txt .= '<th width="30%">Produtos / Serviços / Anúncios</th>';
+     $txt .= '<th width="10%">Vigência</th>';
+     $txt .= '<th class="col-b">Preço</th>';
+     $txt .= '<th class="col-b">Parcelas</th>';
+     $txt .= '<th class="col-b">Valor</th>';
+     $txt .= '<th class="col-b">Desconto</th>';
+     $txt .= '<th class="col-b">Liquido</th>';
+     $txt .= '</tr>';
+     $txt .= '</thead>';
      $com  = "Select I.*, S.serdescricao from (tb_contrato_s I left join tb_servico S on I.iteservico = S.idservico)  where I.iteempresa = " .  $_SESSION['wrkcodemp'] . " and I.itecontrato = " . $cod . " order by I.iditem";
      $nro = leitura_reg($com, $ser);
+     $txt .= '<tbody>';
      foreach ($ser as $lin) {
           $qtd = $qtd + 1;
-          $txt .= '<span>' . $lin['serdescricao'] . '</span>';
-          if ($lin['itevigencia'] == 0) { $txt .= '<span>' . "Esporádico" . '</span>'; }
-          if ($lin['itevigencia'] == 1) { $txt .= '<span>' . "Mensal" . '</span>';  }
-          if ($lin['itevigencia'] == 2) { $txt .= '<span>' . "Bimestral" . '</span>';  }
-          if ($lin['itevigencia'] == 3) { $txt .= '<span>' . "Trimestral" . '</span>'; }
-          if ($lin['itevigencia'] == 4) { $txt .= '<span>' . "Semestral" . '</span>';  }
-          if ($lin['itevigencia'] == 5) { $txt .= '<span>' . "Anual" . '</span>';  }
-          if ($lin['itevigencia'] == 6) { $txt .= '<span>' . "Bianual" . '</span>';  }
-          if ($lin['itevigencia'] == 7) { $txt .= '<span>' . "Trianual" . '</span>';  }
-          $txt .= '<span class="col-3">' . number_format($lin['itepreco'], 2, ",", ".") . '</span>';
-          $txt .= '<span class="col-4">' . $lin['iteparcela'] . '</span>';
-          $txt .= '<span class="col-3">' . number_format($lin['itepreco'] / $lin['iteparcela'], 2, ",", ".") . '</span>';
+          $txt .=  '<tr>';
+          $txt .= '<td>' . $lin['serdescricao'] . '</td>';
+          if ($lin['itevigencia'] == 0) { $txt .= '<td>' . "Esporádico" . '</td>'; }
+          if ($lin['itevigencia'] == 1) { $txt .= '<td>' . "Mensal" . '</td>';  }
+          if ($lin['itevigencia'] == 2) { $txt .= '<td>' . "Bimestral" . '</td>';  }
+          if ($lin['itevigencia'] == 3) { $txt .= '<td>' . "Trimestral" . '</td>'; }
+          if ($lin['itevigencia'] == 4) { $txt .= '<td>' . "Semestral" . '</td>';  }
+          if ($lin['itevigencia'] == 5) { $txt .= '<td>' . "Anual" . '</td>';  }
+          if ($lin['itevigencia'] == 6) { $txt .= '<td>' . "Bianual" . '</td>';  }
+          if ($lin['itevigencia'] == 7) { $txt .= '<td>' . "Trianual" . '</td>';  }
+          $txt .= '<td class="col-a">R$ ' . number_format($lin['itepreco'], 2, ",", ".") . '</td>';
+          $txt .= '<td class="col-b">' . $lin['iteparcela'] . '</td>';
+          $txt .= '<td class="col-a">R$ ' . number_format($lin['itepreco'] / $lin['iteparcela'], 2, ",", ".") . '</td>';
+          $txt .= '<td class="col-b">' . number_format($lin['itedesconto'], 2, ",", ".") . '%</td>';
+          $txt .= '<td class="col-a">R$ ' . number_format($lin['itepreco'] * (1 - $lin['itedesconto'] / 100) / $lin['iteparcela'], 2, ",", ".") . '</td>';
+          $txt .=  '</tr>';
      }
+     $txt .= '</tbody>';
+     $txt .= '</table>';
      $txt .= '</div>';
+
      $txt .= '<hr />';
-
-
 
      $txt .= '<div class="rod-a">';
      $txt .= '<span>' . $reg['empfantasia'] . ' </span>';
@@ -258,6 +272,12 @@ function carrega_con($cod) {
      $txt .= '</div>';
      $txt .= '</body>';
      $txt .= "</html>";
+
+     $pas = "emp_" . str_pad($_SESSION['wrkcodemp'], 3, "0", STR_PAD_LEFT); 
+     if (file_exists($pas) == false) {  mkdir($pas); }
+     $cam = strtolower($pas . "/" . "con_" . str_pad($_SESSION['wrkcodreg'], 6, "0", STR_PAD_LEFT) . "." . "html");
+     file_put_contents($cam, $txt);
+
      return $txt;
 }
 

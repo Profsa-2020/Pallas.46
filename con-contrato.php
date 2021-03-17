@@ -290,6 +290,7 @@ function carrega_con($sta, $dti, $dtf) {
      $com .= " where C.conempresa = " .  $_SESSION['wrkcodemp'] . " ";
      $com .= " and condataemi between '" . $dti . "' and '" . $dtf . "' ";
      if ($sta != 9) {$com .= " and C.constatus = " . $sta; }
+     if ($_SESSION['wrktipusu'] <= 1) { $com .= " and C.conconsultor = " . $_SESSION['wrkcodcon']; }
      $com .= " order by C.idcontrato";
      $nro = leitura_reg($com, $reg);
      foreach ($reg as $lin) {

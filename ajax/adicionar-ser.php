@@ -77,7 +77,7 @@
           $txt .= '<td class="text-right">' . number_format($_SESSION['wrklisser']['pre'][$lin], 2, ",", ".") . '</td>';
           $txt .= '<td class="text-right">' . number_format($_SESSION['wrklisser']['per'][$lin], 2, ",", ".") . '</td>';
           $txt .= '<td class="text-center">' . $_SESSION['wrklisser']['par'][$lin] . '</td>';
-          $txt .= '<td class="text-right">' . number_format($_SESSION['wrklisser']['pre'][$lin] / $_SESSION['wrklisser']['par'][$lin], 2, ",", ".") . '</td>';
+          $txt .= '<td class="text-right">' . number_format(($_SESSION['wrklisser']['pre'][$lin] * (1 - $_SESSION['wrklisser']['per'][$lin] / 100)) / $_SESSION['wrklisser']['par'][$lin], 2, ",", ".") . '</td>';
           $txt .= '<td class="lit-d text-center" cha_s="' . $key . '"><i class="cor-1 cur-1 fa fa-trash-o" aria-hidden="true" title="Efetua exclusão do serviço informado na linha para o contrato"></i></td>';
           $txt .= '</tr>';     
           $_SESSION['wrklisser']['mes'][$lin] = $mes;

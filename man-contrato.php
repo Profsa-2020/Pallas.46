@@ -376,6 +376,7 @@ $(document).ready(function() {
      $per = "";
      $del = "";
      $ite_c = "";
+     $con_l = "";
      $bot = "Salvar";
      include_once "dados.php";
      include_once "profsa.php";
@@ -395,7 +396,9 @@ $(document).ready(function() {
      if (isset($_SESSION['wrklisser']) == false) { $_SESSION['wrklisser'] = array(); }
      if (isset($_REQUEST['ope']) == true) { $_SESSION['wrkopereg'] = $_REQUEST['ope']; }
      if (isset($_REQUEST['cod']) == true) { $_SESSION['wrkcodreg'] = $_REQUEST['cod']; }
-
+     if ($_SESSION['wrktipusu'] <= 1) { // 0-Visitante, 1-Consultor
+          $con_l = " disabled ";
+     }
      $cod = (isset($_REQUEST['cod']) == false ? 0  : $_REQUEST['cod']);
      $sta = (isset($_REQUEST['sta']) == false ? 0  : $_REQUEST['sta']);
      $cli = (isset($_REQUEST['cli']) == false ? 0  : $_REQUEST['cli']);
@@ -488,7 +491,7 @@ $(document).ready(function() {
                          <div class="col-md-2"></div>
                          <div class="col-md-8">
                               <label>Nome do Consultor</label>
-                              <select id="con" name="con" class="form-control">
+                              <select id="con" name="con" class="form-control" <?php echo $con_l; ?> >
                                    <?php $ret = carrega_csu($con); ?>
                               </select>
                          </div>
@@ -833,9 +836,11 @@ function consiste_cto() {
           echo '<script>alert("Razão Social da cliente não pode estar em branco");</script>';
           return 1;
      }
-     if (trim($_REQUEST['con']) == "" || trim($_REQUEST['con']) == "0") {
-          echo '<script>alert("Nome do Consultor do contrato não pode estar em branco");</script>';
-          return 1;
+     if (isset($_REQUEST['con']) == true) {
+          if (trim($_REQUEST['con']) == "" || trim($_REQUEST['con']) == "0") {
+               echo '<script>alert("Nome do Consultor do contrato não pode estar em branco");</script>';
+               return 1;
+          }
      }
      if (trim($_REQUEST['pag']) == "" || trim($_REQUEST['pag']) == "0") {
           echo '<script>alert("Forma de Pagamento do contrato não pode estar em branco");</script>';
@@ -884,14 +889,18 @@ function incluir_cto() {
      $sql .= "'" . (isset($_REQUEST['pro']) == false ? '0' : '1') . "',";
      $sql .= "'" . $_REQUEST['sta'] . "',";
      $sql .= "'" . $_REQUEST['cli'] . "',";
-     $sql .= "'" . $_REQUEST['con'] . "',";
+     if (isset($_REQUEST['con']) == true) {
+          $sql .= "'" . $_REQUEST['con'] . "',";
+     } else {
+          $sql .= "'" . $_SESSION['wrkcodcon'] . "',";
+     }     
      $sql .= "'" . $_REQUEST['pag'] . "',";
      $sql .= "'" . inverte_dat(1, $_REQUEST['dti']) . "',";
      $sql .= "'" . inverte_dat(1, $_REQUEST['dtf']) . "',";
      $sql .= " " . ($_REQUEST['dte'] == "" ? "NULL" : "'" . inverte_dat(1, $_REQUEST['dte']) . "'") . " ,";
      $sql .= "'" . $_SESSION['wrkvalcon'] . "',";
      $sql .= "'" . '0' . "',";
-     $sql .= "'" . ($_REQUEST['des'] == "" ? '0' : str_replace(",", ".", str_replace(".", "", $_REQUEST['ent']))) . "',";
+     $sql .= "'" . ($_REQUEST['ent'] == "" ? '0' : str_replace(",", ".", str_replace(".", "", $_REQUEST['ent']))) . "',";
      $sql .= "'" . $_REQUEST['obs'] . "',";
      $sql .= "'" . $_SESSION['wrkideusu'] . "',";
      $sql .= "'" . date("Y/m/d H:i:s") . "')";
@@ -913,7 +922,9 @@ function incluir_cto() {
      $sql .= "conproposta = '". (isset($_REQUEST['pro']) == false ? '0' : '1') . "', ";
      $sql .= "constatus = '". $_REQUEST['sta'] . "', ";
      $sql .= "concliente = '". $_REQUEST['cli'] . "', ";
-     $sql .= "conconsultor = '". $_REQUEST['con'] . "', ";
+     if (isset($_REQUEST['con']) == true) {
+          $sql .= "conconsultor = '". $_REQUEST['con'] . "', ";
+     }
      $sql .= "conpagto = '". $_REQUEST['pag'] . "', ";
      $sql .= "condataemi = '". inverte_dat(1, $_REQUEST['dti']) . "', ";
      $sql .= "condatafim = '". inverte_dat(1, $_REQUEST['dtf']) . "', ";
@@ -954,8 +965,7 @@ function excluir_cto() {
 }
 
 function carrega_ite($dti, &$dtf) {
-     $txt = ""; $qtd = 0;
-     include_once "dados.php";
+     $txt = ""; $qtd = 0; $_SESSION['wrklisser'] = array();
      $com  = "Select I.*, S.serdescricao from (tb_contrato_s I left join tb_servico S on I.iteservico = S.idservico)  where I.iteempresa = " .  $_SESSION['wrkcodemp'] . " and I.itecontrato = " . $_SESSION['wrkcodreg'] . " order by I.iditem";
      $nro = leitura_reg($com, $reg);
      if ($nro > 0) {
@@ -994,7 +1004,7 @@ function carrega_ite($dti, &$dtf) {
           $txt .= '<td class="text-right">' . number_format($lin['itepreco'], 2, ",", ".") . '</td>';
           $txt .= '<td class="text-right">' . number_format($lin['itedesconto'], 2, ",", ".") . '</td>';
           $txt .= '<td class="text-center">' . $lin['iteparcela'] . '</td>';
-          $txt .= '<td class="text-right">' . number_format($lin['itepreco'] / $lin['iteparcela'], 2, ",", ".") . '</td>';
+          $txt .= '<td class="text-right">' . number_format(($lin['itepreco'] * (1 - $lin['itedesconto'] / 100)) / $lin['iteparcela'], 2, ",", ".") . '</td>';
           $txt .= '<td class="lit-d text-center" cha_s="' . $lin['iteservico'] . '"><i class="cor-1 cur-1 fa fa-trash-o" aria-hidden="true" title="Efetua exclusão do serviço informado na linha para o contrato"></i></td>';
           $txt .= '</tr>';    
           $cod = $lin['iteservico'];
@@ -1086,7 +1096,7 @@ function atualiza_des(&$val_t, &$val_d, &$per_d) {
           $com  = "Select * from tb_contrato_s where itedesconto > 0 and iteempresa = " .  $_SESSION['wrkcodemp'] . " and itecontrato = " . $_SESSION['wrkcodreg'];
           $nro = leitura_reg($com, $reg);
           foreach ($reg as $lin) {               
-               $val_d += $val_d + $lin['itepreco'] * $lin['itedesconto'] / 100;
+               $val_d = $val_d + $lin['itepreco'] * $lin['itedesconto'] / 100;
           }
           $per_d = $val_d / $val_t * 100;
           $sql  = "update tb_contrato set ";
