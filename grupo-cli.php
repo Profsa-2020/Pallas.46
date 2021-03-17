@@ -105,7 +105,7 @@ $(document).ready(function() {
      include_once "dados.php";
      include_once "profsa.php";
      $_SESSION['wrknompro'] = __FILE__;
-     if ($_SESSION['wrktipusu'] <= 2) {
+     if ($_SESSION['wrktipusu'] <= 1) {
           echo '<script>alert("Nível de usuário não permite acesso a está opção do sistema");</script>';
           echo '<script>history.go(-1);</script>';
      }

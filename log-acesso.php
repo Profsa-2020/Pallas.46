@@ -125,7 +125,7 @@ $(document).ready(function() {
     $dtf = date('d/m/Y');
     $dti = (isset($_REQUEST['dti']) == false ? $dti : $_REQUEST['dti']);
     $dtf = (isset($_REQUEST['dtf']) == false ? $dtf : $_REQUEST['dtf']);
-    if ($_SESSION['wrktipusu'] <= 1) {
+    if ($_SESSION['wrktipusu'] <= 2) {
      echo '<script>alert("Nível de usuário não permite manutenção em acessos");</script>';
      echo '<script>history.go(-1);</script>';
  }
