@@ -35,9 +35,11 @@ $(document).ready(function() {
      $('#frmLogin').submit(function() {
           var ema = $('#ema').val();
           var sen = $('#sen').val();
+          var lem = $('#lem').prop("checked") == true ? "S" : "N";
           $.getJSON("ajax/verifica-ace.php", {
                     ema: ema,
-                    sen: sen
+                    sen: sen,
+                    lem: lem
                })
                .done(function(data) {
                     if (data.err != "") {
@@ -60,10 +62,21 @@ $(document).ready(function() {
 });
 </script>
 
+<?php
+     $ret = 0; 
+     $_SESSION['wrknompro'] = __FILE__;
+     date_default_timezone_set("America/Sao_Paulo");
+     if (isset($_SESSION['wrkcpocoo']) == false) { $_SESSION['wrkcpocoo'] = ""; }
+     if (isset($_COOKIE["k_ent"]) == true || isset($_COOKIE["k_end"]) == true) {
+          $sen = $_COOKIE["k_ent"]; $ema = $_COOKIE["k_end"];         
+     }
+
+?>
+
 <body class="login">
 <h1 class="cab-0">Login inicial sistema de Análise de Investimentos - Profsa Informática</h1>
      <div class="entrada">
-          <div class="qua-1 animated bounceInDown">
+          <div class="qua-1">
                <form class="cpo-0" id="frmLogin" name="frmLogin" action="" method="POST">
                     <div class="row">
                          <a href="http://www.clickgest.com.br/">
@@ -73,8 +86,7 @@ $(document).ready(function() {
                     </div>
                     <div class="row">
                          <div class="col s1"></div>
-                         <div class="input-field col s10">
-                              <i class="cor-1 material-icons prefix">email</i>
+                         <div class="input-field col s10">                         
                               <input type="email" class="center" id="ema" name="ema" maxlength="75" value="" required >
                               <label for="nome">Usuário / Login</label>
                          </div>
@@ -83,16 +95,15 @@ $(document).ready(function() {
                     <div class="row">
                          <div class="col s1"></div>
                          <div class="input-field col s10">
-                              <i class="cor-1 material-icons prefix">lock</i>
                               <input type="password" class="center" id="sen" name="sen" maxlength="15" value="" required >
                               <label for="senha">Sua senha</label>
                          </div>
                          <div class="col s1"></div>
                     </div>
                     <div class="row">
-                         <input class="bot-4" type="submit" id="ent" name="entrar" value="ENTRAR" />
+                         <input class="bot-5" type="submit" id="ent" name="entrar" value="ENTRAR" />
                          <br /><br />
-                         <input type="checkbox" id="lem" name="lembrete" value="S" />
+                         <input type="checkbox" id="lem" name="lem" value="S" />
                          <label class="tit-1" for="lem">Lembrar Login</label>
                          <br /><br />
                          <span class="tit-2"><a href="recupera.php">Esqueci a senha</a></span>

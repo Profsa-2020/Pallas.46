@@ -342,7 +342,7 @@ function carrega_pag() {
      $nro = leitura_reg($com, $reg);
      foreach ($reg as $lin) {
           $txt =  '<tr>';
-          $txt .= '<td class="text-center"><a href="man-pagto.php?ope=2&cod=' . $lin['idpagto'] . '" title="Efetua alteração do registro informado na linha"><i class="large material-icons">healing</i></a></td>';
+          $txt .= '<td class="text-center"><a href="man-pagto.php?ope=2&cod=' . $lin['idpagto'] . '" title="Efetua alteração do registro informado na linha"><i class="large material-icons">create</i></a></td>';
           $txt .= '<td class="lit-d text-center"><a href="man-pagto.php?ope=3&cod=' . $lin['idpagto'] . '" title="Efetua exclusão do registro informado na linha"><i class="cor-1 large material-icons">delete_forever</i></a></td>';
           $txt .= '<td class="text-center">' . $lin['idpagto'] . '</td>';
           if ($lin['pagstatus'] == 0) {$txt .= "<td>" . "Normal" . "</td>";}

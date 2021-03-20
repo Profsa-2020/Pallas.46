@@ -2,6 +2,7 @@
      $ret = 0;
      $ema = "";
      $sen = "";
+     $lem = "";
      $tab = array();
      session_start();
      $tab['men'] = '';
@@ -9,6 +10,7 @@
      date_default_timezone_set("America/Sao_Paulo");
      if (isset($_REQUEST['sen']) == true) { $sen = $_REQUEST['sen']; }
      if (isset($_REQUEST['ema']) == true) { $ema = $_REQUEST['ema']; }
+     if (isset($_REQUEST['lem']) == true) { $lem = $_REQUEST['lem']; }
      if (isset($_SESSION['wrknomusu']) == false) { $_SESSION['wrknomusu'] = ''; }
      if (isset($_SESSION['wrkemausu']) == false) { $_SESSION['wrkemausu'] = ''; }
      if (isset($_SESSION['wrktipusu']) == false) { $_SESSION['wrktipusu'] = 0; }
@@ -77,9 +79,10 @@
                $_SESSION['wrknumace'] = $reg['usuacessos'];  
                $_SESSION['wrkapeusu'] = primeiro_nom($reg['usunome']);
                $_SESSION['wrknomemp'] = retorna_dad('emprazao', 'tb_empresa', 'idempresa', $reg['usuempresa']);
-               if (isset($_REQUEST['lembrete']) == true) {
-                    setcookie("k_ent", $_REQUEST['senha'], time() + 3600 * 24 * 30);  // 60 * 60 * 24 * 30 = 30 dias
-                    setcookie("k_end", $_REQUEST['email'], time() + 3600 * 24 * 30);  
+               if ($lem == "S") {
+                    $_SESSION['wrkcpocoo'] =  base64_encode($ema) . "|" .  base64_encode($sen);
+                    setcookie("k_ent", $_REQUEST['sen'], time() + 3600 * 24 * 30);  // 60 * 60 * 24 * 30 = 30 dias
+                    setcookie("k_end", $_REQUEST['ema'], time() + 3600 * 24 * 30);  
                }
                if ($_SESSION['wrknumace'] >= 2) {
                     $com = "Update tb_usuario set usuacessos = " . ($_SESSION['wrknumace'] - 1) . " where idsenha = " . $_SESSION['wrkideusu'];

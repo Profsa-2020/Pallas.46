@@ -107,6 +107,10 @@ $(document).ready(function() {
      include_once "profsa.php";
      $_SESSION['wrknompro'] = __FILE__;
      date_default_timezone_set("America/Sao_Paulo");
+     if ($_SESSION['wrktipusu'] <= 3) {
+          echo '<script>alert("Nível de usuário não permite acesso a está opção do sistema");</script>';
+          echo '<script>history.go(-1);</script>';
+     }
      $_SESSION['wrkdatide'] = date ("d/m/Y H:i:s", getlastmod());
      $_SESSION['wrknomide'] = get_current_user();
      if (isset($_SERVER['HTTP_REFERER']) == true) {
@@ -157,7 +161,7 @@ $(document).ready(function() {
                                         <th width="5%">Código</th>
                                         <th>Status</th>
                                         <th>Razão Social do Destinatário</th>
-                                        <th>Número C.n.p.j.</th>
+                                        <th>CNPJ</th>
                                         <th>Cidade - UF</th>
                                         <th>Telefone</th>
                                         <th>E-Mail</th>
@@ -189,7 +193,7 @@ function carrega_emp() {
      $nro = leitura_reg($com, $reg);
      foreach ($reg as $lin) {
           $txt =  '<tr>';
-          $txt .= '<td class="text-center"><a href="man-empresa.php?ope=2&cod=' . $lin['idempresa'] . '" title="Efetua alteração do registro informado na linha"><i class="large material-icons">healing</i></a></td>';
+          $txt .= '<td class="text-center"><a href="man-empresa.php?ope=2&cod=' . $lin['idempresa'] . '" title="Efetua alteração do registro informado na linha"><i class="large material-icons">create</i></a></td>';
           $txt .= '<td class="lit-d text-center"><a href="man-empresa.php?ope=3&cod=' . $lin['idempresa'] . '" title="Efetua exclusão do registro informado na linha"><i class="cor-1 large material-icons">delete_forever</i></a></td>';
           $txt .= '<td class="text-center">' . $lin['idempresa'] . '</td>';
           if ($lin['empstatus'] == 0) {$txt .= "<td>" . "Ativo" . "</td>";}

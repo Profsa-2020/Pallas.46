@@ -295,7 +295,7 @@ function carrega_con($sta, $dti, $dtf) {
      $nro = leitura_reg($com, $reg);
      foreach ($reg as $lin) {
           $txt =  '<tr>';
-          $txt .= '<td class="text-center"><a href="man-contrato.php?ope=2&cod=' . $lin['idcontrato'] . '" title="Efetua alteração do registro informado na linha"><i class="large material-icons">healing</i></a></td>';
+          $txt .= '<td class="text-center"><a href="man-contrato.php?ope=2&cod=' . $lin['idcontrato'] . '" title="Efetua alteração do registro informado na linha"><i class="large material-icons">create</i></a></td>';
           $txt .= '<td class="lit-d text-center"><a href="man-contrato.php?ope=3&cod=' . $lin['idcontrato'] . '" title="Efetua exclusão do registro informado na linha"><i class="cor-1 large material-icons">delete_forever</i></a></td>';
           $txt .= '<td class="text-center">' . str_pad($lin['idcontrato'], 6, "0", STR_PAD_LEFT)  . '</td>';
           if ($lin['constatus'] == 0) {$txt .= '<td>' . "Normal" . '</td>';}

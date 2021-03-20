@@ -60,10 +60,10 @@ $(function() {
      $("#num").mask("999.999", {
           reverse: true
      });
-     $("#fx1").mask("99,99", {
+     $("#fx1").mask("999,99", {
           reverse: true
      });
-     $("#fx2").mask("99,99", {
+     $("#fx2").mask("999,99", {
           reverse: true
      });
 });
@@ -200,7 +200,7 @@ $(document).ready(function() {
      include_once "dados.php";
      include_once "profsa.php";
      $_SESSION['wrknompro'] = __FILE__;
-     if ($_SESSION['wrktipusu'] <= 2) {
+     if ($_SESSION['wrktipusu'] <= 3) {
           echo '<script>alert("Nível de usuário não permite acesso a está opção do sistema");</script>';
           echo '<script>history.go(-1);</script>';
      }
@@ -326,7 +326,7 @@ $(document).ready(function() {
                          </div>
                          <div class="col-md-2"></div>
                          <div class="col-md-3">
-                              <label>Número do C.n.p.j.</label>
+                              <label>CNPJ</label>
                               <input type="text" class="form-control text-center" maxlength="20" id="cgc" name="cgc"
                                    value="<?php echo $cgc; ?>" />
                          </div>
@@ -351,7 +351,7 @@ $(document).ready(function() {
                     </div>
                     <div class="row">
                          <div class="col-md-2">
-                              <label>C.e.p.</label>
+                              <label>CEP</label>
                               <input type="text" class="form-control" maxlength="9" id="cep" name="cep"
                                    value="<?php echo $cep; ?>" required />
                          </div>
@@ -465,10 +465,8 @@ $(document).ready(function() {
                     <br />
                     <div class="row text-center">
                          <div class="col-md-4 text-left">
-                              <button type="button" class="bot-2" id="bt_logotipo" name="ima"
-                                   title="Upload de arquivo com logotipo da empresa para Danfe"><i
-                                        class="fa fa-picture-o fa-3x" aria-hidden="true"></i>
-                              </button>
+                              <button type="button" class="bot-4" id="bt_logotipo" name="ima"
+                                   title="Upload de arquivo com logotipo da empresa para Danfe">Inserir LOGO</button>
                          </div>
                          <div class="col-md-2">
                               <button type="submit" name="salvar" <?php echo $per; ?>
@@ -561,12 +559,16 @@ function consiste_emp() {
           echo '<script>alert("E-mail da empresa não pode estar em branco");</script>';
           return 3;
      }
+     if ((float) $_REQUEST['fx1'] > 100) {
+          echo '<script>alert("Limite máximo de desconto não pode ser maior que 100%");</script>';
+          return 3;
+     }
      if (trim($_REQUEST['av1']) >= trim($_REQUEST['av2'])) {
           echo '<script>alert("Número de dias de Aviso I deve ser menor que Aviso II");</script>';
           return 3;
      }
      if (trim($_REQUEST['cgc']) == "" || trim($_REQUEST['cgc']) == "../-") {
-          echo '<script>alert("Número do C.n.p.j. da empresa pode estar em branco");</script>';
+          echo '<script>alert("Número do CNPJ da empresa pode estar em branco");</script>';
           return 7;
      }
      if (valida_est(strtoupper($_REQUEST['est'])) == 0) {
@@ -576,10 +578,10 @@ function consiste_emp() {
      if ($_REQUEST['cgc'] != "") {
           $sta = valida_cgc($_REQUEST['cgc']);
           if ($sta != 0) {
-               echo '<script>alert("Dígito de controle do C.n.p.j. não está correto");</script>';
+               echo '<script>alert("Dígito de controle do CNPJ não está correto");</script>';
                return 8;
           }
-     }    
+     }   
      return $sta;
 }    
 

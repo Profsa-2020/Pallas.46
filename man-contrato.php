@@ -569,7 +569,7 @@ $(document).ready(function() {
                                    value="<?php echo $dtf; ?>" required />
                          </div>
                          <div class="col-md-2 text-center"><br />
-                              <button type="button" id="itens" name="itens" class="bot-4">Serviços</button>
+                              <button type="button" id="itens" name="itens" class="bot-4">+ Serviços</button>
                          </div>
                          <div class="col-md-1"></div>
                     </div>
@@ -790,7 +790,7 @@ function carrega_ser() {
 
 function carrega_vig() {
      $txt = "";
-     $txt .= '<option value="0">Esporádico</option>';
+     $txt .= '<option value="0">S/ Vigência</option>';
      $txt .= '<option value="1">Mensal</option>';
      $txt .= '<option value="2">Bimestral</option>';
      $txt .= '<option value="3">Trimestral</option>';
@@ -992,7 +992,7 @@ function carrega_ite($dti, &$dtf) {
           $txt .= '<tr>';     
           $txt .= '<td>' . $qtd . '</td>';
           $txt .= '<td>' . $lin['serdescricao'] . '</td>';
-          if ($lin['itevigencia'] == 0) { $txt .= '<td>' . "Esporádico" . '</td>'; $mes = 0; }
+          if ($lin['itevigencia'] == 0) { $txt .= '<td>' . "S/ Vigência" . '</td>'; $mes = 0; }
           if ($lin['itevigencia'] == 1) { $txt .= '<td>' . "Mensal" . '</td>';  $mes = 1; }
           if ($lin['itevigencia'] == 2) { $txt .= '<td>' . "Bimestral" . '</td>';  $mes = 2; }
           if ($lin['itevigencia'] == 3) { $txt .= '<td>' . "Trimestral" . '</td>';  $mes = 3; }

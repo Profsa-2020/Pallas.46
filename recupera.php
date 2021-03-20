@@ -59,7 +59,7 @@ $(document).ready(function() {
 <body class="login">
 <h1 class="cab-0">Recuperação de Senha - Sistema SearchMidia - Análise de Investimentos</h1>
      <div class="entrada">
-          <div class="qua-1 animated bounceInUp">
+          <div class="qua-1">
                <form class="cpo-0" id="frmRecupera" name="frmRecupera" action="" method="POST">
                     <br /><br />
                     <div class="row">
@@ -72,14 +72,13 @@ $(document).ready(function() {
                     <div class="row">
                          <div class="col s1"></div>
                          <div class="input-field col s10">
-                              <i class="cor-1 material-icons prefix">email</i>
                               <input type="text" class="text-center" id="ema" name="ema" maxlength="50" required>
                               <label for="nome">E-mail do usuário para envio ...</label>
                          </div>
                          <div class="col s1"></div>
                     </div>
                     <div class="row">
-                         <input class="bot-4" type="submit" id="env" name="enviar" value="ENVIAR" />
+                         <input class="bot-5" type="submit" id="env" name="enviar" value="ENVIAR" />
                          <br /><br /><br />
                          <span class="tit-2"><a href="index.php">Voltar</a></span>
                     </div>

@@ -408,7 +408,7 @@ function carrega_ser() {
 
 function carrega_vig() {
      $txt = "";
-     $txt .= '<option value="0">Esporádico</option>';
+     $txt .= '<option value="0">S/ Vigência</option>';
      $txt .= '<option value="1">Mensal</option>';
      $txt .= '<option value="2">Bimestral</option>';
      $txt .= '<option value="3">Trimestral</option>';

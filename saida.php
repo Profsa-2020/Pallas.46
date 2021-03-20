@@ -66,6 +66,10 @@
 
 <body>
      <h1 class="cab-0">Página de Saída Sistema ClickGest Marketing de Resultados - Profsa Informática Ltda</h1>
+     
+     <div class="login"></div>
+
+     <!--
      <div id="particles-js" class="sai-1 text-center">
           <br /> <br /> <br />
           <div class="ima-2 animated zoomInUp text-center">
@@ -89,6 +93,7 @@
                <br />
           </div>
      </div>
+     -->
      <script type="text/javascript" src="js/particles.js"></script>
      <script type="text/javascript" src="js/app.js"></script>
 
@@ -98,7 +103,7 @@
 
 </body>
 <?php
-
+     exit('<script>location.href = "index.php"</script>');  // Saída do sistema e volta a tela de login
 ?>
 
 </html>

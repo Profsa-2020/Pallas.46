@@ -242,7 +242,7 @@ function carrega_con($cod) {
           $qtd = $qtd + 1;
           $txt .=  '<tr>';
           $txt .= '<td>' . $lin['serdescricao'] . '</td>';
-          if ($lin['itevigencia'] == 0) { $txt .= '<td>' . "Esporádico" . '</td>'; }
+          if ($lin['itevigencia'] == 0) { $txt .= '<td>' . "S/ Vigência" . '</td>'; }
           if ($lin['itevigencia'] == 1) { $txt .= '<td>' . "Mensal" . '</td>';  }
           if ($lin['itevigencia'] == 2) { $txt .= '<td>' . "Bimestral" . '</td>';  }
           if ($lin['itevigencia'] == 3) { $txt .= '<td>' . "Trimestral" . '</td>'; }

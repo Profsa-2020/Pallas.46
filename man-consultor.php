@@ -66,7 +66,7 @@ if ($('#pes').prop("checked") == false) {
      $("#cgc").mask("000.000.000-00");
 } else {
      $('#cgc').val('');
-     $('#doc_c').text('Número do C.n.p.j.');
+     $('#doc_c').text('Número do CNPJ');
      $('#doc_i').text('Inscrição Estadual');
      $("#cgc").mask("00.000.000/0000-00");
 }
@@ -161,11 +161,11 @@ $(document).ready(function() {
 
      $('#pes').click(function() {
           if ($('#pes').prop("checked") == false) {
-               $('#doc_c').text('Número do C.p.f.');
+               $('#doc_c').text('CPF');
                $('#doc_i').text('Registro Geral (R.G.)');
                $("#cgc").mask("000.000.000-00");
           } else {
-               $('#doc_c').text('Número do C.n.p.j.');
+               $('#doc_c').text('CNPJ');
                $('#doc_i').text('Inscrição Estadual');
                $("#cgc").mask("00.000.000/0000-00");
           }
@@ -314,7 +314,7 @@ $(document).ready(function() {
                                    <?php echo ($pes == 0 ? '': 'checked' ) ?> />
                          </div>
                          <div class="col-md-3">
-                              <label id="doc_c">Número do C.p.f.</label>
+                              <label id="doc_c">CPF</label>
                               <input type="text" class="form-control text-center" maxlength="20" id="cgc" name="cgc"
                                    value="<?php echo $cgc; ?>" />
                          </div>
@@ -339,7 +339,7 @@ $(document).ready(function() {
                     </div>
                     <div class="row">
                          <div class="col-md-2">
-                              <label>C.e.p.</label>
+                              <label>CEP</label>
                               <input type="text" class="form-control" maxlength="9" id="cep" name="cep"
                                    value="<?php echo $cep; ?>" />
                          </div>
@@ -512,7 +512,7 @@ function consiste_con() {
           return 3;
      }
      if (trim($_REQUEST['cgc']) == "" || trim($_REQUEST['cgc']) == "../-") {
-          echo '<script>alert("Número do C.n.p.j. da consultor pode estar em branco");</script>';
+          echo '<script>alert("Número do CNPJ da consultor pode estar em branco");</script>';
           return 7;
      }
      if (strlen($_REQUEST['obs']) > 500) {
@@ -529,7 +529,7 @@ function consiste_con() {
           if (isset($_REQUEST['pes']) == true) {
                $sta = valida_cgc($_REQUEST['cgc']);
                if ($sta != 0) {
-                    echo '<script>alert("Dígito de controle do C.n.p.j. não está correto");</script>';
+                    echo '<script>alert("Dígito de controle do CNPJ não está correto");</script>';
                     return 8;
                }
           } else {

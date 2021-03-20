@@ -13,7 +13,7 @@
      $nro = leitura_reg($com, $reg);
      foreach ($reg as $lin) {
           $tab_w['qtd'][] = $lin['qtde'];
-          if ($lin['itevigencia'] == 0) {$tab_w['tit'][]  = 'Esporádico'; }
+          if ($lin['itevigencia'] == 0) {$tab_w['tit'][]  = 'S/ Vigência'; }
           if ($lin['itevigencia'] == 1) {$tab_w['tit'][]  = 'Mensal'; }
           if ($lin['itevigencia'] == 2) {$tab_w['tit'][]  = 'Bimestral'; }
           if ($lin['itevigencia'] == 3) {$tab_w['tit'][]  = 'Trimestral'; }

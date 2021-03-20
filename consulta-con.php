@@ -76,8 +76,8 @@ $(document).ready(function() {
      $('#tab-0').DataTable({
           "pageLength": 25,
           "aaSorting": [
-               [2, 'asc'],
-               [0, 'asc']
+               [0, 'desc'],
+               [2, 'asc']
           ],
           "dom": 'Bfrtip',
           "buttons": [{
@@ -371,8 +371,10 @@ function carrega_con($sta, $dti, $dtf, $cli, $con, $com) {
                $txt =  '<tr class="cor-1">';
           } else if ($dia >= $avi1 && $dia < $avi2) {
                $txt =  '<tr class="cor-3">';
-          } else if ($dia >= $avi2) {
+          } else if ($dia >= $avi2 && $lin['constatus'] != 5) {
                $txt =  '<tr>';
+          } else if ($lin['constatus'] == 5) {
+               $txt =  '<tr class="cor-5">';
           } else if ($lin['constatus'] != 6 && $dia < 0) {
                $txt =  '<tr class="cor-4">';
           }

@@ -67,12 +67,12 @@ $(document).ready(function() {
      }
 
      if ($('#pes').prop("checked") == false) {
-          $('#doc_c').text('Número do C.p.f.');
+          $('#doc_c').text('CPF');
           $('#doc_i').text('Registro Geral (R.G.)');
           $("#cgc").mask("000.000.000-00");
           $("#cgc").mask("000.000.000-00");
      } else {
-          $('#doc_c').text('Número do C.n.p.j.');
+          $('#doc_c').text('CNPJ');
           $('#doc_i').text('Inscrição Estadual');
           $("#cgc").mask("00.000.000/0000-00");
           $("#cgc").mask("00.000.000/0000-00");
@@ -162,11 +162,11 @@ $(document).ready(function() {
      $('#pes').click(function() {
           $('#cgc').val("");
           if ($('#pes').prop("checked") == false) {
-               $('#doc_c').text('Número do C.p.f.');
+               $('#doc_c').text('CPF');
                $('#doc_i').text('Registro Geral (R.G.)');
                $("#cgc").mask("000.000.000-00");
           } else {
-               $('#doc_c').text('Número do C.n.p.j.');
+               $('#doc_c').text('CNPJ');
                $('#doc_i').text('Inscrição Estadual');
                $("#cgc").mask("00.000.000/0000-00");
           }
@@ -233,6 +233,7 @@ $(document).ready(function() {
      $aut = (isset($_REQUEST['aut']) == false ? "" : $_REQUEST['aut']);
      $cpf = (isset($_REQUEST['cpf']) == false ? "" : $_REQUEST['cpf']);
      $car = (isset($_REQUEST['car']) == false ? "" : $_REQUEST['car']);
+     $ram = (isset($_REQUEST['ram']) == false ? "" : $_REQUEST['ram']);
      $des = (isset($_REQUEST['des']) == false ? '' : str_replace("'", "´", $_REQUEST['des']));
      $fan = (isset($_REQUEST['fan']) == false ? '' : str_replace("'", "´", $_REQUEST['fan']));
      $obs = (isset($_REQUEST['obs']) == false ? '' : str_replace("'", "´", $_REQUEST['obs']));
@@ -249,7 +250,7 @@ $(document).ready(function() {
      if ($_SESSION['wrkopereg'] >= 2) {
           if (isset($_REQUEST['salvar']) == false) { 
                $cha = $_SESSION['wrkcodreg']; $_SESSION['wrknumcha'] = $_SESSION['wrkcodreg']; $_SESSION['wrkmostel'] = 1;
-               $ret = ler_cliente($_SESSION['wrkcodreg'], $cgc, $des, $fan, $ema, $sta, $tel, $cep, $end, $num, $com, $bai, $cid, $est, $ins, $cel, $con, $sit, $pes, $aut, $cpf, $car, $gru, $obs); 
+               $ret = ler_cliente($_SESSION['wrkcodreg'], $cgc, $des, $fan, $ema, $sta, $tel, $cep, $end, $num, $com, $bai, $cid, $est, $ins, $cel, $con, $sit, $pes, $aut, $cpf, $car, $gru, $ram, $obs); 
           }
      }
      if (isset($_REQUEST['salvar']) == true) {
@@ -259,7 +260,7 @@ $(document).ready(function() {
                if ($ret == 0) {
                     $ret = incluir_cli();
                     $ret = gravar_log(11,"Inclusão de novo cliente para venda: " . $des);
-                    $des = ''; $ema = ''; $sta = 00; $cpf = ''; $cgc = ''; $tel = ''; $cel = ''; $obs = ''; $cep = ''; $end = ''; $num = ''; $com = ''; $bai = ''; $cid = ''; $est = ''; $reg = ''; $nas = ''; $obs = ''; $pes = 0; $aut = ''; $cpf = ''; $car = ''; $con = ''; $fan = ''; $gru = 0;
+                    $des = ''; $ema = ''; $sta = 00; $cpf = ''; $cgc = ''; $tel = ''; $cel = ''; $obs = ''; $cep = ''; $end = ''; $num = ''; $com = ''; $bai = ''; $cid = ''; $est = ''; $reg = ''; $nas = ''; $obs = ''; $pes = 0; $aut = ''; $cpf = ''; $car = ''; $con = ''; $fan = ''; $ram = ''; $gru = 0;
                }
           }
           if ($_SESSION['wrkopereg'] == 2) {
@@ -267,14 +268,14 @@ $(document).ready(function() {
                if ($ret == 0) {
                     $ret = alterar_cli();
                     $ret = gravar_log(12,"Alteração de cliente existente: " . $des); $_SESSION['wrkmostel'] = 0;
-                    $des = ''; $ema = ''; $sta = 00; $cpf = ''; $cgc = ''; $tel = ''; $cel = ''; $obs = ''; $cep = ''; $end = ''; $num = ''; $com = ''; $bai = ''; $cid = ''; $est = ''; $reg = ''; $nas = ''; $obs = ''; $pes = 0; $aut = ''; $cpf = ''; $car = '';  $con = '';$fan = ''; $gru = 0;
+                    $des = ''; $ema = ''; $sta = 00; $cpf = ''; $cgc = ''; $tel = ''; $cel = ''; $obs = ''; $cep = ''; $end = ''; $num = ''; $com = ''; $bai = ''; $cid = ''; $est = ''; $reg = ''; $nas = ''; $obs = ''; $pes = 0; $aut = ''; $cpf = ''; $car = '';  $con = '';$fan = ''; $gru = 0;$ram = ''; 
                     echo '<script>history.go(-' . $_SESSION['wrknumvol'] . ');</script>'; $_SESSION['wrknumvol'] = 1;
                }
           }
           if ($_SESSION['wrkopereg'] == 3) {
                $ret = excluir_cli();
                $ret = gravar_log(13,"Exclusão de cliente existente: " . $des); $_SESSION['wrkmostel'] = 0;
-               $des = ''; $ema = ''; $sta = 00; $cpf = ''; $cgc = ''; $tel = ''; $cel = ''; $obs = ''; $cep = ''; $end = ''; $num = ''; $com = ''; $bai = ''; $cid = ''; $est = ''; $reg = ''; $nas = ''; $obs = ''; $pes = 0; $aut = ''; $cpf = ''; $car = '';  $con = '';$fan = ''; $gru = 0;
+               $des = ''; $ema = ''; $sta = 00; $cpf = ''; $cgc = ''; $tel = ''; $cel = ''; $obs = ''; $cep = ''; $end = ''; $num = ''; $com = ''; $bai = ''; $cid = ''; $est = ''; $reg = ''; $nas = ''; $obs = ''; $pes = 0; $aut = ''; $cpf = ''; $car = '';  $con = '';$fan = ''; $gru = 0;$ram = ''; 
                echo '<script>history.go(-' . $_SESSION['wrknumvol'] . ');</script>'; $_SESSION['wrknumvol'] = 1;
           }
      }
@@ -316,7 +317,7 @@ $(document).ready(function() {
                                    <?php echo ($pes == 0 ? '': 'checked' ) ?> />
                          </div>
                          <div class="col-md-3">
-                              <label id="doc_c">Número do C.n.p.j.</label>
+                              <label id="doc_c">CNPJ</label>
                               <input type="text" class="form-control text-center" maxlength="20" id="cgc" name="cgc"
                                    value="<?php echo $cgc; ?>" />
                          </div>
@@ -336,16 +337,21 @@ $(document).ready(function() {
                          <div class="col-md-5">
                               <label>Nome Fantasia</label>
                               <input type="text" class="form-control" maxlength="60" id="fan" name="fan"
-                                   value="<?php echo $fan; ?>" />
+                                   value="<?php echo $fan; ?>" required />
                          </div>
                     </div>
                     <div class="row">
                          <div class="col-md-2">
-                              <label>C.e.p.</label>
+                              <label>CEP</label>
                               <input type="text" class="form-control" maxlength="9" id="cep" name="cep"
                                    value="<?php echo $cep; ?>" required />
                          </div>
-                         <div class="col-md-6"></div>
+                         <div class="col-md-2"></div>
+                         <div class="col-md-4">
+                              <label>Ramo de Atividade</label>
+                              <input type="text" class="form-control" maxlength="50" id="ram" name="ram"
+                                   value="<?php echo $ram; ?>" required />
+                         </div>
                          <div class="col-md-4">
                               <label>Grupo de Cliente</label>
                               <select id="gru" name="gru" class="form-control">
@@ -508,7 +514,7 @@ function carrega_gru($gru) {
      return $sta;
 }
 
-function ler_cliente(&$cha, &$cgc, &$des, &$fan, &$ema, &$sta, &$tel, &$cep, &$end, &$num, &$com, &$bai, &$cid, &$est, &$ins, &$cel, &$con, &$sit, &$pes, &$aut, &$cpf, &$car, &$gru, &$obs) {
+function ler_cliente(&$cha, &$cgc, &$des, &$fan, &$ema, &$sta, &$tel, &$cep, &$end, &$num, &$com, &$bai, &$cid, &$est, &$ins, &$cel, &$con, &$sit, &$pes, &$aut, &$cpf, &$car, &$gru, &$ram, &$obs) {
      include_once "dados.php";
      $nro = acessa_reg('Select * from tb_cliente where idcliente = ' . $cha, $reg);
      if ($nro == 0 || $reg == false) {
@@ -538,6 +544,7 @@ function ler_cliente(&$cha, &$cgc, &$des, &$fan, &$ema, &$sta, &$tel, &$cep, &$e
           $aut = $reg['cliautorizante'];
           $cpf = $reg['clicpf'];
           $car = $reg['clicargo'];
+          $ram = $reg['cliramo'];
           $obs = $reg['cliobservacao'];
           $_SESSION['wrkcodreg'] = $reg['idcliente'];
      }
@@ -555,7 +562,7 @@ function consiste_cli() {
           return 3;
      }
      if (trim($_REQUEST['cgc']) == "" || trim($_REQUEST['cgc']) == "../-") {
-          echo '<script>alert("Número do C.n.p.j. da cliente pode estar em branco");</script>';
+          echo '<script>alert("Número do CNPJ da cliente pode estar em branco");</script>';
           return 7;
      }
      if (valida_est(strtoupper($_REQUEST['est'])) == 0) {
@@ -583,7 +590,7 @@ function consiste_cli() {
           } else {
                $sta = valida_cgc($_REQUEST['cgc']);
                if ($sta != 0) {
-                    echo '<script>alert("Dígito de controle do C.n.p.j. não está correto");</script>';
+                    echo '<script>alert("Dígito de controle do CNPJ não está correto");</script>';
                     return 8;
                }
           }
@@ -619,6 +626,7 @@ function incluir_cli() {
      $sql .= "clicpf, ";
      $sql .= "cligrupo, ";
      $sql .= "cliconsultor, ";
+     $sql .= "cliramo, ";
      $sql .= "cliobservacao, ";
      $sql .= "keyinc, ";
      $sql .= "datinc ";
@@ -647,6 +655,7 @@ function incluir_cli() {
      $sql .= "'" . limpa_nro($_REQUEST['cpf']) . "',";
      $sql .= "'" . $_REQUEST['gru'] . "',";
      $sql .= "'" . $_SESSION['wrkcodcon'] . "',";
+     $sql .= "'" . $_REQUEST['ram'] . "',";
      $sql .= "'" . $_REQUEST['obs'] . "',";
      $sql .= "'" . $_SESSION['wrkideusu'] . "',";
      $sql .= "'" . date("Y/m/d H:i:s") . "')";
@@ -686,6 +695,7 @@ function incluir_cli() {
      $sql .= "clicargo = '". $_REQUEST['car'] . "', ";
      $sql .= "clicpf = '". limpa_nro($_REQUEST['cpf']) . "', ";
      $sql .= "clipessoa = '". (isset($_REQUEST['pes']) == false ? 0 : 1 ) . "', ";
+     $sql .= "cliramo = '". $_REQUEST['ram'] . "', ";
      $sql .= "cliobservacao = '". $_REQUEST['obs'] . "', ";
      $sql .= "keyalt = '" . $_SESSION['wrkideusu'] . "', ";
      $sql .= "datalt = '" . date("Y/m/d H:i:s") . "' ";

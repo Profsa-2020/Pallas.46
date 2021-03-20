@@ -69,7 +69,7 @@ $(document).ready(function() {
      $('#tab-0').DataTable({
           "pageLength": 25,
           "aaSorting": [
-               [4, 'asc'],
+               [2, 'desc'],
                [3, 'asc']
           ],
           "language": {
@@ -164,7 +164,7 @@ $(document).ready(function() {
                                         <th width="5%">Código</th>
                                         <th>Status</th>
                                         <th>Nome do Consultor</th>
-                                        <th>Número C.p.f.</th>
+                                        <th>CPF</th>
                                         <th>Registro</th>
                                         <th>Cidade - UF</th>
                                         <th>E-Mail</th>
@@ -193,7 +193,7 @@ function carrega_con() {
      $nro = leitura_reg($com, $reg);
      foreach ($reg as $lin) {
           $txt =  '<tr>';
-          $txt .= '<td class="text-center"><a href="man-consultor.php?ope=2&cod=' . $lin['idconsultor'] . '" title="Efetua alteração do registro informado na linha"><i class="large material-icons">healing</i></a></td>';
+          $txt .= '<td class="text-center"><a href="man-consultor.php?ope=2&cod=' . $lin['idconsultor'] . '" title="Efetua alteração do registro informado na linha"><i class="large material-icons">create</i></a></td>';
           $txt .= '<td class="lit-d text-center"><a href="man-consultor.php?ope=3&cod=' . $lin['idconsultor'] . '" title="Efetua exclusão do registro informado na linha"><i class="cor-1 large material-icons">delete_forever</i></a></td>';
           $txt .= '<td class="text-center">' . $lin['idconsultor'] . '</td>';
           if ($lin['constatus'] == 0) {$txt .= "<td>" . "Ativo" . "</td>";}

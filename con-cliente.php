@@ -163,9 +163,9 @@ $(document).ready(function() {
                                         <th width="5%">Excluir</th>
                                         <th width="5%">Código</th>
                                         <th>Status</th>
-                                        <th>Razão Social do Cliente</th>
-                                        <th>Número C.n.p.j.</th>
-                                        <th>Cidade - UF</th>
+                                        <th>Nome Fantasia</th>
+                                        <th>CNPJ</th>
+                                        <th>Ramo de Atividade</th>
                                         <th>E-Mail</th>
                                         <th>Telefone</th>
                                         <th>Celular</th>
@@ -192,20 +192,20 @@ function carrega_cli() {
      $nro = leitura_reg($com, $reg);
      foreach ($reg as $lin) {
           $txt =  '<tr>';
-          $txt .= '<td class="text-center"><a href="man-cliente.php?ope=2&cod=' . $lin['idcliente'] . '" title="Efetua alteração do registro informado na linha"><i class="large material-icons">healing</i></a></td>';
+          $txt .= '<td class="text-center"><a href="man-cliente.php?ope=2&cod=' . $lin['idcliente'] . '" title="Efetua alteração do registro informado na linha"><i class="large material-icons">create</i></a></td>';
           $txt .= '<td class="lit-d text-center"><a href="man-cliente.php?ope=3&cod=' . $lin['idcliente'] . '" title="Efetua exclusão do registro informado na linha"><i class="cor-1 large material-icons">delete_forever</i></a></td>';
           $txt .= '<td class="text-center">' . $lin['idcliente'] . '</td>';
           if ($lin['clistatus'] == 0) {$txt .= "<td>" . "Ativo" . "</td>";}
           if ($lin['clistatus'] == 1) {$txt .= "<td>" . "Inativo" . "</td>";}
           if ($lin['clistatus'] == 2) {$txt .= "<td>" . "Suspenso" . "</td>";}
           if ($lin['clistatus'] == 3) {$txt .= "<td>" . "Cancelado" . "</td>";}
-          $txt .= "<td>" . $lin['clirazao'] . "</td>";
+          $txt .= "<td>" . $lin['clifantasia'] . "</td>";
           if ($lin['clipessoa'] == 0) {
                $txt .= "<td>" . mascara_cpo($lin['clicnpj'], "   .   .   -  ") . "</td>";
           } else {
                $txt .= "<td>" . mascara_cpo($lin['clicnpj'], "  .   .   /    -  ") . "</td>";
           }
-          $txt .= "<td>" . $lin['clicidade'] . '-' . $lin['cliestado'] . "</td>";
+          $txt .= "<td>" . $lin['cliramo'] . "</td>";
           $txt .= "<td>" . $lin['cliemail'] . "</td>";
           $txt .= "<td>" . $lin['clitelefone'] . "</td>";
           $txt .= '<td class="cel-w cur-1">' . $lin['clicelular'] . '</td>';

@@ -65,7 +65,7 @@
           $qtd = $qtd + 1;
           $txt .= '<td>' . $qtd . '</td>';
           $txt .= '<td>' . retorna_dad('serdescricao', 'tb_servico', 'idservico', $key) . '</td>';
-          if ($_SESSION['wrklisser']['vig'][$lin] == 0) { $txt .= '<td>' . "Esporádico" . '</td>'; $mes = 0; }
+          if ($_SESSION['wrklisser']['vig'][$lin] == 0) { $txt .= '<td>' . "S/ Vigência" . '</td>'; $mes = 0; }
           if ($_SESSION['wrklisser']['vig'][$lin] == 1) { $txt .= '<td>' . "Mensal" . '</td>'; $mes = 1; }
           if ($_SESSION['wrklisser']['vig'][$lin] == 2) { $txt .= '<td>' . "Bimestral" . '</td>';  $mes = 2; }
           if ($_SESSION['wrklisser']['vig'][$lin] == 3) { $txt .= '<td>' . "Trimestral" . '</td>';  $mes = 3; }

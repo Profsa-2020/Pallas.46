@@ -15,7 +15,7 @@
      }   
 ?>
 
-<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+<nav class="navbar navbar-expand-lg navbar-light bg-primary text-white fixed-top">
      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
           aria-controls="navbarNav" aria-expanded="false" aria-label="Alterna navegação do menu principal">
           <span class="navbar-toggler-icon"></span>
@@ -23,7 +23,7 @@
      <a class="navbar-brand" href="menu01.php">
           <?php
           if ($_SESSION['wrklogemp'] == "") {
-               echo '<img class="log-1" src="img/logo-12.png">';
+               echo '<img class="log-1" src="img/logo-22.png">';
           } else {
                echo '<img class="log-1" src="' . $_SESSION['wrklogemp'] . '">';
           }
@@ -37,16 +37,12 @@
                               aria-hidden="true"></i><br /> Empresas </a>
                </li>
                <li class="nav-item">
-                    <a class="nav-link" href="man-pagto.php?ope=1&cod=0"><i class="fa fa-credit-card fa-1g" aria-hidden="true"></i><br />
-                         Formas de Pagto </a>
-               </li>
-               <li class="nav-item">
                     <a class="nav-link" href="con-consultor.php"><i class="fa fa-users fa-1g" aria-hidden="true"></i><br />
                          Consultores </a>
                </li>
                <li class="nav-item">
                     <a class="nav-link" href="grupo-cli.php?ope=1&cod=0"><i class="fa fa-filter fa-1g" aria-hidden="true"></i><br />
-                         Grupo de Cliente </a>
+                         Grupos de Cliente </a>
                </li>
                <li class="nav-item">
                     <a class="nav-link" href="con-cliente.php"><i class="fa fa-handshake-o fa-1g" aria-hidden="true"></i><br />
@@ -54,11 +50,15 @@
                </li>
                <li class="nav-item">
                     <a class="nav-link" href="grupo-ser.php?ope=1&cod=0"><i class="fa fa-filter fa-1g" aria-hidden="true"></i><br />
-                         Grupo de Serviço </a>
+                         Grupos de Serviço </a>
                </li>
                <li class="nav-item">
                     <a class="nav-link" href="man-servico.php?ope=1&cod=0"> <i class="fa fa-desktop fa-1g"
                               aria-hidden="true"></i><br /> Serviços </a>
+               </li>
+               <li class="nav-item">
+                    <a class="nav-link" href="man-pagto.php?ope=1&cod=0"><i class="fa fa-credit-card fa-1g" aria-hidden="true"></i><br />
+                         Formas de Pagamento </a>
                </li>
                <li class="nav-item">
                     <a class="nav-link" href="con-contrato.php?ope=1&cod=0"> <i class="fa fa-money fa-1g"
@@ -66,7 +66,7 @@
                </li>
                <li class="nav-item">
                     <a class="nav-link" href="consulta-con.php"><i class="fa fa-search fa-1g"
-                              aria-hidden="true"></i><br /> Consulta </a>
+                              aria-hidden="true"></i><br /> Consultas </a>
                </li>
                <li class="nav-item">
                     <a class="nav-link" href="con-usuario.php"><i class="fa fa-user-circle-o fa-1g"
@@ -76,8 +76,8 @@
           <span class="navbar-text text-center">
                <?php 
                     echo '<div>';
-                    echo '<a class="nav-link" href="log-acesso.php" title="Abre página com consulta de Log de usuários, somente o administrador"><strong class="lit-1">' . primeiro_nom($_SESSION['wrknomusu']) . '</strong></a>';
-                    echo '<a class="nav-link" href="saida.php"><i class="fa fa-sign-out fa-1g" aria-hidden="true"></i><br /></a>';
+                    echo '<a class="nav-link" href="log-acesso.php" title="Abre página com consulta de Log de usuários, somente o administrador"><strong class="lit-1 text-white">' . primeiro_nom($_SESSION['wrknomusu']) . '</strong></a>';
+                    echo '<a class="nav-link text-white" href="saida.php"><i class="fa fa-sign-out fa-1g" aria-hidden="true"></i><br /></a>';
                     echo '</div>';
                ?>
           </span>
