@@ -50,7 +50,7 @@
 
 <script>
 $(function() {
-     $("#tel").mask("(00)0000-0000");
+     $("#tel").mask("(00)00000-0000");
      $("#cel").mask("(00)00000-0000");
      $("#cpf").mask("000.000.000-00");
      $("#cep").mask("00000-000");
@@ -398,14 +398,14 @@ $(document).ready(function() {
                     </div>
                     <div class="row">
                          <div class="col-md-4">
-                              <label>Telefone</label>
-                              <input type="text" class="form-control" maxlength="15" id="tel" name="tel"
-                                   value="<?php echo $tel; ?>" required />
-                         </div>
-                         <div class="col-md-4">
                               <label>Celular</label>
                               <input type="text" class="form-control" maxlength="15" id="cel" name="cel"
-                                   value="<?php echo $cel; ?>" />
+                                   value="<?php echo $cel; ?>" required />
+                         </div>
+                         <div class="col-md-4">
+                              <label>Telefone</label>
+                              <input type="text" class="form-control" maxlength="15" id="tel" name="tel"
+                                   value="<?php echo $tel; ?>" />
                          </div>
                          <div class="col-md-4">
                               <label>Status</label>

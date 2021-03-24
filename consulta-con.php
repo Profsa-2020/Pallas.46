@@ -200,13 +200,13 @@ $(document).ready(function() {
           <form class="tel-1 text-center" name="frmTelCon" action="" method="POST">
                <div class="form-row">
                     <div class="col-sm-3">
-                         <label>Nome do Cliente</label>
+                         <label>Cliente</label>
                          <select id="cli" name="cli" class="form-control">
                               <?php $ret = carrega_cli($cli); ?>
                          </select>
                     </div>
                     <div class="col-sm-3">
-                         <label>Nome do Consultor</label>
+                         <label>Consultor</label>
                          <select id="con" name="con" class="form-control" <?php echo $con_l; ?>>
                               <?php $ret = carrega_csu($con); ?>
                          </select>
@@ -302,13 +302,13 @@ $(document).ready(function() {
                                    <tr>
                                         <th>Contrato</th>
                                         <th>Status</th>
-                                        <th>Nome do Cliente</th>
+                                        <th>Cliente</th>
                                         <th class="text-center">Proposta</th>
                                         <th>Consultor</th>
                                         <th>Valor</th>
                                         <th>Desconto</th>
                                         <th>Liquido</th>
-                                        <th>Descricao do Servico</th>
+                                        <th>Servico</th>
                                         <th>Vigencia</th>
                                         <th>Inicio</th>
                                         <th>Final</th>
@@ -393,7 +393,7 @@ function carrega_con($sta, $dti, $dtf, $cli, $con, $com) {
           $txt .= '<td class="text-right">' . number_format($lin['convaldesconto'], 2, ",", ".") . '</td>';
           $txt .= '<td class="text-right">' . number_format($lin['convaltotal'] - $lin['convaldesconto'], 2, ",", ".") . '</td>';
           $txt .= '<td>' . limpa_cpo($lin['serdescricao']) . '</td>';
-          if ($lin['itevigencia'] == 0) {$txt .= "<td>" . "Esporárido" . "</td>";}
+          if ($lin['itevigencia'] == 0) {$txt .= "<td>" . "S/ Vigência" . "</td>";}
           if ($lin['itevigencia'] == 1) {$txt .= "<td>" . "Mensal" . "</td>";}
           if ($lin['itevigencia'] == 2) {$txt .= "<td>" . "Bimestral" . "</td>";}
           if ($lin['itevigencia'] == 3) {$txt .= "<td>" . "Trimestral" . "</td>";}

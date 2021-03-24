@@ -149,7 +149,6 @@ date_default_timezone_set("America/Sao_Paulo");
                                              <th width="5%">Alterar</th>
                                              <th width="5%">Excluir</th>
                                              <th width="5%">Código</th>
-                                             <th>Nome da Empresa</th>
                                              <th>Usuário</th>
                                              <th>Status</th>
                                              <th>E-Mail</th>
@@ -178,14 +177,13 @@ date_default_timezone_set("America/Sao_Paulo");
 <?php 
 function carrega_usu() {
      include_once "dados.php";
-     $com = "Select U.*, E.emprazao, E.empfantasia from (tb_usuario U left join tb_empresa E on U.usuempresa = E.idempresa) order by U.usunome, U.idsenha";
+     $com = "Select U.*, E.emprazao, E.empfantasia from (tb_usuario U left join tb_empresa E on U.usuempresa = E.idempresa) where U.usuempresa = " .  $_SESSION['wrkcodemp'] . " order by U.usunome, U.idsenha";
      $nro = leitura_reg($com, $reg);
      foreach ($reg as $lin) {
           $txt =  '<tr>';
           $txt .= '<td class="text-center"><a href="man-usuario.php?ope=2&cod=' . $lin['idsenha'] . '" title="Efetua alteração do registro informado na linha"><i class="large material-icons">create</i></a></td>';
           $txt .= '<td class="lit-d text-center"><a href="man-usuario.php?ope=3&cod=' . $lin['idsenha'] . '" title="Efetua exclusão do registro informado na linha"><i class="cor-1 large material-icons">delete_forever</i></a></td>';
           $txt .= '<td class="text-center">' . $lin['idsenha'] . '</td>';
-          $txt .= "<td>" . $lin['empfantasia'] . "</td>";
           $txt .= "<td>" . $lin['usunome'] . "</td>";
           if ($lin['usustatus'] == 0) {$txt .= "<td>" . "Normal" . "</td>";}
           if ($lin['usustatus'] == 1) {$txt .= "<td>" . "Bloqueado" . "</td>";}

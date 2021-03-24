@@ -390,7 +390,7 @@ function carrega_ser() {
           $txt .= '<td class="text-left">' . $lin['grudescricao'] . "</td>";
           $txt .= '<td class="text-left">' . $lin['serdescricao'] . "</td>";
           $txt .= '<td class="text-center">' . number_format($lin['serpreco'], 2, ",", ".") . "</td>";
-          if ($lin['servigencia'] == 0) {$txt .= "<td>" . "Esporárido" . "</td>";}
+          if ($lin['servigencia'] == 0) {$txt .= "<td>" . "S/ Vigência" . "</td>";}
           if ($lin['servigencia'] == 1) {$txt .= "<td>" . "Mensal" . "</td>";}
           if ($lin['servigencia'] == 2) {$txt .= "<td>" . "Bimestral" . "</td>";}
           if ($lin['servigencia'] == 3) {$txt .= "<td>" . "Trimestral" . "</td>";}

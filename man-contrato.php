@@ -642,7 +642,7 @@ $(document).ready(function() {
                               </div>
                               <div class="row">
                                    <div class="col-md-12">
-                                        <label>Descrição do Serviço</label>
+                                        <label>Serviço</label>
                                         <select id="des_s" name="des_s" class="form-control">
                                              <?php echo carrega_ser(); ?>
                                         </select>
@@ -728,13 +728,13 @@ function carrega_cli($cli) {
      if ($cli == 0) {
           echo '<option value="0" selected="selected">Selecione cliente desejado ...</option>';
      }
-     $com = "Select idcliente, clirazao from tb_cliente where clistatus = 0 and cliempresa = " . $_SESSION['wrkcodemp'] . " order by clirazao, idcliente";
+     $com = "Select idcliente, clifantasia from tb_cliente where clistatus = 0 and cliempresa = " . $_SESSION['wrkcodemp'] . " order by clirazao, idcliente";
      $nro = leitura_reg($com, $reg);
      foreach ($reg as $lin) {
           if ($lin['idcliente'] != $cli) {
-               echo  '<option value ="' . $lin['idcliente'] . '">' . $lin['clirazao'] . '</option>'; 
+               echo  '<option value ="' . $lin['idcliente'] . '">' . $lin['clifantasia'] . '</option>'; 
           } else {
-               echo  '<option value ="' . $lin['idcliente'] . '" selected="selected">' . $lin['clirazao'] . '</option>';
+               echo  '<option value ="' . $lin['idcliente'] . '" selected="selected">' . $lin['clifantasia'] . '</option>';
           }
      }
      return $sta;

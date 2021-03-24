@@ -258,7 +258,7 @@ $(document).ready(function() {
                                         <th width="3%">Exc</th>
                                         <th>Contrato</th>
                                         <th width="5%">Status</th>
-                                        <th>Nome do Cliente</th>
+                                        <th>Cliente</th>
                                         <th class="text-center">Proposta</th>
                                         <th>Consultor</th>
                                         <th>Inicio</th>
@@ -286,7 +286,7 @@ function carrega_con($sta, $dti, $dtf) {
      include_once "dados.php";
      $dti = substr($dti,6,4) . "-" . substr($dti,3,2) . "-" . substr($dti,0,2) . " 00:00:00";
      $dtf = substr($dtf,6,4) . "-" . substr($dtf,3,2) . "-" . substr($dtf,0,2) . " 23:59:59";
-     $com  = "Select C.*, X.connome, Y.clirazao from ((tb_contrato C left join tb_consultor X on C.conconsultor = X.idconsultor) left join tb_cliente Y on C.concliente = Y.idcliente) ";
+     $com  = "Select C.*, X.connome, Y.clifantasia from ((tb_contrato C left join tb_consultor X on C.conconsultor = X.idconsultor) left join tb_cliente Y on C.concliente = Y.idcliente) ";
      $com .= " where C.conempresa = " .  $_SESSION['wrkcodemp'] . " ";
      $com .= " and condataemi between '" . $dti . "' and '" . $dtf . "' ";
      if ($sta != 9) {$com .= " and C.constatus = " . $sta; }
@@ -305,7 +305,7 @@ function carrega_con($sta, $dti, $dtf) {
           if ($lin['constatus'] == 4) {$txt .= '<td>' . "Cancelado" . '</td>';}
           if ($lin['constatus'] == 5) {$txt .= '<td>' . "Suspenso" . '</td>';}
           if ($lin['constatus'] == 6) {$txt .= '<td>' . "Finalizado" . '</td>';}
-          $txt .= '<td>' . $lin['clirazao'] . '</td>';
+          $txt .= '<td>' . $lin['clifantasia'] . '</td>';
           $txt .= '<td class="text-center">' . ($lin['conproposta'] == 0 ? 'Não' : 'Sim') . '</td>';
           $txt .= '<td>' . $lin['connome'] . '</td>';
           $txt .= '<td>' . date('d/m/Y',strtotime($lin['condataemi'])) . '</td>';
