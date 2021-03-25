@@ -1,2 +1,7 @@
 ﻿* { margin: 0; padding: 0; font-family: 'Calibri', 'Lato', 'Open Sans',  'Verdana', 'Times New Roman'; border-collapse: collapse; }
 
+.cab-0 { height: 0px; visibility: hidden; margin: 0px; }
+
+.con-a { 
+     width: 100%;  text-align: center; color: #ffffff;  background-color: #405d9b; font-size: 28px;  font-weight: bold; 
+}

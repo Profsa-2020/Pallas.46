@@ -115,7 +115,7 @@ $(document).ready(function() {
     include_once "dados.php";
     include_once "profsa.php";
     $_SESSION['wrknompro'] = __FILE__;
-    if ($_SESSION['wrktipusu'] <= 2) {
+    if ($_SESSION['wrktipusu'] <= 3) {
      echo '<script>alert("Nível de usuário não permite visualização de log de acesso");</script>';
      echo '<script>history.go(-1);</script>';
 }     

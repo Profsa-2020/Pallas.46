@@ -154,6 +154,7 @@ $(document).ready(function() {
      <div id="box10">
           <img class="subir" src="img/subir.png" title="Volta a página para o seu topo." />
      </div>
+     <input type="hidden" id="tip_u" name="tip_u" value="<?php echo $_SESSION['wrktipusu']; ?>" />
 </body>
 
 <?php

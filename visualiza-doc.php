@@ -54,7 +54,7 @@
      <link href="css/pallas46.css" rel="stylesheet" type="text/css" media="screen" />
      <link href="css/pallas46p.css" rel="stylesheet" type="text/css" media="print" />
 
-     <title><?php echo ($pro == 1 ? "Proposta SearchMidia" : "Contrato SearchMidia") ?></title>
+     <title><?php echo ($pro == "1" ? "Proposta SearchMidia" : "Contrato SearchMidia"); ?></title>
 </head>
 
 <script>
@@ -118,7 +118,7 @@ $(document).ready(function() {
 ?>
 
 <body id="box00">
-     <h1 class="cab-0">Proposta SearchMidia - <?php echo date('d/m/Y H:i:s'); ?></h1>
+     <h4 class="cab-0"><?php echo ($pro == "1" ? "Proposta SearchMidia" : "Contrato SearchMidia") . "-" . date('d/m/Y H:i:s'); ?></h1>
      <div class="row">
           <div class="col-12">
                <?php echo $txt; ?>
@@ -305,7 +305,7 @@ function carrega_pro($cod) {
 function carrega_con($cod) {
      $txt = ""; $qtd = 0;
      include_once "dados.php";
-     $com  = "Select C.*, X.*, Y.*, Z.emprazao, Z.empfantasia, Z.emptelefone, Z.empcelular, Z.empemail, Z.empendereco, Z.empnumeroend, Z.empnumeroend, Z.empcomplemento, Z.empwebsite, Z.empcidade, Z.empestado from ((((tb_contrato C left join tb_consultor X on C.conconsultor = X.idconsultor) ";
+     $com  = "Select C.*, X.*, Y.*, W.pagdescricao, Z.emprazao, Z.empfantasia, Z.emptelefone, Z.empcelular, Z.empemail, Z.empendereco, Z.empnumeroend, Z.empnumeroend, Z.empcomplemento, Z.empwebsite, Z.empcidade, Z.empestado from ((((tb_contrato C left join tb_consultor X on C.conconsultor = X.idconsultor) ";
      $com .= " left join tb_empresa Z on C.conempresa = Z.idempresa) ";
      $com .= " left join tb_cliente Y on C.concliente = Y.idcliente) ";
      $com .= " left join tb_pagto W on C.conpagto = W.idpagto) ";
@@ -322,31 +322,35 @@ function carrega_con($cod) {
      $txt .= '<meta name="description" content="Profsa Informática - Gerenciamento de Contratos - SearchMidia" />';
      $txt .= '<meta name="author" content="Paulo Rogério Souza" />';
      $txt .= '<style type="text/css">';
-     $txt .= 'body { font-family: Lato}';
+     $txt .= 'body { font-family: Lato; }';
      $txt .= '.corpo { width: 1000px; height: auto; margin: 10px auto; border: 0.25px solid #bab8b8; }';
-     $txt .= '.tit-a { width: 1000px; margin: 10px auto; padding: 10px; border: 0.25px solid #bab8b8; }';
-     $txt .= '.tit-a h3 { float: right; }';
+
+     $txt .= '.tit-a { width: 1000px; margin: 0px auto; border: 0.5px solid #bab8b8; }';
+     $txt .= '.tit-a h3 { text-align: center; }';
+     $txt .= '.tit-a td { padding: 5px; }';
 
      $txt .= '.con-a { width: 100%;  text-align: center; color: #ffffff;  background-color: #405d9b; font-size: 28px;  font-weight: bold; }';
-    
+ 
      $txt .= '.con-b { width: 1000px; }';
      $txt .= '.con-b td { padding: 5px; font-size: 22px; }';
      $txt .= '.con-b span { font-weight: bold; }';
 
-     $txt .= '.inf-a { font-size: 22px; text-align: justify; padding: 0px 10px; }';
+     $txt .= '.inf-a { width: 100%; font-size: 18px; text-align: center; padding: 0px 10px; }';
 
      $txt .= '.ser-a { margin: 0px 10px; font-size: 20px;  font-weight: bold; }';
 
      $txt .= '.lit-a { font-weight: bold; }';
      $txt .= '.ima-a { margin: 10px 0px; }';
 
+     $txt .= '.ass-a { text-align: center; font-size: 18px; font-weight: bold; }';
+
      $txt .= '.rod-a { text-align: center; font-size: 18px; }';
 
-     $txt .= '.tab-a { margin: 0px 10px; }';
-     $txt .= '.tab-a table { width: 100%; margin: 0px auto; }';
-     $txt .= '.tab-a th { border: 0.5px solid #000000; }';
-     $txt .= '.tab-a td { border-right: 0.5px solid #000000; padding: 0px 5px; }';
- 
+     $txt .= '.tab-b { margin: 0px 10px; }';
+     $txt .= '.tab-b table { width: 100%; margin: 0px auto; }';
+     $txt .= '.tab-b th { border: 0.5px solid #000000; }';
+     $txt .= '.tab-b td { border-right: 0.5px solid #000000; padding: 0px 5px; }';
+
      $txt .= '.col-a { text-align: right; }';
      $txt .= '.col-b { text-align: center; }';
 
@@ -356,14 +360,22 @@ function carrega_con($cod) {
 
      $txt .= '<body>';
 
-     $txt .= '<div class="tit-a">';
+     $txt .= '<table class="tit-a">';
+     $txt .= '<tbody>';
+     $txt .= '<tr>';
+     $txt .= '<td>';
      if ($_SESSION['wrklogemp'] == "") {
           $txt .= '<img class="ima-a" src="img/logo-12.png">';
      } else {
           $txt .= '<img class="ima-a" src="' . $_SESSION['wrklogemp'] . '">';
      }
-     $txt .= '<h3><strong><br />' . 'Contrato de Prestação de Serviços - Nº ' . str_pad($reg['idcontrato'], 6, "0", STR_PAD_LEFT) . '</strong></h3>';
-     $txt .= '</div>';
+     $txt .= '</td>';
+     $txt .= '<td>';
+     $txt .= '<h3><strong><br />' . 'CONTRATO DE ADESÃO DE PUBLICIDADE DE SERVIÇOS E PRODUTOS <br /> Nº ' . str_pad($reg['idcontrato'], 6, "0", STR_PAD_LEFT) . '</strong></h3>';
+     $txt .= '</td>';
+     $txt .= '</tr>';
+     $txt .= '</tbody>';
+     $txt .= '</table>';
 
      $txt .= '<div class="corpo">';
      $txt .= '<div class="con-a">';
@@ -388,30 +400,66 @@ function carrega_con($cod) {
      $txt .= '</div>';
      $txt .= '<table class="con-b">';
      $txt .= '<tbody>';
+
      $txt .= '<tr>';
-     $txt .= '<td width="50%"><span>Empresa: </span>' . $reg['clifantasia'] . '</td>';
-     if ($reg['clipessoa'] == 0) {
-          $txt .= '<td><span>CPF: </span>' . mascara_cpo($reg['clicnpj'], "   .   .   /  ") . '</td>';
-     } else {
-          $txt .= '<td><span>CNPJ: </span>' . mascara_cpo($reg['clicnpj'], "  .   .   /    -  ") . '</td>';
-     }
+     $txt .= '<td colspan="2" width="50%"><span>Razão Social: </span>' . $reg['clirazao'] . '</td>';
      $txt .= '</tr>';
      $txt .= '<tr>';
-     $txt .= '<td><span>Telefone: </span>' . $reg['clitelefone'] . '</td>';
-     $txt .= '<td><span>E-Mail: </span>' . $reg['cliemail'] . '</td>';
+     if ($reg['clipessoa'] == 0) {
+          $txt .= '<td><span>CPF: </span>' . mascara_cpo($reg['clicnpj'], "   .   .   /  ") . '</td>';
+          $txt .= '<td width="50%"><span>Registro Geral: </span>' . $reg['cliinscricao'] . '</td>';
+     } else {
+          $txt .= '<td><span>CNPJ: </span>' . mascara_cpo($reg['clicnpj'], "  .   .   /    -  ") . '</td>';
+          $txt .= '<td width="50%"><span>Inscrição Estadual: </span>' . $reg['cliinscricao'] . '</td>';
+     }
+     $txt .= '</tr>';
+
+     $txt .= '<tr>';
+     $txt .= '<td><span>Endereço: </span>' . $reg['cliendereco'] . ", " .  $reg['clinumeroend'] . '</td>';
+     $txt .= '<td><span>Complemento: </span>' . $reg['clicomplemento'] . '</td>';
      $txt .= '</tr>';    
+
+     $txt .= '<tr>';
+     $txt .= '<td><span>Bairro: </span>' . $reg['clibairro'] . '</td>';
+     $txt .= '<td><span>Cidade - UF: </span>' . $reg['clicidade'] . "-" . $reg['cliestado'] . '</td>';
+     $txt .= '</tr>';    
+
+     $txt .= '<tr>';
+     $txt .= '<td><span>Telefone: </span>' . $reg['clitelefone'] . '</td>';
+     $txt .= '<td><span>Celular: </span>' . $reg['clicelular'] . '</td>';
+     $txt .= '</tr>';    
+
+     $txt .= '<tr>';
+     $txt .= '<td><span>E-Mail: </span>' . $reg['cliemail'] . '</td>';
+     $txt .= '<td><span>Site: </span>' . $reg['clisite'] . '</td>';
+     $txt .= '</tr>';    
+     
      $txt .= '</tbody>';
      $txt .= '</table>';
 
-     $txt .= '<div class="con-a">';
-     $txt .= '<span>INFORMAÇÕES</span>';
-     $txt .= '</div>';
-     $txt .= '<span class="inf-a">Este contrato tem o objetivo de informar os serviços que podemos realizar, visando a divulgação de sua empresa ou produtos. Foi elaborada após análise feita com base na concorrência e no seu mercado de atuação. Os serviços propostos podem ser alterados de acordo com a verba disponível.</span>';    
+
+     if ($reg['cliautorizante'] != "") {
+          $txt .= '<div class="corpo">';
+          $txt .= '<div class="con-a">';
+          $txt .= '<span>AUTORIZANTE</span>';
+          $txt .= '</div>';
+          $txt .= '<table class="con-b">';
+          $txt .= '<tbody>';
+          $txt .= '<tr>';
+          $txt .= '<td colspan="2" width="50%"><span>Nome: </span>' . $reg['cliautorizante'] . '</td>';
+          $txt .= '</tr>';
+          $txt .= '<tr>';
+          $txt .= '<td><span>CPF: </span>' . mascara_cpo($reg['clicpf'], "   .   .   /  ") . '</td>';
+          $txt .= '<td><span>Cargo: </span>' . $reg['clicargo'] . '</td>';
+          $txt .= '</tr>';    
+          $txt .= '</tbody>';
+          $txt .= '</table>';
+     }
     
      $txt .= '<div class="con-a">';
      $txt .= '<span>SERVIÇOS E VALORES</span>';
      $txt .= '</div>';
-     $txt .= '<div class="tab-a">';
+     $txt .= '<div class="tab-b">';
      $txt .= '<table>';
      $txt .= '<thead>';
      $txt .= '<tr>';
@@ -444,18 +492,47 @@ function carrega_con($cod) {
           $txt .= '<td class="col-a">R$ ' . number_format($lin['itepreco'] * (1 - $lin['itedesconto'] / 100) / $lin['iteparcela'], 2, ",", ".") . '</td>';
           $txt .=  '</tr>';
      }
-     for ($ind = 0; $ind < 2; $ind++) {
-          $qtd = $qtd + 1;
-          $txt .=  '<tr>';
-          $txt .=  '<td>&nbsp; </td><td>&nbsp; </td><td>&nbsp; </td><td>&nbsp; </td><td>&nbsp; </td><td>&nbsp; </td>';
-          $txt .=  '</tr>';
-     }    
      $txt .= '</tbody>';
      $txt .= '</table>';
      $txt .= '</div>';
 
      $txt .= '<div class="con-a">';
-     $txt .= '<span>' . date('d/m/Y') . ' - CONTRATO VÁLIDO POR 15 DIAS</span>';
+     $txt .= '<span>' . 'FORMA DE PAGAMENTO' . '</span>';
+     $txt .= '</div>';
+
+     $txt .= '<table class="con-b">';
+     $txt .= '<tbody>';
+     if ($reg['convalentrada'] > 0) {
+          $txt .= '<tr>';
+          $txt .= '<td><span>Data da Entrada: </span>' . date('d/m/Y',strtotime($reg['condataent'])) . '</td>';
+          $txt .= '<td><span>Valor da Entrada: </span>' . number_format($reg['convalentrada'], 2, ",", ".") . '</td>';
+          $txt .= '</tr>';    
+     }
+     $txt .= '<tr>';
+     $txt .= '<td><span>Forma de Pagamento: </span>' . $reg['pagdescricao'] . '</td>';
+     $txt .= '<td><span>Desconto: </span>' . number_format($reg['convaldesconto'], 2, ",", ".") . '</td>';
+     $txt .= '</tr>';    
+     $txt .= '</tbody>';
+     $txt .= '</table>';
+
+     $txt .= '<div class="con-a">';
+     $txt .= '<span>' . 'AVISO' . ' </span>';
+     $txt .= '</div>';
+     $txt .= '<p class="inf-a">As condições gerais e específicas dos produtos e serviços poderão ser acessadas em www.searchmidia.com.br/contratosetermos. Declara o autorizante que, no momento da assinatura teve acesso às condições gerais e específicas de contratação e foi esclarecido sobre regras de cancelamento, prazos, multas e demais cláusulas..</p>';    
+
+     $txt .= '<div class="con-a">';
+     $txt .= '<span>' . 'ASSINATURA DO AUTORIZANTE' . ' </span>';
+     $txt .= '</div>';
+
+     $txt .= '<div class="ass-a">';
+     $txt .= '<p>' . $reg['clicidade'] . ', ' . date('d',strtotime($reg['condataemi'])) . " de " . mes_ano($reg['condataemi']) . " de " . date('Y',strtotime($reg['condataemi'])) . '.</p>';
+     $txt .= '<br /><br />';   
+     $txt .= '<p>' . '____________________________________________________________________' . '</p>';
+     $txt .= '<p>Nome: ' . $reg['cliautorizante'] . ' / CPF: ' . mascara_cpo($reg['clicpf'], "   .   .   /  ") . '</p>';
+     $txt .= '</div>';
+
+     $txt .= '<div class="con-a">';
+     $txt .= '<span>' . 'ATENDIMENTO' . ' </span>';
      $txt .= '</div>';
 
      $txt .= '<div class="rod-a">';
@@ -463,6 +540,8 @@ function carrega_con($cod) {
      $txt .= '<span>' . $reg['empendereco'] . ", " . $reg['empnumeroend'] . " " . $reg['empcomplemento'] . " " . $reg['empcidade']. "-" . $reg['empestado']. '</span><br />';
      $txt .= '<span>' . $reg['empwebsite'] . " / " . $reg['empemail'] . '</span>';
      $txt .= '</div>';
+
+     $txt .= '<br />';
 
      $txt .= '</div>';
      $txt .= '</body>';
