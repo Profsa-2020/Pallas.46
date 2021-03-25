@@ -59,23 +59,22 @@ $(function() {
      });
 });
 
-if ($('#pes').prop("checked") == false) {
-     $('#cgc').val('');
-     $('#doc_c').text('Número do C.p.f.');
-     $('#doc_i').text('Registro Geral (R.G.)');
-     $("#cgc").mask("000.000.000-00");
-} else {
-     $('#cgc').val('');
-     $('#doc_c').text('Número do CNPJ');
-     $('#doc_i').text('Inscrição Estadual');
-     $("#cgc").mask("00.000.000/0000-00");
-}
 
 $(document).ready(function() {
      var alt = $(window).height();
      var lar = $(window).width();
      if (lar < 800) {
           $('nav').removeClass("fixed-top");
+     }
+
+     if ($('#pes').prop("checked") == false) {
+          $('#doc_c').text('CPF');
+          $('#doc_i').text('Registro Geral (R.G.)');
+          $("#cgc").mask("000.000.000-00");
+     } else {
+          $('#doc_c').text('CNPJ');
+          $('#doc_i').text('Inscrição Estadual');
+          $("#cgc").mask("00.000.000/0000-00");
      }
 
      $('#cgc').blur(function() {

@@ -312,7 +312,7 @@ function carrega_con($sta, $dti, $dtf) {
           $txt .= '<td>' . date('d/m/Y',strtotime($lin['condatafim'])) . '</td>';
           $txt .= '<td class="text-right">' . number_format($lin['convaltotal'], 2, ",", ".") . '</td>';
           $txt .= '<td class="text-right">' . number_format($lin['convaldesconto'], 2, ",", ".") . '</td>';
-          $txt .= '<td class="cur-1 text-center">' . '<a href="visualiza-pdf.php?cod=' . $lin['idcontrato'] .  '" target="_blank">' . '<i class="fa fa-print fa-2x" aria-hidden="true" title="Cria janela com modelo do impresso do contrato solicitado ..."></i>' . '</a>' . '</td>';
+          $txt .= '<td class="cur-1 text-center">' . '<a href="visualiza-doc.php?cod=' . $lin['idcontrato'] . '&pro=' . $lin['conproposta'] .  '" target="_blank">' . '<i class="fa fa-print fa-2x" aria-hidden="true" title="Cria janela com modelo do impresso do contrato solicitado ..."></i>' . '</a>' . '</td>';
           $txt .= "</tr>";
           echo $txt; 
      }

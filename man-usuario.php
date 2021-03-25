@@ -58,6 +58,17 @@ $(function() {
 });
 
 $(document).ready(function() {
+     $('#sen').blur(function() {
+          var sen = $('#sen').val();
+          $.get("ajax/verifica-pas.php", {
+                    sen: sen
+               })
+               .done(function(data) {
+                    if (data != "") {
+                         alert(data);
+                    }
+               });
+     });
 
 });
 </script>
@@ -238,7 +249,7 @@ $(document).ready(function() {
                                    <option value="1" <?php echo ($tip != 1 ? '' : 'selected="selected"'); ?>>
                                         Consultor</option>
                                    <option value="2" <?php echo ($tip != 2 ? '' : 'selected="selected"'); ?>>
-                                        Gerência</option>
+                                        Cliente</option>
                                    <option value="3" <?php echo ($tip != 3 ? '' : 'selected="selected"'); ?>>
                                         Suporte</option>
                                    <option value="4" <?php echo ($tip != 4 ? '' : 'selected="selected"'); ?>>
@@ -305,7 +316,7 @@ function ultimo_cod() {
      if ($emp == 0) {
           echo '<option value="0" selected="selected">Selecione empresa desejada ...</option>';
      }
-     $com = "Select idempresa, emprazao, empfantasia from tb_empresa where empstatus = 0 order by emprazao, idempresa";
+     $com = "Select idempresa, emprazao, empfantasia from tb_empresa where empstatus = 0 and idempresa = " . $_SESSION['wrkcodemp'] . " order by emprazao, idempresa";
      $nro = leitura_reg($com, $reg);
      foreach ($reg as $lin) {
           if ($lin['idempresa'] != $emp) {
@@ -363,16 +374,16 @@ function carrega_con($con) {
  function consiste_usu() {
      $sta = 0;
      if (trim($_REQUEST['nom']) == "") {
-         echo '<script>alert("Nome do Usuário não pode estar em branco");</script>';
-         return 1;
+          echo '<script>alert("Nome do Usuário não pode estar em branco");</script>';
+          return 1;
      }
      if (trim($_REQUEST['sen']) == "") {
-         echo '<script>alert("Senha do Usuário não pode estar em branco");</script>';
-         return 2;
+          echo '<script>alert("Senha do Usuário não pode estar em branco");</script>';
+          return 2;
      }
      if (trim($_REQUEST['ema']) == "") {
-         echo '<script>alert("E-mail do Usuário não pode estar em branco");</script>';
-         return 3;
+          echo '<script>alert("E-mail do Usuário não pode estar em branco");</script>';
+          return 3;
      }
      if ($_REQUEST['val'] != "") {
           if (valida_dat($_REQUEST['val']) != 0) {
@@ -404,6 +415,32 @@ function carrega_con($con) {
                return 6;
           }
      }
+     if ($_REQUEST['sen']  != "") {
+          $nro_g = 0; $nro_p = 0; $nro_e = 0; $nro_n = 0;     
+          for ($ind = 0; $ind < strlen($_REQUEST['sen']); $ind++) {
+               $cod = ord(substr($_REQUEST['sen'], $ind, 1));
+               if ($cod >= 48 && $cod <= 57) { $nro_n += 1; }
+               if ($cod >= 65 && $cod <= 90) { $nro_g += 1; }
+               if ($cod >= 97 && $cod <= 122) { $nro_p += 1; }
+               if ($cod >= 33 && $cod <= 47) { $nro_e += 1; }
+               if ($cod >= 58 && $cod <= 64) { $nro_e += 1; }
+               if ($cod >= 91 && $cod <= 96) { $nro_e += 1; }
+               if ($cod >= 123 && $cod <= 126) { $nro_e += 1; }
+          }
+          if ($nro_n == 0) {
+               echo '<script>alert("Não há números informados na senha para cadastro do usuário");</script>'; return 1;
+          }
+          if ($nro_g == 0) {
+               echo '<script>alert("Não há letras maísculas informadas na senha para  o usuário");</script>'; return 1;
+          }
+          if ($nro_p == 0) {
+               echo '<script>alert("Não há letras miísculas informadas na senha para o usuário")</script>'; return 1;
+          }
+          if ($nro_e == 0) {
+               echo '<script>alert("Não há caracteres especiais informados na senha para o usuário")</script>'; return 1;
+          }
+     }
+
      return $sta;
  }    
      
@@ -499,39 +536,39 @@ function alterar_usu() {
      include_once "dados.php";
      $nro = acessa_reg("Select * from tb_usuario where usuemail = '" . $ema_usu . "'", $reg);       
      if ($nro == 1 || $reg == true) {
-         $sen = base64_decode($reg['ususenha']);
-         $nom = $reg['usunome'];
-         $ema = $reg['usuemail'];
- 
-         $tex  = '<!DOCTYPE html>';
-         $tex .= '<html lang="pt_br">';
-         $tex .= '<head>';
-         $tex .= '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />';
-         $tex .= '<title>SearchMidia  Marketing de Retorno</title>';
-         $tex .= '</head>';
-         $tex .= '<body>';
-         $tex .= '<p align="center">';
-         $tex .= '<img border="0" src="http://www.searchmidia.com.br/pallas46/img/logo-03.png"></p>';
-         $tex .= '<p align="center">&nbsp;</p>';
-         $tex .= '<p align="center"><font size="5" face="Verdana" color="#FF0000"><b>Cadastramento de Acesso</b></font></p>';
-         $tex .= '<p align="center">&nbsp;</p>';
-         $tex .= '<p align="center"><font size="5" face="Verdana"><b>Nome: ' . $nom . '</b></font></p>';
-         $tex .= '<p align="center"><font size="5" face="Verdana"><b>Login: ' . $ema . '</b></font></p>';
-         $tex .= '<p align="center"><font size="5" face="Verdana"><b>Senha: ' . $sen . '</b></font></p>';
-         $tex .= '<p align="center"><font size="4" face="Verdana"><a href="http://www.searchmidia.com.br/pallas46/login.php">';
-         $tex .= 'www.searchmidia.com.br</a></font></p>';
-         $tex .= '<p align="center">&nbsp;</p>';
- 
-         $tex .= '</body>';
-         $tex .= '</html>';
- 
-         $asu = "Acesso ao sistema SearchMidia - Marketing de Retorno";
- 
-         $sta = envia_email($ema, $asu, $tex, $nom, '', '');
- 
-         if ($sta != 1) {
-             echo '<script>alert("Erro no envio de login e senha para o usuário !");</script>';
-         }
+          $sen = base64_decode($reg['ususenha']);
+          $nom = $reg['usunome'];
+          $ema = $reg['usuemail'];
+
+          $tex  = '<!DOCTYPE html>';
+          $tex .= '<html lang="pt_br">';
+          $tex .= '<head>';
+          $tex .= '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />';
+          $tex .= '<title>SearchMidia  Marketing de Retorno</title>';
+          $tex .= '</head>';
+          $tex .= '<body>';
+          $tex .= '<p align="center">';
+          $tex .= '<img border="0" src="https://cdn.shortpixel.ai/client/q_glossy,ret_img,w_297,h_61/https://www.searchmidia.com.br/wp-content/uploads/2017/07/logo-294-b.png"></p></a>';
+          $tex .= '<p align="center">&nbsp;</p>';
+          $tex .= '<p align="center"><font size="5" face="Verdana" color="#FF0000"><b>Cadastramento de Acesso</b></font></p>';
+          $tex .= '<p align="center">&nbsp;</p>';
+          $tex .= '<p align="center"><font size="5" face="Verdana"><b>Nome: ' . $nom . '</b></font></p>';
+          $tex .= '<p align="center"><font size="5" face="Verdana"><b>Login: ' . $ema . '</b></font></p>';
+          $tex .= '<p align="center"><font size="5" face="Verdana"><b>Senha: ' . $sen . '</b></font></p>';
+          $tex .= '<p align="center"><font size="4" face="Verdana"><a href="http://www.searchmidia.com.br/pallas46/login.php">';
+          $tex .= 'www.searchmidia.com.br</a></font></p>';
+          $tex .= '<p align="center">&nbsp;</p>';
+
+          $tex .= '</body>';
+          $tex .= '</html>';
+
+          $asu = "Acesso ao sistema SearchMidia - Marketing de Retorno";
+
+          $sta = envia_email($ema, $asu, $tex, $nom, '', '');
+
+          if ($sta != 1) {
+               echo '<script>alert("Erro no envio de login e senha para o usuário !");</script>';
+          }
      }
      return $sta;
  }

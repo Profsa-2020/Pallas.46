@@ -79,6 +79,17 @@ $(document).ready(function() {
           $('nav').removeClass("fixed-top");
      }
 
+     $(function() {
+          $('#cli').autocomplete({
+               source: "ajax/procura-cli.php",
+               minLength: 3,
+               select: function(event, ui) {
+                    $('#cli').val(ui.item.label);
+                    $('#cli_c').val(ui.item.id);
+               }
+          });
+     });
+
      $("#frmTelMan").submit(function() {
           var dat = "";
           var val = $('#tot_g').val();
@@ -401,7 +412,7 @@ $(document).ready(function() {
      }
      $cod = (isset($_REQUEST['cod']) == false ? 0 : $_REQUEST['cod']);
      $sta = (isset($_REQUEST['sta']) == false ? 1 : $_REQUEST['sta']);
-     $cli = (isset($_REQUEST['cli']) == false ? 0 : $_REQUEST['cli']);
+     $cli = (isset($_REQUEST['cli']) == false ? '' : $_REQUEST['cli']);
      $pag = (isset($_REQUEST['pag']) == false ? 0  : $_REQUEST['pag']);
      $pro = (isset($_REQUEST['pro']) == false ? 1 : $_REQUEST['pro']);
      $dti = (isset($_REQUEST['dti']) == false ? date('d/m/Y')  : $_REQUEST['dti']);
@@ -409,6 +420,7 @@ $(document).ready(function() {
      $ent = (isset($_REQUEST['ent']) == false ? ''  : $_REQUEST['ent']);
      $dte = (isset($_REQUEST['dte']) == false ? ''  : $_REQUEST['dte']);
      $obs = (isset($_REQUEST['obs']) == false ? ''  : $_REQUEST['obs']);
+     $key = (isset($_REQUEST['cli_c']) == false ? 0 : $_REQUEST['cli_c']);
      $con = (isset($_REQUEST['con']) == false ? $_SESSION['wrkcodcon'] : $_REQUEST['con']);
      if ($_SESSION['wrkopereg'] == 1) { 
           if (isset($_REQUEST['salvar']) == false) {
@@ -424,7 +436,7 @@ $(document).ready(function() {
      if ($_SESSION['wrkopereg'] >= 2) {
           if (isset($_REQUEST['salvar']) == false) { 
                $cha = $_SESSION['wrkcodreg']; $_SESSION['wrknumcha'] = $_SESSION['wrkcodreg']; $_SESSION['wrkmostel'] = 1; $_SESSION['wrknumvol'] = 1;
-               $ret = ler_contrato($_SESSION['wrkcodreg'], $sta, $cli, $pag, $pro, $dti, $dtf, $dte, $ent, $obs, $con); 
+               $ret = ler_contrato($_SESSION['wrkcodreg'], $sta, $key, $cli, $pag, $pro, $dti, $dtf, $dte, $ent, $obs, $con); 
                $ite_c = carrega_ite($dti, $dtf);
           }
      }
@@ -434,11 +446,11 @@ $(document).ready(function() {
                $ret = consiste_cto();
                if ($ret == 0) {
                     $ret = incluir_cto();
+                    $ret = enviar_ema();
                     $ret = gravar_ser();
                     $ret = atualiza_des($val_t, $val_d, $per_d);
-                    $nom = retorna_dad('clirazao', 'tb_cliente', 'idcliente', $cli);
-                    $ret = gravar_log(11,"Inclusão de novo contrato para venda: " . $nom); $_SESSION['wrkvalcon'] = 0; $_SESSION['wrklisser'] = array();
-                    $sta = 0; $cli = 0; $pag = 0; $pro = 0; $dti = date('d/m/Y'); $dtf = ''; $dte = ''; $ent = ''; $obs = ''; $con = $_SESSION['wrkcodcon']; $_SESSION['wrknumvol'] = 1;
+                    $ret = gravar_log(11,"Inclusão de novo contrato para venda: " . $cli); $_SESSION['wrkvalcon'] = 0; $_SESSION['wrklisser'] = array();
+                    $sta = 0; $cli = ''; $pag = 0; $pro = 0; $dti = date('d/m/Y'); $dtf = ''; $dte = ''; $ent = ''; $obs = ''; $con = $_SESSION['wrkcodcon']; $_SESSION['wrknumvol'] = 1;
                }
           }
           if ($_SESSION['wrkopereg'] == 2) {
@@ -447,17 +459,15 @@ $(document).ready(function() {
                     $ret = alterar_cto();
                     $ret = gravar_ser();
                     $ret = atualiza_des($val_t, $val_d, $per_d);
-                    $nom = retorna_dad('clirazao', 'tb_cliente', 'idcliente', $cli);
-                    $ret = gravar_log(12,"Alteração de contrato existente: " . $nom); $_SESSION['wrkmostel'] = 0;
-                    $sta = 0; $cli = 0; $pag = 0; $pro = 0; $dti = date('d/m/Y'); $dtf = ''; $dte = ''; $ent = ''; $obs = ''; $con = $_SESSION['wrkcodcon']; $_SESSION['wrkvalcon'] = 0; $_SESSION['wrklisser'] = array();
+                    $ret = gravar_log(12,"Alteração de contrato existente: " . $cli); $_SESSION['wrkmostel'] = 0;
+                    $sta = 0; $cli = ''; $pag = 0; $pro = 0; $dti = date('d/m/Y'); $dtf = ''; $dte = ''; $ent = ''; $obs = ''; $con = $_SESSION['wrkcodcon']; $_SESSION['wrkvalcon'] = 0; $_SESSION['wrklisser'] = array();
                     echo '<script>history.go(-' . $_SESSION['wrknumvol'] . ');</script>'; $_SESSION['wrknumvol'] = 1;
                }
           }
           if ($_SESSION['wrkopereg'] == 3) {
                $ret = excluir_cto();
-               $nom = retorna_dad('clirazao', 'tb_cliente', 'idcliente', $cli);
-               $ret = gravar_log(13,"Exclusão de contrato existente: " . $nom); $_SESSION['wrkmostel'] = 0;
-               $sta = 0; $cli = 0; $pag = 0; $pro = 0; $dti = date('d/m/Y'); $dtf = ''; $dte = ''; $ent = ''; $obs = ''; $con = $_SESSION['wrkcodcon']; $_SESSION['wrkvalcon'] = 0; $_SESSION['wrklisser'] = array();
+               $ret = gravar_log(13,"Exclusão de contrato existente: " . $cli); $_SESSION['wrkmostel'] = 0;
+               $sta = 0; $cli = ''; $pag = 0; $pro = 0; $dti = date('d/m/Y'); $dtf = ''; $dte = ''; $ent = ''; $obs = ''; $con = $_SESSION['wrkcodcon']; $_SESSION['wrkvalcon'] = 0; $_SESSION['wrklisser'] = array();
                echo '<script>history.go(-' . $_SESSION['wrknumvol'] . ');</script>'; $_SESSION['wrknumvol'] = 1;
           }
      }
@@ -491,7 +501,7 @@ $(document).ready(function() {
                          <div class="col-md-2"></div>
                          <div class="col-md-8">
                               <label>Nome do Consultor</label>
-                              <select id="con" name="con" class="form-control" <?php echo $con_l; ?> >
+                              <select id="con" name="con" class="form-control" <?php echo $con_l; ?>>
                                    <?php $ret = carrega_csu($con); ?>
                               </select>
                          </div>
@@ -526,9 +536,8 @@ $(document).ready(function() {
                          <div class="col-md-2"></div>
                          <div class="col-md-8">
                               <label>Nome do Cliente</label>
-                              <select id="cli" name="cli" class="form-control">
-                                   <?php $ret = carrega_cli($cli); ?>
-                              </select>
+                              <input type="text" class="form-control" maxlength="50" id="cli" name="cli"
+                                   value="<?php echo $cli; ?>" required />
                          </div>
                          <div class="lit-1 col-md-2 text-center">
                               <span>Proposta ?</span> &nbsp; <br />
@@ -603,6 +612,7 @@ $(document).ready(function() {
                          <div class="col-sm-4"></div>
                     </div>
                     <br />
+                    <input type="hidden" id="cli_c" name="cli_c" value="<?php echo $key; ?>" />   
                     <input type="hidden" id="tot_g" name="tot_g" value="<?php echo $_SESSION['wrkvalcon']; ?>" />
                </form>
           </div>
@@ -802,7 +812,7 @@ function carrega_vig() {
 }
 
 
-function ler_contrato(&$cha, &$sta, &$cli, &$pag, &$pro, &$dti, &$dtf, &$dte, &$ent, &$obs, &$con) {
+function ler_contrato(&$cha, &$sta, &$key, &$cli, &$pag, &$pro, &$dti, &$dtf, &$dte, &$ent, &$obs, &$con) {
      include_once "dados.php";
      $nro = acessa_reg('Select * from tb_contrato where idcontrato = ' . $cha, $reg);
      if ($nro == 0 || $reg == false) {
@@ -810,7 +820,7 @@ function ler_contrato(&$cha, &$sta, &$cli, &$pag, &$pro, &$dti, &$dtf, &$dte, &$
           $nro = 1;
      }else{
           $cha = $reg['idcontrato'];
-          $cli = $reg['concliente'];
+          $key = $reg['concliente'];
           $pag = $reg['conpagto'];
           $sta = $reg['constatus'];
           $pro = $reg['conproposta'];
@@ -826,6 +836,7 @@ function ler_contrato(&$cha, &$sta, &$cli, &$pag, &$pro, &$dti, &$dtf, &$dte, &$
           $ent = number_format($reg['convalentrada'], 2, ",", ".");
           $_SESSION['wrkcodreg'] = $reg['idcontrato'];
           $_SESSION['wrkvalcon'] = $reg['convaltotal'];
+          $cli = retorna_dad('clifantasia', 'tb_cliente', 'idcliente', $reg['concliente']);
      }
      return $cha;
 }      
@@ -888,7 +899,7 @@ function incluir_cto() {
      $sql .= "'" . $_SESSION['wrkcodemp'] . "',";
      $sql .= "'" . (isset($_REQUEST['pro']) == false ? '0' : '1') . "',";
      $sql .= "'" . $_REQUEST['sta'] . "',";
-     $sql .= "'" . $_REQUEST['cli'] . "',";
+     $sql .= "'" . $_REQUEST['cli_c'] . "',";
      if (isset($_REQUEST['con']) == true) {
           $sql .= "'" . $_REQUEST['con'] . "',";
      } else {
@@ -921,7 +932,7 @@ function incluir_cto() {
      $sql  = "update tb_contrato set ";
      $sql .= "conproposta = '". (isset($_REQUEST['pro']) == false ? '0' : '1') . "', ";
      $sql .= "constatus = '". $_REQUEST['sta'] . "', ";
-     $sql .= "concliente = '". $_REQUEST['cli'] . "', ";
+     $sql .= "concliente = '". $_REQUEST['cli_c'] . "', ";
      if (isset($_REQUEST['con']) == true) {
           $sql .= "conconsultor = '". $_REQUEST['con'] . "', ";
      }
@@ -1113,6 +1124,54 @@ function atualiza_des(&$val_t, &$val_d, &$per_d) {
      }
      return $ret;
 }
+
+function enviar_ema() {
+     $ret = 0;
+     include_once "dados.php";
+     $nro = acessa_reg("Select idempresa, emprazao, empemail, empcontato from tb_empresa where idempresa = " . $_SESSION['wrkcodemp'], $reg);       
+     if ($nro == 1 || $reg == true) { 
+          $tex  = '<!DOCTYPE html>';
+          $tex .= '<html lang="pt_br">';
+          $tex .= '<head>';
+          $tex .= '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />';
+          $tex .= '<title>SearchMidia  - Marketing de Retorno</title>';
+          $tex .= '</head>';
+          $tex .= '<body>';
+          $tex .= '<p align="center">';
+          $tex .= '<img border="0" src="https://cdn.shortpixel.ai/client/q_glossy,ret_img,w_297,h_61/https://www.searchmidia.com.br/wp-content/uploads/2017/07/logo-294-b.png"></p></a>';
+          $tex .= '<p align="center">&nbsp;</p>';
+          $tex .= '<p align="center"><font size="5" face="Verdana" color="#FF0000"><b>Cadastramento de Novo Contrato</b></font></p>';
+          $tex .= '<p align="center">&nbsp;</p>';
+          $tex .= '<p align="center"><font size="5" face="Verdana"><b>Número: ' . $_SESSION['wrkcodreg'] . '</b></font></p>';
+          $tex .= '<p align="center"><font size="5" face="Verdana"><b>Cliente: ' .  retorna_dad('clifantasia', 'tb_cliente', 'idcliente', $_REQUEST['cli']) . '</b></font></p>';
+          $tex .= '<p align="center"><font size="4" face="Verdana"><b>Consultor: ' . retorna_dad('connome', 'tb_consultor', 'idconsultor', $_REQUEST['con']) . '</b></font></p>';
+          $tex .= '<p align="center"><font size="4" face="Verdana"><b>Inicio: ' . $_REQUEST['dti'] . '</b></font></p>';
+          $tex .= '<p align="center"><font size="4" face="Verdana"><b>Final: ' . $_REQUEST['dtf'] . '</b></font></p>';
+          if ($_REQUEST['ent'] != "") {
+               $tex .= '<p align="center"><font size="4" face="Verdana"><b>Entrada: R$ ' . $_REQUEST['ent'] . '</b></font></p>';
+          }
+          $tex .= '<p align="center"><font size="4" face="Verdana"><b>Valor: R$ ' . number_format($_SESSION['wrkvalcon'], 2, ",", ".") . '</b></font></p>';
+          if ($_REQUEST['obs'] != "") {
+               $tex .= '<p align="center"><font size="4" face="Verdana"><b>Observação: ' . $_REQUEST['obs'] . '</b></font></p>';
+          }
+          $tex .= '<p align="center"><font size="4" face="Verdana"><a href="http://www.searchmidia.com.br/pallas46/login.php">';
+          $tex .= 'www.searchmidia.com.br</a></font></p>';
+          $tex .= '<p align="center">&nbsp;</p>';
+
+          $tex .= '</body>';
+          $tex .= '</html>';
+
+          $asu = "Novo contrato cadastrado no sistema SearchMidia";
+
+          $sta = envia_email($reg['empemail'], $asu, $tex, $reg['empcontato'], '', '');
+
+          if ($sta != 1) {
+               echo '<script>alert("Erro no envio de dados do contrato para o administrador !");</script>';
+          }
+     }
+     return $ret;
+}
+
 ?>
 
 </html>

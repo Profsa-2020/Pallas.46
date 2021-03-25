@@ -145,10 +145,6 @@ $(document).ready(function() {
      include_once "dados.php";
      include_once "profsa.php";
      $_SESSION['wrknompro'] = __FILE__;
-     if ($_SESSION['wrktipusu'] <= 1) {
-          echo '<script>alert("Nível de usuário não permite acesso a está opção do sistema");</script>';
-          echo '<script>history.go(-1);</script>';
-     }
      date_default_timezone_set("America/Sao_Paulo");
      $_SESSION['wrkdatide'] = date ("d/m/Y H:i:s", getlastmod());
      $_SESSION['wrknomide'] = get_current_user();
@@ -305,9 +301,6 @@ $(document).ready(function() {
                                         <th>Cliente</th>
                                         <th class="text-center">Proposta</th>
                                         <th>Consultor</th>
-                                        <th>Valor</th>
-                                        <th>Desconto</th>
-                                        <th>Liquido</th>
                                         <th>Servico</th>
                                         <th>Vigencia</th>
                                         <th>Inicio</th>
@@ -337,7 +330,7 @@ function carrega_nro($sta, $dti, $dtf, $cli, $con, &$com, &$qtd, &$val) {
      include_once "dados.php"; $ret = 0; $val = 0; $qtd = 0; $ant = 0;     
      $dti = substr($dti,6,4) . "-" . substr($dti,3,2) . "-" . substr($dti,0,2) . " 00:00:00";
      $dtf = substr($dtf,6,4) . "-" . substr($dtf,3,2) . "-" . substr($dtf,0,2) . " 23:59:59";
-     $com  = "Select I.*, C.*, X.connome, Y.clirazao, S.serdescricao from ((((tb_contrato_s I left join tb_contrato C on I.itecontrato = C.idcontrato) ";
+     $com  = "Select I.*, C.*, X.connome, Y.clifantasia, S.serdescricao from ((((tb_contrato_s I left join tb_contrato C on I.itecontrato = C.idcontrato) ";
      $com .= " left join tb_consultor X on C.conconsultor = X.idconsultor) ";
      $com .= " left join tb_cliente Y on C.concliente = Y.idcliente) ";
      $com .= " left join tb_servico S on I.iteservico = S.idservico) ";
@@ -386,12 +379,9 @@ function carrega_con($sta, $dti, $dtf, $cli, $con, $com) {
           if ($lin['constatus'] == 4) {$txt .= '<td>' . "Cancelado" . '</td>';}
           if ($lin['constatus'] == 5) {$txt .= '<td>' . "Suspenso" . '</td>';}
           if ($lin['constatus'] == 6) {$txt .= '<td>' . "Finalizado" . '</td>';}
-          $txt .= '<td>' . limpa_cpo($lin['clirazao']) . '</td>';
+          $txt .= '<td>' . limpa_cpo($lin['clifantasia']) . '</td>';
           $txt .= '<td class="text-center">' . ($lin['conproposta'] == 0 ? 'Nao' : 'Sim') . '</td>';
           $txt .= '<td>' . limpa_cpo($lin['connome']) . '</td>';
-          $txt .= '<td class="text-right">' . number_format($lin['convaltotal'], 2, ",", ".") . '</td>';
-          $txt .= '<td class="text-right">' . number_format($lin['convaldesconto'], 2, ",", ".") . '</td>';
-          $txt .= '<td class="text-right">' . number_format($lin['convaltotal'] - $lin['convaldesconto'], 2, ",", ".") . '</td>';
           $txt .= '<td>' . limpa_cpo($lin['serdescricao']) . '</td>';
           if ($lin['itevigencia'] == 0) {$txt .= "<td>" . "S/ Vigência" . "</td>";}
           if ($lin['itevigencia'] == 1) {$txt .= "<td>" . "Mensal" . "</td>";}
@@ -428,8 +418,9 @@ function carrega_ger($sta, $dti, $dtf, &$tab) {
      date_default_timezone_set("America/Sao_Paulo");
      $dti = substr($dti,6,4) . "-" . substr($dti,3,2) . "-" . substr($dti,0,2) . " 00:00:00";
      $dtf = substr($dtf,6,4) . "-" . substr($dtf,3,2) . "-" . substr($dtf,0,2) . " 23:59:59";
-     $com  = "Select * from tb_contrato where conempresa = " .  $_SESSION['wrkcodemp'] . " ";
+     $com  = "Select * from tb_contrato where conempresa = " .  $_SESSION['wrkcodemp'] . " ";     
      $com .= " and condataemi between '" . $dti . "' and '" . $dtf . "' ";
+     if ($_SESSION['wrktipusu'] <= 1) { $com .= " and conconsultor = " . $_SESSION['wrkcodcon']; }
      $nro = leitura_reg($com, $reg);
      foreach ($reg as $lin) {
           $qtd = $qtd + 1;
@@ -444,13 +435,13 @@ function carrega_cli($cli) {
      $sta = 0;
      include_once "dados.php";    
       echo '<option value="0" selected="selected">Todos os cliente cadastrados ...</option>';
-     $com = "Select idcliente, clirazao from tb_cliente where clistatus = 0 and cliempresa = " . $_SESSION['wrkcodemp'] . " order by clirazao, idcliente";
+     $com = "Select idcliente, clifantasia from tb_cliente where clistatus = 0 and cliempresa = " . $_SESSION['wrkcodemp'] . " order by clifantasia, idcliente";
      $nro = leitura_reg($com, $reg);
      foreach ($reg as $lin) {
           if ($lin['idcliente'] != $cli) {
-               echo  '<option value ="' . $lin['idcliente'] . '">' . $lin['clirazao'] . '</option>'; 
+               echo  '<option value ="' . $lin['idcliente'] . '">' . $lin['clifantasia'] . '</option>'; 
           } else {
-               echo  '<option value ="' . $lin['idcliente'] . '" selected="selected">' . $lin['clirazao'] . '</option>';
+               echo  '<option value ="' . $lin['idcliente'] . '" selected="selected">' . $lin['clifantasia'] . '</option>';
           }
      }
      return $sta;

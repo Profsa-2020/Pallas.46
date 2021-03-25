@@ -119,8 +119,8 @@ $(document).ready(function() {
                               if ($('#con').val() == "") {
                                    $('#con').val(data.qsa[0].nome);
                               }
-                              if ($('#tel').val() == "") {
-                                   $('#tel').val(data.telefone.substring(0, 15));
+                              if ($('#cel').val() == "") {
+                                   $('#cel').val(data.telefone.substring(0, 15));
                               }
                               if ($('#ema').val() == "") {
                                    $('#ema').val(data.email);
@@ -260,7 +260,7 @@ $(document).ready(function() {
                if ($ret == 0) {
                     $ret = incluir_cli();
                     $ret = gravar_log(11,"Inclusão de novo cliente para venda: " . $des);
-                    $des = ''; $ema = ''; $sta = 00; $cpf = ''; $cgc = ''; $tel = ''; $cel = ''; $obs = ''; $cep = ''; $end = ''; $num = ''; $com = ''; $bai = ''; $cid = ''; $est = ''; $reg = ''; $nas = ''; $obs = ''; $pes = 0; $aut = ''; $cpf = ''; $car = ''; $con = ''; $fan = ''; $ram = ''; $gru = 0;
+                    $des = ''; $ema = ''; $sta = 00; $cpf = ''; $cgc = ''; $tel = ''; $cel = ''; $obs = ''; $cep = ''; $end = ''; $num = ''; $com = ''; $bai = ''; $cid = ''; $est = ''; $reg = ''; $nas = ''; $obs = ''; $pes = 1; $aut = ''; $cpf = ''; $car = ''; $con = ''; $fan = ''; $ram = ''; $gru = 0;
                }
           }
           if ($_SESSION['wrkopereg'] == 2) {
@@ -275,7 +275,7 @@ $(document).ready(function() {
           if ($_SESSION['wrkopereg'] == 3) {
                $ret = excluir_cli();
                $ret = gravar_log(13,"Exclusão de cliente existente: " . $des); $_SESSION['wrkmostel'] = 0;
-               $des = ''; $ema = ''; $sta = 00; $cpf = ''; $cgc = ''; $tel = ''; $cel = ''; $obs = ''; $cep = ''; $end = ''; $num = ''; $com = ''; $bai = ''; $cid = ''; $est = ''; $reg = ''; $nas = ''; $obs = ''; $pes = 0; $aut = ''; $cpf = ''; $car = '';  $con = '';$fan = ''; $gru = 0;$ram = ''; 
+               $des = ''; $ema = ''; $sta = 00; $cpf = ''; $cgc = ''; $tel = ''; $cel = ''; $obs = ''; $cep = ''; $end = ''; $num = ''; $com = ''; $bai = ''; $cid = ''; $est = ''; $reg = ''; $nas = ''; $obs = ''; $pes = 1; $aut = ''; $cpf = ''; $car = '';  $con = '';$fan = ''; $gru = 0;$ram = ''; 
                echo '<script>history.go(-' . $_SESSION['wrknumvol'] . ');</script>'; $_SESSION['wrknumvol'] = 1;
           }
      }

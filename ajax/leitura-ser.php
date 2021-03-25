@@ -21,7 +21,7 @@
           $nro = acessa_reg("Select * from tb_servico where serdescricao = '" . $ser . "'", $reg);            
      }
      if ($nro > 1) {
-          $tab['men'] = "Existem [" . $nro . "] serviços cadastrados com a mesma solicitação efetuada";
+          $tab['men'] = "Existem [" . $nro . "] serviços cadastrados com a mesma descrição informada";
      }
      if ($nro == 0) {
           $tab['men'] = 'Serviço informado no contrato não cadastrado no sistema !';

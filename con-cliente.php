@@ -164,11 +164,9 @@ $(document).ready(function() {
                                         <th width="5%">Código</th>
                                         <th>Status</th>
                                         <th>Nome Fantasia</th>
-                                        <th>CNPJ</th>
-                                        <th>Ramo de Atividade</th>
-                                        <th>E-Mail</th>
-                                        <th>Telefone</th>
                                         <th>Celular</th>
+                                        <th>Telefone</th>
+                                        <th>E-Mail</th>
                                         <th>Nome do Contato</th>
                                    </tr>
                               </thead>
@@ -200,15 +198,9 @@ function carrega_cli() {
           if ($lin['clistatus'] == 2) {$txt .= "<td>" . "Suspenso" . "</td>";}
           if ($lin['clistatus'] == 3) {$txt .= "<td>" . "Cancelado" . "</td>";}
           $txt .= "<td>" . $lin['clifantasia'] . "</td>";
-          if ($lin['clipessoa'] == 0) {
-               $txt .= "<td>" . mascara_cpo($lin['clicnpj'], "   .   .   -  ") . "</td>";
-          } else {
-               $txt .= "<td>" . mascara_cpo($lin['clicnpj'], "  .   .   /    -  ") . "</td>";
-          }
-          $txt .= "<td>" . $lin['cliramo'] . "</td>";
-          $txt .= "<td>" . $lin['cliemail'] . "</td>";
-          $txt .= "<td>" . $lin['clitelefone'] . "</td>";
           $txt .= '<td class="cel-w cur-1">' . $lin['clicelular'] . '</td>';
+          $txt .= "<td>" . $lin['clitelefone'] . "</td>";
+          $txt .= "<td>" . $lin['cliemail'] . "</td>";
           $txt .= "<td>" . $lin['clicontato'] . "</td>";
           $txt .= "</tr>";
           echo $txt; 

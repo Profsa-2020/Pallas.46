@@ -192,7 +192,7 @@ function carrega_usu() {
           $txt .= "<td>" . $lin['usuemail'] . "</td>";
           if ($lin['usutipo'] == 0) {$txt .= "<td>" . "Visitante" . "</td>";}
           if ($lin['usutipo'] == 1) {$txt .= "<td>" . "Consultor" . "</td>";}
-          if ($lin['usutipo'] == 2) {$txt .= "<td>" . "Gerência" . "</td>";}
+          if ($lin['usutipo'] == 2) {$txt .= "<td>" . "Cliente" . "</td>";}
           if ($lin['usutipo'] == 3) {$txt .= "<td>" . "Suporte" . "</td>";}
           if ($lin['usutipo'] == 4) {$txt .= "<td>" . "Administrador" . "</td>";}
           $txt .= "<td>" . $lin['usucelular'] . "</td>";

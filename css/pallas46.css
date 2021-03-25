@@ -102,7 +102,7 @@
 }
 
 .qua-0 input[type=checkbox] {
-    width: 20px;
+    width: 20px; 
     height: 20px;
     margin-top: 15px;
 }
@@ -179,6 +179,10 @@
     padding: 0px 5px;
 }
 
+.tab-3 {
+    border: 0.5px solid #8a8888;
+}
+
 .tel-1 label {
     font-size: 14px !important;    
     color: #918e8e !important;    
@@ -201,7 +205,7 @@
  }
  
  .tit-2 {
-     font-size: 11px;
+     font-size: 14px;
      text-decoration: none;
  }
 
