@@ -70,11 +70,9 @@ $(document).ready(function() {
           $('#doc_c').text('CPF');
           $('#doc_i').text('Registro Geral (R.G.)');
           $("#cgc").mask("000.000.000-00");
-          $("#cgc").mask("000.000.000-00");
      } else {
           $('#doc_c').text('CNPJ');
           $('#doc_i').text('Inscrição Estadual');
-          $("#cgc").mask("00.000.000/0000-00");
           $("#cgc").mask("00.000.000/0000-00");
      }
 
@@ -261,6 +259,7 @@ $(document).ready(function() {
                     $ret = incluir_cli();
                     $ret = gravar_log(11,"Inclusão de novo cliente para venda: " . $des);
                     $des = ''; $ema = ''; $sta = 00; $cpf = ''; $cgc = ''; $tel = ''; $cel = ''; $obs = ''; $cep = ''; $end = ''; $num = ''; $com = ''; $bai = ''; $cid = ''; $est = ''; $reg = ''; $nas = ''; $obs = ''; $pes = 1; $aut = ''; $cpf = ''; $car = ''; $con = ''; $fan = ''; $ram = ''; $gru = 0;
+                    echo '<script>history.go(-' . $_SESSION['wrknumvol'] . ');</script>'; $_SESSION['wrknumvol'] = 1;
                }
           }
           if ($_SESSION['wrkopereg'] == 2) {
@@ -433,7 +432,7 @@ $(document).ready(function() {
                                    value="<?php echo $car; ?>" />
                          </div>
                          <div class="col-md-4">
-                              <label>Número do C.p.f.</label>
+                              <label>CPF</label>
                               <input type="text" class="form-control" maxlength="15" id="cpf" name="cpf"
                                    value="<?php echo $cpf; ?>" />
                          </div>
@@ -469,9 +468,8 @@ $(document).ready(function() {
                                    class="bot-4 <?php echo $del; ?>"><?php echo $bot; ?></button>
                          </div>
                          <div class="col-md-2">
-                              <?php
-                                   echo '<div class="bot-1" ><a href="' . $_SESSION['wrkproant'] . '.php" title="Volta a página anterior deste processamento.">Voltar</a></div>'
-                              ?>
+                         <button type="button" class="bot-1" id="volta" name="volta"
+                                   onclick="location.href='<?php echo $_SESSION['wrkproant'] . ".php"; ?>'">Voltar</button>
                          </div>
                          <div class="col-md-4"></div>
                     </div>

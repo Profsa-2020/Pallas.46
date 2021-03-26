@@ -75,6 +75,29 @@ $(document).ready(function() {
           $('nav').removeClass("fixed-top");
      }
 
+     if ($('#pes').prop("checked") == false) {
+          $('#doc_c').text('CPF');
+          $('#doc_i').text('Registro Geral (R.G.)');
+          $("#cgc").mask("000.000.000-00");
+     } else {
+          $('#doc_c').text('CNPJ');
+          $('#doc_i').text('Inscrição Estadual');
+          $("#cgc").mask("00.000.000/0000-00");
+     }
+
+     $('#pes').click(function() {
+          $('#cgc').val("");
+          if ($('#pes').prop("checked") == false) {
+               $('#doc_c').text('CPF');
+               $('#doc_i').text('Registro Geral (R.G.)');
+               $("#cgc").mask("000.000.000-00");
+          } else {
+               $('#doc_c').text('CNPJ');
+               $('#doc_i').text('Inscrição Estadual');
+               $("#cgc").mask("00.000.000/0000-00");
+          }
+     });
+
      $('#cgc').blur(function() {
           var cgc = $('#cgc').val();
           var cgc = cgc.replace(/[^0-9]/g, '');
@@ -200,7 +223,7 @@ $(document).ready(function() {
      include_once "dados.php";
      include_once "profsa.php";
      $_SESSION['wrknompro'] = __FILE__; 
-     if ($_SESSION['wrktipusu'] <= 2) {
+     if ($_SESSION['wrktipusu'] <= 1) {
           echo '<script>alert("Nível de usuário não permite acesso a está opção do sistema");</script>';
           echo '<script>history.go(-1);</script>';
      }
@@ -239,6 +262,7 @@ $(document).ready(function() {
      $av1 = (isset($_REQUEST['av1']) == false ? "" : $_REQUEST['av1']);
      $av2 = (isset($_REQUEST['av2']) == false ? "" : $_REQUEST['av2']);
      $par = (isset($_REQUEST['par']) == false ? "" : $_REQUEST['par']);
+     $pes = (isset($_REQUEST['pes']) == false ? 1 : $_REQUEST['pes']);
      $des = (isset($_REQUEST['des']) == false ? '' : str_replace("'", "´", $_REQUEST['des']));
      $fan = (isset($_REQUEST['fan']) == false ? '' : str_replace("'", "´", $_REQUEST['fan']));
      $obs = (isset($_REQUEST['obs']) == false ? '' : str_replace("'", "´", $_REQUEST['obs']));
@@ -255,7 +279,7 @@ $(document).ready(function() {
      if ($_SESSION['wrkopereg'] >= 2) {
           if (isset($_REQUEST['salvar']) == false) { 
                $cha = $_SESSION['wrkcodreg']; $_SESSION['wrknumcha'] = $_SESSION['wrkcodreg']; $_SESSION['wrkmostel'] = 1;
-               $ret = ler_empresa($_SESSION['wrkcodreg'], $cgc, $des, $fan, $ema, $sta, $tel, $cep, $end, $num, $com, $bai, $cid, $est, $ins, $cel, $con, $sit, $fx1, $fx2, $av1, $av2,$par, $obs); 
+               $ret = ler_empresa($_SESSION['wrkcodreg'], $cgc, $des, $fan, $ema, $sta, $tel, $cep, $end, $num, $com, $bai, $cid, $est, $ins, $cel, $con, $sit, $fx1, $fx2, $av1, $av2,$par, $pes, $obs); 
           }
      }
      if (isset($_REQUEST['salvar']) == true) {
@@ -265,7 +289,8 @@ $(document).ready(function() {
                if ($ret == 0) {
                     $ret = incluir_emp();
                     $ret = gravar_log(11,"Inclusão de nova empresa para venda: " . $des);
-                    $des = ''; $ema = ''; $sta = 0; $cpf = ''; $tel = ''; $cel = ''; $obs = ''; $cep = ''; $end = ''; $num = ''; $com = ''; $bai = ''; $cid = ''; $est = ''; $reg = ''; $nas = ''; $obs = ''; $fx1 = ''; $fx2 = ''; $av1 = ''; $av2 = ''; $par = ''; 
+                    $des = ''; $ema = ''; $sta = 0; $cpf = ''; $tel = ''; $cel = ''; $obs = ''; $cep = ''; $end = ''; $num = ''; $pes = 1; $com = ''; $bai = ''; $cid = ''; $est = ''; $reg = ''; $nas = ''; $obs = ''; $fx1 = ''; $fx2 = ''; $av1 = ''; $av2 = ''; $par = ''; 
+                    echo '<script>history.go(-' . $_SESSION['wrknumvol'] . ');</script>'; $_SESSION['wrknumvol'] = 1;
                }
           }
           if ($_SESSION['wrkopereg'] == 2) {
@@ -273,14 +298,14 @@ $(document).ready(function() {
                if ($ret == 0) {
                     $ret = alterar_emp();
                     $ret = gravar_log(12,"Alteração de empresa existente: " . $des); $_SESSION['wrkmostel'] = 0;
-                    $des = ''; $ema = ''; $sta = 00; $cpf = ''; $tel = ''; $cel = ''; $obs = ''; $cep = ''; $end = ''; $num = ''; $com = ''; $bai = ''; $cid = ''; $est = ''; $reg = ''; $nas = ''; $obs = ''; $fx1 = ''; $fx2 = '';  $av1 = ''; $av2 = ''; $par = ''; 
+                    $des = ''; $ema = ''; $sta = 00; $cpf = ''; $tel = ''; $cel = ''; $obs = ''; $cep = ''; $end = ''; $num = ''; $com = ''; $pes = 1; $bai = ''; $cid = ''; $est = ''; $reg = ''; $nas = ''; $obs = ''; $fx1 = ''; $fx2 = '';  $av1 = ''; $av2 = ''; $par = ''; 
                     echo '<script>history.go(-' . $_SESSION['wrknumvol'] . ');</script>'; $_SESSION['wrknumvol'] = 1;
                }
           }
           if ($_SESSION['wrkopereg'] == 3) {
                $ret = excluir_emp();
                $ret = gravar_log(13,"Exclusão de empresa existente: " . $des); $_SESSION['wrkmostel'] = 0;
-               $des = ''; $ema = ''; $sta = 00; $cpf = ''; $tel = ''; $cel = ''; $obs = ''; $cep = ''; $end = ''; $num = ''; $com = ''; $bai = ''; $cid = ''; $est = ''; $reg = ''; $nas = ''; $obs = ''; $fx1 = ''; $fx2 = ''; $av1 = ''; $av2 = ''; $par = ''; 
+               $des = ''; $ema = ''; $sta = 00; $cpf = ''; $tel = ''; $cel = ''; $obs = ''; $cep = ''; $end = ''; $num = ''; $com = ''; $pes = 1; $bai = ''; $cid = ''; $est = ''; $reg = ''; $nas = ''; $obs = ''; $fx1 = ''; $fx2 = ''; $av1 = ''; $av2 = ''; $par = ''; 
                echo '<script>history.go(-' . $_SESSION['wrknumvol'] . ');</script>'; $_SESSION['wrknumvol'] = 1;
           }
      }
@@ -308,14 +333,16 @@ $(document).ready(function() {
                     <div class="col-md-10 text-left">
                          <span>Manutenção de Empresas</span>
                     </div>
-                    <div class="col-md-2">
-                         <form name="frmTelNov" action="man-empresa.php?ope=1&cod=0" method="POST">
-                              <div class="text-center">
-                                   <button type="submit" class="bot-4" id="nov" name="novo"
-                                        title="Mostra campos para criar nova empresa no sistema">Adicionar</button>
-                              </div>
-                         </form>
-                    </div>
+                    <?php if ($_SESSION['wrktipusu'] >= 3) { ?>
+                         <div class="col-md-2">
+                              <form name="frmTelNov" action="man-empresa.php?ope=1&cod=0" method="POST">
+                                   <div class="text-center">
+                                        <button type="submit" class="bot-4" id="nov" name="novo"
+                                             title="Mostra campos para criar nova empresa no sistema">Adicionar</button>
+                                   </div>
+                              </form>
+                         </div>
+                    <?php } ?>
                </div>
                <form class="tel-1" id="frmManEmp" name="frmManEmp" action="man-empresa.php" method="POST" enctype="multipart/form-data">
                     <div class="row">
@@ -324,15 +351,19 @@ $(document).ready(function() {
                               <input type="text" class="form-control text-center" maxlength="6" id="cod" name="cod"
                                    value="<?php echo $_SESSION['wrkcodreg']; ?>" disabled />
                          </div>
-                         <div class="col-md-2"></div>
+                         <div class="lit-1 col-md-2 text-center">
+                              <span>Pessoa Jurídica</span> &nbsp; <br />
+                              <input type="checkbox" id="pes" name="pes" value="1"
+                                   <?php echo ($pes == 0 ? '': 'checked' ) ?> />
+                         </div>
                          <div class="col-md-3">
-                              <label>CNPJ</label>
+                              <label id="doc_c">CNPJ</label>
                               <input type="text" class="form-control text-center" maxlength="20" id="cgc" name="cgc"
                                    value="<?php echo $cgc; ?>" />
                          </div>
                          <div class="col-md-2"></div>
                          <div class="col-md-3">
-                              <label>Inscrição Estadual</label>
+                              <label id="doc_i">Inscrição Estadual</label>
                               <input type="text" class="form-control text-center" maxlength="15" id="ins" name="ins"
                                    value="<?php echo $ins; ?>" />
                          </div>
@@ -473,9 +504,8 @@ $(document).ready(function() {
                                    class="bot-4 <?php echo $del; ?>"><?php echo $bot; ?></button>
                          </div>
                          <div class="col-md-2">
-                              <?php
-                                   echo '<div class="bot-1" ><a href="' . $_SESSION['wrkproant'] . '.php" title="Volta a página anterior deste processamento.">Voltar</a></div>'
-                              ?>
+                         <button type="button" class="bot-1" id="volta" name="volta"
+                                   onclick="location.href='<?php echo $_SESSION['wrkproant'] . ".php"; ?>'">Voltar</button>
                          </div>
                          <div class="col-md-4 text-right">
                               <?php
@@ -509,7 +539,7 @@ function ultimo_cod() {
      return $cod;
 }
 
-function ler_empresa(&$cha, &$cgc, &$des, &$fan, &$ema, &$sta, &$tel, &$cep, &$end, &$num, &$com, &$bai, &$cid, &$est, &$ins, &$cel, &$con, &$sit, &$fx1, &$fx2, &$av1, &$av2, &$par, &$obs) {
+function ler_empresa(&$cha, &$cgc, &$des, &$fan, &$ema, &$sta, &$tel, &$cep, &$end, &$num, &$com, &$bai, &$cid, &$est, &$ins, &$cel, &$con, &$sit, &$fx1, &$fx2, &$av1, &$av2, &$par, &$pes, &$obs) {
      include_once "dados.php";
      $nro = acessa_reg('Select * from tb_empresa where idempresa = ' . $cha, $reg);
      if ($nro == 0 || $reg == false) {
@@ -538,6 +568,7 @@ function ler_empresa(&$cha, &$cgc, &$des, &$fan, &$ema, &$sta, &$tel, &$cep, &$e
           $obs = $reg['empobservacao'];
           $av1 = $reg['empaviso1'];
           $av2 = $reg['empaviso2'];
+          $pes = $reg['emppessoa'];
           $fx1 = number_format($reg['empfaixa1'], 2, ",", ".");
           $fx2 = number_format($reg['empfaixa2'], 2, ",", ".");
           $_SESSION['wrkcodreg'] = $reg['idempresa'];
@@ -610,6 +641,7 @@ function incluir_emp() {
      $sql .= "empaviso1, ";
      $sql .= "empaviso2, ";
      $sql .= "empparcelas, ";
+     $sql .= "emppessoa, ";
      $sql .= "empobservacao, ";
      $sql .= "keyinc, ";
      $sql .= "datinc ";
@@ -635,6 +667,7 @@ function incluir_emp() {
      $sql .= "'" . str_replace(",", ".", $_REQUEST['av1']) . "',";
      $sql .= "'" . str_replace(",", ".", $_REQUEST['av2']) . "',";
      $sql .= "'" . $_REQUEST['par'] . "',";
+     $sql .= "'" . (isset($_REQUEST['pes']) == false ? 0 : 1 ) . "',";
      $sql .= "'" . $_REQUEST['obs'] . "',";
      $sql .= "'" . $_SESSION['wrkideusu'] . "',";
      $sql .= "'" . date("Y/m/d H:i:s") . "')";
@@ -673,6 +706,7 @@ function incluir_emp() {
      $sql .= "empaviso1 = '". $_REQUEST['av1'] . "', ";
      $sql .= "empaviso2 = '". $_REQUEST['av2'] . "', ";
      $sql .= "empfaixa1 = '". str_replace(",", ".", $_REQUEST['fx1']) . "', ";
+     $sql .= "emppessoa = '". (isset($_REQUEST['pes']) == false ? 0 : 1 ) . "', ";
      $sql .= "empobservacao = '". $_REQUEST['obs'] . "', ";
      $sql .= "keyalt = '" . $_SESSION['wrkideusu'] . "', ";
      $sql .= "datalt = '" . date("Y/m/d H:i:s") . "' ";

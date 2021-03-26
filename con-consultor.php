@@ -69,8 +69,7 @@ $(document).ready(function() {
      $('#tab-0').DataTable({
           "pageLength": 25,
           "aaSorting": [
-               [2, 'desc'],
-               [3, 'asc']
+               [2, 'desc']
           ],
           "language": {
                "lengthMenu": "Demonstrar _MENU_ linhas por páginas",
@@ -151,7 +150,7 @@ $(document).ready(function() {
                </div>
           </div>
      </div>
-     <div class="container-fluid">
+     <div class="container">
           <div class="row">
                <div class="col-md-12">
                     <br />
@@ -164,13 +163,9 @@ $(document).ready(function() {
                                         <th width="5%">Código</th>
                                         <th>Status</th>
                                         <th>Nome do Consultor</th>
-                                        <th>CPF</th>
-                                        <th>Registro</th>
-                                        <th>Cidade - UF</th>
                                         <th>E-Mail</th>
                                         <th>Telefone</th>
                                         <th>Celular</th>
-                                        <th>Observação</th>
                                    </tr>
                               </thead>
                               <tbody>
@@ -201,17 +196,9 @@ function carrega_con() {
           if ($lin['constatus'] == 2) {$txt .= "<td>" . "Suspenso" . "</td>";}
           if ($lin['constatus'] == 3) {$txt .= "<td>" . "Cancelado" . "</td>";}
           $txt .= "<td>" . $lin['connome'] . "</td>";
-          if ($lin['conpessoa'] == 0) {
-               $txt .= "<td>" . mascara_cpo($lin['concpf'], "   .   .   -  ") . "</td>";
-          } else {
-               $txt .= "<td>" . mascara_cpo($lin['concpf'], "  .   .   /    -  ") . "</td>";
-          }
-          $txt .= "<td>" . $lin['conregistro'] . "</td>";
-          $txt .= "<td>" . $lin['concidade'] . '-' . $lin['conestado'] . "</td>";
           $txt .= "<td>" . $lin['conemail'] . "</td>";
           $txt .= "<td>" . $lin['contelefone'] . "</td>";
           $txt .= '<td class="cel-w cur-1">' . $lin['concelular'] . '</td>';
-          $txt .= "<td>" . $lin['conobservacao'] . "</td>";
           $txt .= "</tr>";
           echo $txt; 
      }

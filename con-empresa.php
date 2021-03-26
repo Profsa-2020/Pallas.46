@@ -62,8 +62,8 @@ $(document).ready(function() {
      $('#tab-0').DataTable({
           "pageLength": 25,
           "aaSorting": [
-               [4, 'asc'],
-               [3, 'asc']
+               [3, 'asc'],
+               [2, 'asc']
           ],
           "language": {
                "lengthMenu": "Demonstrar _MENU_ linhas por páginas",
@@ -107,7 +107,7 @@ $(document).ready(function() {
      include_once "profsa.php";
      $_SESSION['wrknompro'] = __FILE__;
      date_default_timezone_set("America/Sao_Paulo");
-     if ($_SESSION['wrktipusu'] <= 3) {
+     if ($_SESSION['wrktipusu'] <= 1) {
           echo '<script>alert("Nível de usuário não permite acesso a está opção do sistema");</script>';
           echo '<script>history.go(-1);</script>';
      }
@@ -138,17 +138,19 @@ $(document).ready(function() {
                <div class="col-md-10 text-left">
                     <span>Lista de Empresas</span>
                </div>
-               <div class="col-md-2 text-center">
-                    <form name="frmTelNov" action="man-empresa.php?ope=1&cod=0" method="POST">
-                         <div class="text-center">
-                              <button type="submit" class="bot-4" id="nov" name="novo"
-                                   title="Mostra campos para criar nova empresa no sistema">Adicionar</button>
-                         </div>
-                    </form>
-               </div>
+               <?php if ($_SESSION['wrktipusu'] >= 3) { ?>
+                    <div class="col-md-2 text-center">
+                         <form name="frmTelNov" action="man-empresa.php?ope=1&cod=0" method="POST">
+                              <div class="text-center">
+                                   <button type="submit" class="bot-4" id="nov" name="novo"
+                                        title="Mostra campos para criar nova empresa no sistema">Adicionar</button>
+                              </div>
+                         </form>
+                    </div>
+               <?php } ?>
           </div>
      </div>
-     <div class="container-fluid">
+     <div class="container">
           <div class="row">
                <div class="col-md-12">
                     <br />
@@ -158,7 +160,6 @@ $(document).ready(function() {
                                    <tr>
                                         <th width="5%">Alterar</th>
                                         <th width="5%">Excluir</th>
-                                        <th width="5%">Código</th>
                                         <th>Status</th>
                                         <th>Razão Social do Destinatário</th>
                                         <th>CNPJ</th>
@@ -194,8 +195,11 @@ function carrega_emp() {
      foreach ($reg as $lin) {
           $txt =  '<tr>';
           $txt .= '<td class="text-center"><a href="man-empresa.php?ope=2&cod=' . $lin['idempresa'] . '" title="Efetua alteração do registro informado na linha"><i class="large material-icons">create</i></a></td>';
-          $txt .= '<td class="lit-d text-center"><a href="man-empresa.php?ope=3&cod=' . $lin['idempresa'] . '" title="Efetua exclusão do registro informado na linha"><i class="cor-1 large material-icons">delete_forever</i></a></td>';
-          $txt .= '<td class="text-center">' . $lin['idempresa'] . '</td>';
+          if ($_SESSION['wrktipusu'] <= 2) { 
+               $txt .= "<td>" . "" . "</td>";
+          } else {
+               $txt .= '<td class="lit-d text-center"><a href="man-empresa.php?ope=3&cod=' . $lin['idempresa'] . '" title="Efetua exclusão do registro informado na linha"><i class="cor-1 large material-icons">delete_forever</i></a></td>';
+          }
           if ($lin['empstatus'] == 0) {$txt .= "<td>" . "Ativo" . "</td>";}
           if ($lin['empstatus'] == 1) {$txt .= "<td>" . "Inativo" . "</td>";}
           if ($lin['empstatus'] == 2) {$txt .= "<td>" . "Suspenso" . "</td>";}

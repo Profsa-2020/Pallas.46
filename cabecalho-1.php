@@ -32,7 +32,7 @@
      </a>
      <div class="collapse navbar-collapse align-self-center" id="navbarNav">
           <ul class="navbar-nav mr-auto text-center">
-               <?php if ($_SESSION['wrktipusu'] >= 3) { ?>
+               <?php if ($_SESSION['wrktipusu'] >= 2) { ?>
                     <li class="nav-item">
                          <a class="nav-link" href="con-empresa.php"><i class="fa fa-building fa-1g"
                                    aria-hidden="true"></i><br /> Empresas </a>
@@ -43,7 +43,7 @@
                     </li>
                     <li class="nav-item">
                          <a class="nav-link" href="grupo-cli.php?ope=1&cod=0"><i class="fa fa-filter fa-1g" aria-hidden="true"></i><br />
-                              Grupos de Cliente </a>
+                              Grupos de Clientes </a>
                     </li>
                     <li class="nav-item">
                          <a class="nav-link" href="con-cliente.php"><i class="fa fa-handshake-o fa-1g" aria-hidden="true"></i><br />
@@ -51,7 +51,7 @@
                     </li>
                     <li class="nav-item">
                          <a class="nav-link" href="grupo-ser.php?ope=1&cod=0"><i class="fa fa-filter fa-1g" aria-hidden="true"></i><br />
-                              Grupos de Serviço </a>
+                              Grupos de Serviços </a>
                     </li>
                     <li class="nav-item">
                          <a class="nav-link" href="man-servico.php?ope=1&cod=0"> <i class="fa fa-desktop fa-1g"

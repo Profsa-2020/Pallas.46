@@ -451,6 +451,7 @@ $(document).ready(function() {
                     $ret = atualiza_des($val_t, $val_d, $per_d);
                     $ret = gravar_log(11,"Inclusão de novo contrato para venda: " . $cli); $_SESSION['wrkvalcon'] = 0; $_SESSION['wrklisser'] = array();
                     $sta = 0; $cli = ''; $pag = 0; $pro = 0; $dti = date('d/m/Y'); $dtf = ''; $dte = ''; $ent = ''; $obs = ''; $con = $_SESSION['wrkcodcon']; $_SESSION['wrknumvol'] = 1;
+                    echo '<script>history.go(-' . $_SESSION['wrknumvol'] . ');</script>'; $_SESSION['wrknumvol'] = 1;
                }
           }
           if ($_SESSION['wrkopereg'] == 2) {
@@ -556,7 +557,7 @@ $(document).ready(function() {
                          <div class="col-md-2"></div>
                     </div>
                     <div class="row">
-                         <div class="col-md-1"></div>
+                         <div class="col-md-2"></div>
                          <div class="col-md-2">
                               <label>Data Inicial</label>
                               <input type="text" class="form-control text-center" maxlength="10" id="dti" name="dti"
@@ -572,15 +573,10 @@ $(document).ready(function() {
                               <input type="text" class="form-control text-center" maxlength="10" id="ent" name="ent"
                                    value="<?php echo $ent; ?>" />
                          </div>
-                         <div class="col-md-2">
-                              <label>Data Final</label>
-                              <input type="text" class="form-control text-center" maxlength="10" id="dtf" name="dtf"
-                                   value="<?php echo $dtf; ?>" required />
-                         </div>
                          <div class="col-md-2 text-center"><br />
                               <button type="button" id="itens" name="itens" class="bot-4">+ Serviços</button>
                          </div>
-                         <div class="col-md-1"></div>
+                         <div class="col-md-2"></div>
                     </div>
                     <div class="row">
                          <div class="col-md-2"></div>
@@ -614,6 +610,7 @@ $(document).ready(function() {
                     <br />
                     <input type="hidden" id="cli_c" name="cli_c" value="<?php echo $key; ?>" />   
                     <input type="hidden" id="tot_g" name="tot_g" value="<?php echo $_SESSION['wrkvalcon']; ?>" />
+                    <input type="hidden" class="form-control text-center" maxlength="10" id="dtf" name="dtf" value="<?php echo $dtf; ?>" />
                </form>
           </div>
      </div>

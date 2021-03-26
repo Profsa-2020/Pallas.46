@@ -136,7 +136,8 @@ $(document).ready(function() {
                   $ret = enviar_ema($_REQUEST['ema']);
                   $ret = gravar_log(11,"Inclusão de novo usuário: " . $nom);
                   $sen = ''; $nom = ''; $ema = ''; $sta = ''; $tip = ''; $val = ''; $ace = ''; $tel = '';  $cel = ''; $emp = 0; $con = 0;
-              }
+                  echo '<script>history.go(-' . $_SESSION['wrknumvol'] . ');</script>'; $_SESSION['wrknumvol'] = 1;
+               }
           }
           if ($_SESSION['wrkopereg'] == 2) {
               $ret = consiste_usu();
@@ -287,9 +288,8 @@ $(document).ready(function() {
                                    class="bot-4 <?php echo $del; ?>"><?php echo $bot; ?></button>
                          </div>
                          <div class="col-md-2">
-                              <?php
-                                   echo '<div class="bot-1" ><a href="' . $_SESSION['wrkproant'] . '.php" title="Volta a página anterior deste processamento.">Voltar</a></div>'
-                              ?>
+                         <button type="button" class="bot-1" id="volta" name="volta"
+                                   onclick="location.href='<?php echo $_SESSION['wrkproant'] . ".php"; ?>'">Voltar</button>
                          </div>
                          <div class="col-md-4"></div>
                     </div>

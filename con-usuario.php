@@ -138,7 +138,7 @@ date_default_timezone_set("America/Sao_Paulo");
                </div>
           </div>
      </div>
-     <div class="container-fluid">
+     <div class="container">
           <div class="row">
                <div class="col-md-12">
                     <div class="row">

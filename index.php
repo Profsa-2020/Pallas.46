@@ -78,6 +78,7 @@ $(document).ready(function() {
      <div class="entrada">
           <div class="qua-1">
                <form class="cpo-0" id="frmLogin" name="frmLogin" action="" method="POST">
+                    <br /><br />
                     <div class="row">
                          <a href="http://www.clickgest.com.br/">
                               <img class="ima-1" src="img/logo-11.png" alt="Logotipo da empresa ClickGesta"

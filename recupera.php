@@ -64,7 +64,7 @@ $(document).ready(function() {
                     <br /><br />
                     <div class="row">
                          <a href="http://www.searchmidia.com.br/">
-                              <img class="ima-1" src="img/logo-04.png" alt="Logotipo da empresa SearchMidia"
+                              <img class="ima-1" src="img/logo-11.png" alt="Logotipo da empresa SearchMidia"
                                    title="Recuperação de senha do sistema principal da empresa SearchMidia" />
                          </a>
                     </div>

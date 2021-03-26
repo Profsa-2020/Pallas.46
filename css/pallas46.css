@@ -1,5 +1,8 @@
 * { margin: 0; padding: 0; font-family: 'Calibri', 'Lato', 'Open Sans',  'Verdana', 'Times New Roman'; border-collapse: collapse; }
 
+
+body, #box00 { background-color: #f8f9fa; }
+
 .cab-0 { height: 0px; visibility: hidden; margin: 0px; }
 
 .bot-1 {
@@ -68,7 +71,8 @@
 }
 
  .ima-1 {
-    width: 75%;
+    width: 50%;
+    min-width: 250px;
  }
  
  .ima-2 {
@@ -92,8 +96,6 @@
     overflow: hidden;
     padding: 0px 5px;
     margin: 0px auto;
-    border: 0.5px solid #009FB7;
-    box-shadow: 10px 15px 5px rgba(0,0,0,.3);
  }
 
  .qua-0 label, .lit-1 span {
@@ -150,7 +152,6 @@
     font-size: 32px;
     font-weight: 300;
     border-radius: 10px;
-    background-color: #F8F9FA;
 }
 
 .qua-3 {
@@ -183,6 +184,11 @@
     border: 0.5px solid #8a8888;
 }
 
+.tel-1 {
+    padding: 0px 5px;
+    background-color: #ffffff;
+}
+
 .tel-1 label {
     font-size: 14px !important;    
     color: #918e8e !important;    
@@ -202,6 +208,7 @@
      font-size: 12px;
      font-weight: bold;
      text-decoration: none;
+     background-color: #ffffff;
  }
  
  .tit-2 {

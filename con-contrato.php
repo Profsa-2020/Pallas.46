@@ -71,8 +71,7 @@ $(document).ready(function() {
      $('#tab-0').DataTable({
           "pageLength": 25,
           "aaSorting": [
-               [4, 'asc'],
-               [6, 'asc']
+               [2, 'desc']
           ],
           "language": {
                "lengthMenu": "Demonstrar _MENU_ linhas por páginas",
