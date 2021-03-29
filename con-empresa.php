@@ -81,6 +81,23 @@ $(document).ready(function() {
           }
      });
 
+     $(".exc").click(function() {
+          let tip = "e";
+          let cod = $(this).attr("cod");
+          let res = confirm('Confirma exclusão da empresa informada em opção ?');
+          if (res == true) {
+               $.get("ajax/deleta-reg.php", {
+                    tip: tip,
+                    cod: cod
+               })
+               .done(function(data) {
+                    if (data != "") {
+                         alert(data);
+                         document.location.reload(true); }   // Recarrega página inteira em JavaScript
+               });
+          }
+     });
+
      $(window).scroll(function() {
           if ($(this).scrollTop() > 100) {
                $(".subir").fadeIn(500);
@@ -198,7 +215,7 @@ function carrega_emp() {
           if ($_SESSION['wrktipusu'] <= 2) { 
                $txt .= "<td>" . "" . "</td>";
           } else {
-               $txt .= '<td class="lit-d text-center"><a href="man-empresa.php?ope=3&cod=' . $lin['idempresa'] . '" title="Efetua exclusão do registro informado na linha"><i class="cor-1 large material-icons">delete_forever</i></a></td>';
+               $txt .= '<td>' . '<button type="button" class="exc bot-2 cor-1" name="exc" cod="' . $lin['idempresa'] . '" title="Efetua exclusão do registro informado na linha"><i class="cor-1 large material-icons">delete_forever</i></button>' . '</td>';
           }
           if ($lin['empstatus'] == 0) {$txt .= "<td>" . "Ativo" . "</td>";}
           if ($lin['empstatus'] == 1) {$txt .= "<td>" . "Inativo" . "</td>";}

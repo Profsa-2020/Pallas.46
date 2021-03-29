@@ -18,7 +18,7 @@
           $nro = acessa_reg("Select * from tb_servico where idservico = " . $cod, $reg);            
      } else{
           $ser = retorna_dad('serdescricao', 'tb_servico', 'idservico', $ser);
-          $nro = acessa_reg("Select * from tb_servico where serdescricao = '" . $ser . "'", $reg);            
+          $nro = acessa_reg("Select * from tb_servico where serempresa = " . $_SESSION['wrkcodemp'] . " and serdescricao = '" . $ser . "'", $reg);            
      }
      if ($nro > 1) {
           $tab['men'] = "Existem [" . $nro . "] serviços cadastrados com a mesma descrição informada";

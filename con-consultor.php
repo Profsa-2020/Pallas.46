@@ -66,6 +66,23 @@ $(document).ready(function() {
           window.open(end);
      });
 
+     $(".exc").click(function() {
+          let tip = "o";
+          let cod = $(this).attr("cod");
+          let res = confirm('Confirma exclusão do consultor informado em opção ?');
+          if (res == true) {
+               $.get("ajax/deleta-reg.php", {
+                    tip: tip,
+                    cod: cod
+               })
+               .done(function(data) {
+                    if (data != "") {
+                         alert(data);
+                         document.location.reload(true); }   // Recarrega página inteira em JavaScript
+               });
+          }
+     });
+
      $('#tab-0').DataTable({
           "pageLength": 25,
           "aaSorting": [
@@ -189,7 +206,7 @@ function carrega_con() {
      foreach ($reg as $lin) {
           $txt =  '<tr>';
           $txt .= '<td class="text-center"><a href="man-consultor.php?ope=2&cod=' . $lin['idconsultor'] . '" title="Efetua alteração do registro informado na linha"><i class="large material-icons">create</i></a></td>';
-          $txt .= '<td class="lit-d text-center"><a href="man-consultor.php?ope=3&cod=' . $lin['idconsultor'] . '" title="Efetua exclusão do registro informado na linha"><i class="cor-1 large material-icons">delete_forever</i></a></td>';
+          $txt .= '<td>' . '<button type="button" class="exc bot-2 cor-1" name="exc" cod="' . $lin['idconsultor'] . '" title="Efetua exclusão do registro informado na linha"><i class="cor-1 large material-icons">delete_forever</i></button>' . '</td>';
           $txt .= '<td class="text-center">' . $lin['idconsultor'] . '</td>';
           if ($lin['constatus'] == 0) {$txt .= "<td>" . "Ativo" . "</td>";}
           if ($lin['constatus'] == 1) {$txt .= "<td>" . "Inativo" . "</td>";}

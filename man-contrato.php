@@ -485,16 +485,8 @@ $(document).ready(function() {
      <div class="container">
           <div class="qua-0">
                <div class="row qua-2">
-                    <div class="col-md-10 text-left">
+                    <div class="col-md-12 text-left">
                          <span>Manutenção de Contratos</span>
-                    </div>
-                    <div class="col-md-2">
-                         <form id="frmTelNov" name="frmTelNov" action="man-contrato.php?ope=1&cod=0" method="POST">
-                              <div class="text-center">
-                                   <button type="submit" class="bot-4" id="nov" name="novo"
-                                        title="Mostra campos para criar novo contrato no sistema">Adicionar</button>
-                              </div>
-                         </form>
                     </div>
                </div>
                <form class="tel-1" id="frmTelMan" name="frmTelMan" action="" method="POST">

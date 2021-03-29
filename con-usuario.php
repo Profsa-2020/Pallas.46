@@ -62,6 +62,23 @@ $(document).ready(function() {
           $('#tab-0 tbody').empty();
      });
 
+     $(".exc").click(function() {
+          let tip = "u";
+          let cod = $(this).attr("cod");
+          let res = confirm('Confirma exclusão de usuário do sistema informado em opção ?');
+          if (res == true) {
+               $.get("ajax/deleta-reg.php", {
+                    tip: tip,
+                    cod: cod
+               })
+               .done(function(data) {
+                    if (data != "") {
+                         alert(data);
+                         document.location.reload(true); } // Recarrega página inteira em JavaScript
+               });
+          }
+     });
+
      $('#tab-0').DataTable({
           "pageLength": 25,
           "aaSorting": [
@@ -182,7 +199,7 @@ function carrega_usu() {
      foreach ($reg as $lin) {
           $txt =  '<tr>';
           $txt .= '<td class="text-center"><a href="man-usuario.php?ope=2&cod=' . $lin['idsenha'] . '" title="Efetua alteração do registro informado na linha"><i class="large material-icons">create</i></a></td>';
-          $txt .= '<td class="lit-d text-center"><a href="man-usuario.php?ope=3&cod=' . $lin['idsenha'] . '" title="Efetua exclusão do registro informado na linha"><i class="cor-1 large material-icons">delete_forever</i></a></td>';
+          $txt .= '<td>' . '<button type="button" class="exc bot-2 cor-1" name="exc" cod="' . $lin['idsenha'] . '" title="Efetua exclusão do registro informado na linha"><i class="cor-1 large material-icons">delete_forever</i></button>' . '</td>';
           $txt .= '<td class="text-center">' . $lin['idsenha'] . '</td>';
           $txt .= "<td>" . $lin['usunome'] . "</td>";
           if ($lin['usustatus'] == 0) {$txt .= "<td>" . "Normal" . "</td>";}

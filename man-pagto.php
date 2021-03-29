@@ -64,6 +64,23 @@ $(document).ready(function() {
           $('nav').removeClass("fixed-top");
      }
 
+     $(".exc").click(function() {
+          let tip = "p";
+          let cod = $(this).attr("cod");
+          let res = confirm('Confirma exclusão de forma de pagto informada em opção ?');
+          if (res == true) {
+               $.get("ajax/deleta-reg.php", {
+                    tip: tip,
+                    cod: cod
+               })
+               .done(function(data) {
+                    if (data != "") {
+                         alert(data);
+                         document.location.reload(true); } // Recarrega página inteira em JavaScript
+               });
+          }
+     });
+
      $('#tab-0').DataTable({
           "pageLength": 25,
           "aaSorting": [
@@ -343,7 +360,7 @@ function carrega_pag() {
      foreach ($reg as $lin) {
           $txt =  '<tr>';
           $txt .= '<td class="text-center"><a href="man-pagto.php?ope=2&cod=' . $lin['idpagto'] . '" title="Efetua alteração do registro informado na linha"><i class="large material-icons">create</i></a></td>';
-          $txt .= '<td class="lit-d text-center"><a href="man-pagto.php?ope=3&cod=' . $lin['idpagto'] . '" title="Efetua exclusão do registro informado na linha"><i class="cor-1 large material-icons">delete_forever</i></a></td>';
+          $txt .= '<td>' . '<button type="button" class="exc bot-2 cor-1" name="exc" cod="' . $lin['idpagto'] . '" title="Efetua exclusão do registro informado na linha"><i class="cor-1 large material-icons">delete_forever</i></button>' . '</td>';
           $txt .= '<td class="text-center">' . $lin['idpagto'] . '</td>';
           if ($lin['pagstatus'] == 0) {$txt .= "<td>" . "Normal" . "</td>";}
           if ($lin['pagstatus'] == 1) {$txt .= "<td>" . "Bloqueado" . "</td>";}

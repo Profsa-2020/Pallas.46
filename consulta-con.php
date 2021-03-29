@@ -73,6 +73,17 @@ $(document).ready(function() {
           $('nav').removeClass("fixed-top");
      }
 
+     $(function() {
+          $('#cli').autocomplete({
+               source: "ajax/procura-cli.php",
+               minLength: 3,
+               select: function(event, ui) {
+                    $('#cli').val(ui.item.label);
+                    $('#cli_c').val(ui.item.id);
+               }
+          });
+     });
+
      $('#tab-0').DataTable({
           "pageLength": 25,
           "aaSorting": [
@@ -165,13 +176,15 @@ $(document).ready(function() {
      $sta = (isset($_REQUEST['sta']) == false ? 9 : $_REQUEST['sta']);
      $tab = array(); $ret = carrega_ger($sta, $dti, $dtf, $tab);
 
-     $cli = (isset($_REQUEST['cli']) == false ? 0  : $_REQUEST['cli']);
+     $cli = (isset($_REQUEST['cli']) == false ? '' : $_REQUEST['cli']);
+     $key = (isset($_REQUEST['cli_c']) == false ? 0 : $_REQUEST['cli_c']);
      $con = (isset($_REQUEST['con']) == false ? 0 : $_REQUEST['con']);
      if ($_SESSION['wrktipusu'] <= 1) { // 0-Visitante, 1-Consultor
           $con_l = " disabled ";
           $con = $_SESSION['wrkcodcon'];
      }
-     $ret = carrega_nro($sta, $dti, $dtf, $cli, $con, $com, $qtd, $val);  
+     if ($_REQUEST['cli'] == "") { $key = 0; }
+     $ret = carrega_nro($sta, $dti, $dtf, $key, $con, $com, $qtd, $val);  
 
  ?>
 
@@ -195,17 +208,16 @@ $(document).ready(function() {
      <div class="container-fluid">
           <form class="tel-1 text-center" name="frmTelCon" action="" method="POST">
                <div class="form-row">
-                    <div class="col-sm-3">
-                         <label>Cliente</label>
-                         <select id="cli" name="cli" class="form-control">
-                              <?php $ret = carrega_cli($cli); ?>
-                         </select>
-                    </div>
-                    <div class="col-sm-3">
+               <div class="col-sm-3">
                          <label>Consultor</label>
                          <select id="con" name="con" class="form-control" <?php echo $con_l; ?>>
                               <?php $ret = carrega_csu($con); ?>
                          </select>
+                    </div>
+                    <div class="col-sm-3">
+                         <label>Cliente</label>
+                         <input type="text" class="form-control" maxlength="50" id="cli" name="cli"
+                                   value="<?php echo $cli; ?>" />
                     </div>
                     <div class="col-sm-1">
                          <label>Data Inicial</label>
@@ -253,6 +265,7 @@ $(document).ready(function() {
                     </div>
                </div>
                <br />
+               <input type="hidden" id="cli_c" name="cli_c" value="<?php echo $key; ?>" />   
           </form>
      </div>
      <div class="container-fluid">
@@ -313,7 +326,7 @@ $(document).ready(function() {
                                    </tr>
                               </thead>
                               <tbody>
-                                   <?php $ret = carrega_con($sta, $dti, $dtf, $cli, $con, $com);  ?>
+                                   <?php $ret = carrega_con($sta, $dti, $dtf, $key, $con, $com);  ?>
                               </tbody>
                          </table>
                     </div>

@@ -168,16 +168,8 @@ $(document).ready(function() {
      <div class="container">
           <div class="qua-0">
                <div class="row qua-2">
-                    <div class="col-10 text-left">
+                    <div class="col-12 text-left">
                          <span>Manutenção de Usuários</span>
-                    </div>
-                    <div class="col-2">
-                         <form name="frmTelNov" action="man-usuario.php?ope=1&cod=0" method="POST">
-                              <div class="text-center">
-                                   <button type="submit" class="bot-4" id="nov" name="novo"
-                                        title="Mostra campos para criar novo usuario no sistema">Adicionar</button>
-                              </div>
-                         </form>
                     </div>
                </div>
 

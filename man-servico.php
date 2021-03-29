@@ -40,6 +40,10 @@
      <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
      <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
+     <script type="text/javascript" language="javascript"
+          src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
+     <link href="https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css" />
+
      <script type="text/javascript" src="js/datepicker-pt-BR.js"></script>
 
      <script type="text/javascript" src="js/jquery.mask.min.js"></script>
@@ -61,6 +65,23 @@ $(document).ready(function() {
      if (lar < 800) {
           $('nav').removeClass("fixed-top");
      }
+
+     $(".exc").click(function() {
+          let tip = "t";
+          let cod = $(this).attr("cod");
+          let res = confirm('Confirma exclusão de serviço à contratos informado em opção ?');
+          if (res == true) {
+               $.get("ajax/deleta-reg.php", {
+                    tip: tip,
+                    cod: cod
+               })
+               .done(function(data) {
+                    if (data != "") {
+                         alert(data);
+                         document.location.reload(true); } // Recarrega página inteira em JavaScript
+               });
+          }
+     });
 
      $('#tab-0').DataTable({
           "pageLength": 25,
@@ -381,7 +402,7 @@ function carrega_ser() {
      foreach ($reg as $lin) {
           $txt =  '<tr>';
           $txt .= '<td class="text-center"><a href="man-servico.php?ope=2&cod=' . $lin['idservico'] . '" title="Efetua alteração do registro informado na linha"><i class="large material-icons">create</i></a></td>';
-          $txt .= '<td class="lit-d text-center"><a href="man-servico.php?ope=3&cod=' . $lin['idservico'] . '" title="Efetua exclusão do registro informado na linha"><i class="cor-1 large material-icons">delete_forever</i></a></td>';
+          $txt .= '<td>' . '<button type="button" class="exc bot-2 cor-1" name="exc" cod="' . $lin['idservico'] . '" title="Efetua exclusão do registro informado na linha"><i class="cor-1 large material-icons">delete_forever</i></button>' . '</td>';
           $txt .= '<td class="text-center">' . $lin['idservico'] . '</td>';
           if ($lin['serstatus'] == 0) {$txt .= "<td>" . "Normal" . "</td>";}
           if ($lin['serstatus'] == 1) {$txt .= "<td>" . "Bloqueado" . "</td>";}

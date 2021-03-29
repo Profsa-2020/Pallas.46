@@ -330,19 +330,9 @@ $(document).ready(function() {
      <div class="container">
           <div class="qua-0">
                <div class="row qua-2">
-                    <div class="col-md-10 text-left">
+                    <div class="col-md-12 text-left">
                          <span>Manutenção de Empresas</span>
                     </div>
-                    <?php if ($_SESSION['wrktipusu'] >= 3) { ?>
-                         <div class="col-md-2">
-                              <form name="frmTelNov" action="man-empresa.php?ope=1&cod=0" method="POST">
-                                   <div class="text-center">
-                                        <button type="submit" class="bot-4" id="nov" name="novo"
-                                             title="Mostra campos para criar nova empresa no sistema">Adicionar</button>
-                                   </div>
-                              </form>
-                         </div>
-                    <?php } ?>
                </div>
                <form class="tel-1" id="frmManEmp" name="frmManEmp" action="man-empresa.php" method="POST" enctype="multipart/form-data">
                     <div class="row">
