@@ -183,7 +183,9 @@ $(document).ready(function() {
           $con_l = " disabled ";
           $con = $_SESSION['wrkcodcon'];
      }
-     if ($_REQUEST['cli'] == "") { $key = 0; }
+     if (isset($_REQUEST['cli']) == true) {
+          if ($_REQUEST['cli'] == "") { $key = 0; }
+     }
      $ret = carrega_nro($sta, $dti, $dtf, $key, $con, $com, $qtd, $val);  
 
  ?>
@@ -447,7 +449,7 @@ function carrega_ger($sta, $dti, $dtf, &$tab) {
 function carrega_cli($cli) {
      $sta = 0;
      include_once "dados.php";    
-      echo '<option value="0" selected="selected">Todos os cliente cadastrados ...</option>';
+     echo '<option value="0" selected="selected">Todos os cliente cadastrados ...</option>';
      $com = "Select idcliente, clifantasia from tb_cliente where clistatus = 0 and cliempresa = " . $_SESSION['wrkcodemp'] . " order by clifantasia, idcliente";
      $nro = leitura_reg($com, $reg);
      foreach ($reg as $lin) {
@@ -463,8 +465,13 @@ function carrega_cli($cli) {
 function carrega_csu($con) {
      $sta = 0;
      include_once "dados.php";    
-      echo '<option value="0" selected="selected">Todos os consultores cadastrados ...</option>';
-     $com = "Select idconsultor, connome from tb_consultor where constatus = 0 and conempresa = " . $_SESSION['wrkcodemp'] . " order by connome, idconsultor";
+     echo '<option value="0" selected="selected">Todos os consultores cadastrados ...</option>';
+     if ($_SESSION['wrktipusu'] >= 2) {
+          $com = "Select idconsultor, connome from tb_consultor where constatus = 0 and conempresa = " . $_SESSION['wrkcodemp'] . " order by connome, idconsultor";
+     } else {
+          $com = "Select idconsultor, connome from tb_consultor where constatus = 0 and conempresa = " . $_SESSION['wrkcodemp'] . " and idconsultor = " . $_SESSION['wrkcodcon'] . " order by connome, idconsultor";
+}
+
      $nro = leitura_reg($com, $reg);
      foreach ($reg as $lin) {
           if ($lin['idconsultor'] != $con) {

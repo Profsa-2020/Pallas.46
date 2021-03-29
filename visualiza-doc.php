@@ -296,7 +296,7 @@ function carrega_pro($cod) {
 
      $pas = "emp_" . str_pad($_SESSION['wrkcodemp'], 3, "0", STR_PAD_LEFT); 
      if (file_exists($pas) == false) {  mkdir($pas); }
-     $cam = strtolower($pas . "/" . "con_" . str_pad($_SESSION['wrkcodreg'], 6, "0", STR_PAD_LEFT) . "." . "html");
+     $cam = strtolower($pas . "/" . "pro_" . str_pad($_SESSION['wrkcodreg'], 6, "0", STR_PAD_LEFT) . "." . "html");
      file_put_contents($cam, $txt);
 
      return $txt;

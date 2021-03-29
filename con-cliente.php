@@ -203,7 +203,11 @@ $(document).ready(function() {
 <?php
 function carrega_cli() {
      include_once "dados.php";
-     $com = "Select * from tb_cliente where cliempresa = " .  $_SESSION['wrkcodemp'] . " order by clirazao, idcliente";
+     if ($_SESSION['wrktipusu'] >= 2) { 
+          $com = "Select * from tb_cliente where cliempresa = " .  $_SESSION['wrkcodemp'] . " order by clirazao, idcliente";
+     } else {
+          $com = "Select * from tb_cliente where cliempresa = " .  $_SESSION['wrkcodemp'] . " and cliconsultor = " . $_SESSION['wrkcodcon'] . " order by clirazao, idcliente";
+     }
      $nro = leitura_reg($com, $reg);
      foreach ($reg as $lin) {
           $txt =  '<tr>';

@@ -66,6 +66,9 @@ $(document).ready(function() {
      $ret = 0; 
      $_SESSION['wrknompro'] = __FILE__;
      date_default_timezone_set("America/Sao_Paulo");
+     $_SESSION['wrkdatide'] = date ("d/m/Y H:i:s", getlastmod());
+     $_SESSION['wrknomide'] = get_current_user();
+     $_SESSION['wrknumusu'] = getmypid();
      if (isset($_SESSION['wrkcpocoo']) == false) { $_SESSION['wrkcpocoo'] = ""; }
      if (isset($_COOKIE["k_ent"]) == true || isset($_COOKIE["k_end"]) == true) {
           $sen = $_COOKIE["k_ent"]; $ema = $_COOKIE["k_end"];         

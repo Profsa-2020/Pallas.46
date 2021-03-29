@@ -33,35 +33,45 @@
      <div class="collapse navbar-collapse align-self-center" id="navbarNav">
           <ul class="navbar-nav mr-auto text-center">
                <?php if ($_SESSION['wrktipusu'] >= 2) { ?>
-                    <li class="nav-item">
-                         <a class="nav-link" href="con-empresa.php"><i class="fa fa-building fa-1g"
-                                   aria-hidden="true"></i><br /> Empresas </a>
-                    </li>
-                    <li class="nav-item">
-                         <a class="nav-link" href="con-consultor.php"><i class="fa fa-users fa-1g" aria-hidden="true"></i><br />
-                              Consultores </a>
-                    </li>
-                    <li class="nav-item">
-                         <a class="nav-link" href="grupo-cli.php?ope=1&cod=0"><i class="fa fa-filter fa-1g" aria-hidden="true"></i><br />
-                              Grupos de Clientes </a>
-                    </li>
-                    <li class="nav-item">
-                         <a class="nav-link" href="con-cliente.php"><i class="fa fa-handshake-o fa-1g" aria-hidden="true"></i><br />
-                              Clientes </a>
-                    </li>
-                    <li class="nav-item">
-                         <a class="nav-link" href="grupo-ser.php?ope=1&cod=0"><i class="fa fa-filter fa-1g" aria-hidden="true"></i><br />
-                              Grupos de Serviços </a>
-                    </li>
-                    <li class="nav-item">
-                         <a class="nav-link" href="man-servico.php?ope=1&cod=0"> <i class="fa fa-desktop fa-1g"
-                                   aria-hidden="true"></i><br /> Serviços </a>
-                    </li>
-                    <li class="nav-item">
-                         <a class="nav-link" href="man-pagto.php?ope=1&cod=0"><i class="fa fa-credit-card fa-1g" aria-hidden="true"></i><br />
-                              Formas de Pagamento </a>
-                    </li>
+               <li class="nav-item">
+                    <a class="nav-link" href="con-empresa.php"><i class="fa fa-building fa-1g"
+                              aria-hidden="true"></i><br /> Empresas </a>
+               </li>
+               <li class="nav-item">
+                    <a class="nav-link" href="con-consultor.php"><i class="fa fa-users fa-1g"
+                              aria-hidden="true"></i><br />
+                         Consultores </a>
+               </li>
+               <li class="nav-item">
+                    <a class="nav-link" href="grupo-cli.php?ope=1&cod=0"><i class="fa fa-filter fa-1g"
+                              aria-hidden="true"></i><br />
+                         Grupos de Clientes </a>
+               </li>
                <?php } ?>
+
+               <li class="nav-item">
+                    <a class="nav-link" href="con-cliente.php"><i class="fa fa-handshake-o fa-1g"
+                              aria-hidden="true"></i><br />
+                         Clientes </a>
+               </li>
+
+               <?php if ($_SESSION['wrktipusu'] >= 2) { ?>
+               <li class="nav-item">
+                    <a class="nav-link" href="grupo-ser.php?ope=1&cod=0"><i class="fa fa-filter fa-1g"
+                              aria-hidden="true"></i><br />
+                         Grupos de Serviços </a>
+               </li>
+               <li class="nav-item">
+                    <a class="nav-link" href="man-servico.php?ope=1&cod=0"> <i class="fa fa-desktop fa-1g"
+                              aria-hidden="true"></i><br /> Serviços </a>
+               </li>
+               <li class="nav-item">
+                    <a class="nav-link" href="man-pagto.php?ope=1&cod=0"><i class="fa fa-credit-card fa-1g"
+                              aria-hidden="true"></i><br />
+                         Formas de Pagamento </a>
+               </li>
+               <?php } ?>
+
                <li class="nav-item">
                     <a class="nav-link" href="con-contrato.php?ope=1&cod=0"> <i class="fa fa-money fa-1g"
                               aria-hidden="true"></i><br /> Contratos </a>
@@ -70,11 +80,12 @@
                     <a class="nav-link" href="consulta-con.php"><i class="fa fa-search fa-1g"
                               aria-hidden="true"></i><br /> Consultas </a>
                </li>
-               <?php if ($_SESSION['wrktipusu'] >= 3) { ?>
-                    <li class="nav-item">
-                         <a class="nav-link" href="con-usuario.php"><i class="fa fa-user-circle-o fa-1g"
-                                   aria-hidden="true"></i><br /> Usuários </a>
-                    </li>
+
+               <?php if ($_SESSION['wrktipusu'] >= 2) { ?>
+               <li class="nav-item">
+                    <a class="nav-link" href="con-usuario.php"><i class="fa fa-user-circle-o fa-1g"
+                              aria-hidden="true"></i><br /> Usuários </a>
+               </li>
                <?php } ?>
 
           </ul>

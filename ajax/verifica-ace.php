@@ -79,10 +79,11 @@
                $_SESSION['wrknumace'] = $reg['usuacessos'];  
                $_SESSION['wrkapeusu'] = primeiro_nom($reg['usunome']);
                $_SESSION['wrknomemp'] = retorna_dad('emprazao', 'tb_empresa', 'idempresa', $reg['usuempresa']);
-               if ($lem == "S") {
-                    $_SESSION['wrkcpocoo'] =  base64_encode($ema) . "|" .  base64_encode($sen);
+               if ($lem == "S") {          
                     setcookie("k_ent", $_REQUEST['sen'], time() + 3600 * 24 * 30);  // 60 * 60 * 24 * 30 = 30 dias
                     setcookie("k_end", $_REQUEST['ema'], time() + 3600 * 24 * 30);  
+                    $_SESSION['wrkcpocoo'] =  date('Y-m-d H:i:s') . "|" . base64_encode($ema) . "|" .  base64_encode($sen) . "|" . getenv("REMOTE_ADDR") . "|" . $_SESSION['wrknumusu'] ;
+                    file_put_contents("Eu_" . getenv("REMOTE_ADDR") . ".inf", $_SESSION['wrkcpocoo']);      
                }
                if ($_SESSION['wrknumace'] >= 2) {
                     $com = "Update tb_usuario set usuacessos = " . ($_SESSION['wrknumace'] - 1) . " where idsenha = " . $_SESSION['wrkideusu'];
